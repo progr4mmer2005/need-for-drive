@@ -1,0 +1,116 @@
+@use '../../variables.scss' as *;
+
+.menu {
+  width: 100vw;
+  height: 100vh;
+  visibility: hidden;
+  position: fixed;
+  display: flex;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  background-color: #111518;
+  z-index: 100;
+  align-items: center;
+  transform: translateX(-100%);
+  transition: all ease-in-out 0.3s;
+
+  @media (max-width: 550px) {
+    align-items: start;
+  }
+
+  &--active {
+    transform: translateX(0);
+    visibility: visible;
+    opacity: 1;
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__content {
+    padding-left: 128px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+
+    @media (max-width: 550px) {
+      height: 100vh;
+      padding-top: 80px;
+      padding-left: 28px;
+    }
+  }
+
+  &__bottom {
+    @media (max-width: 550px) {
+      margin-top: auto;
+      padding-bottom: 24px;
+    }
+  }
+
+  &__links {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  &__link {
+    color: white;
+    font-family: Roboto, sans-serif;
+    font-size: clamp(22px, 4vw, 32px);
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    transition:
+      color 0.2s ease,
+      opacity 0.2s ease;
+  }
+
+  &__link:hover,
+  &__link--active {
+    color: $primary-color;
+  }
+
+  &__link:active {
+    opacity: 0.7;
+  }
+
+  & * ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__socials {
+    margin-top: 38px !important;
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+  }
+
+  &__social-link {
+    display: flex;
+    text-decoration: none;
+  }
+
+  &__social-icon {
+    width: 38px;
+    fill: currentcolor;
+    color: $light-gray-color;
+    height: 38px;
+    cursor: pointer;
+    transition:
+      color 0.2s ease,
+      opacity 0.2s ease;
+
+    &:hover {
+      color: $primary-color;
+    }
+
+    &:active {
+      opacity: 0.7;
+    }
+  }
+}

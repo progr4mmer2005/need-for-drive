@@ -1,0 +1,17 @@
+.hero {
+  padding: 24px 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+
+  @media (max-width: 650px) {
+    padding: 24px 32px;
+  }
+
+  @media (max-width: 550px) {
+    padding: 16px 16px 0;
+    gap: 24px;
+    justify-content: start;
+  }
+}

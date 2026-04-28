@@ -1,0 +1,19 @@
+.navigation {
+  background-color: #111518;
+  height: 100vh;
+  width: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 32px;
+  padding-bottom: 32px;
+  justify-content: space-between;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 200;
+
+  @media (max-width: 550px) {
+    visibility: hidden;
+  }
+}

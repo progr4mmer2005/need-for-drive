@@ -1,0 +1,20 @@
+{
+  "extends": "stylelint-config-standard-scss",
+  "plugins": ["stylelint-scss"],
+
+  "ignoreFiles": [
+    "**/*.{js,html,svg,png,jpg,jpeg,ttf,woff,woff2}"
+  ],
+
+  "rules": {
+    "at-rule-no-unknown": null,
+    "media-feature-range-notation": null,
+    "selector-class-pattern": null,
+    "color-hex-length": null,
+    "no-descending-specificity": null,
+    "declaration-block-no-duplicate-properties": null,
+    "color-function-notation": null,
+    "alpha-value-notation": null,
+    "scss/load-partial-extension": null
+  }
+}

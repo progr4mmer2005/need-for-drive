@@ -1,0 +1,21 @@
+@use './blocks/burger-button/burger-button.scss';
+@use './blocks/navigation/navigation.scss';
+@use './blocks/language-button/language-button.scss';
+@use './fonts.scss';
+@use './blocks/logo/logo.scss';
+@use './blocks/header/header.scss';
+@use './blocks/waypoint/waypoint.scss';
+@use './blocks/split/split.scss';
+@use './blocks/slider/slider.scss';
+@use './blocks/hero/hero.scss';
+@use './blocks/promo/promo.scss';
+@use './blocks/button/button.scss';
+@use './blocks/footer/footer.scss';
+@use './blocks/menu/menu.scss';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Roboto, sans-serif;
+}
