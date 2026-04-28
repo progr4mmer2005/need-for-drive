@@ -1,0 +1,31 @@
+@use '../../styles/variables' as *;
+
+.waypoint {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  text-decoration: none;
+  transition: filter 0.2s ease;
+
+  &:hover {
+    filter: brightness(0.9);
+  }
+
+  &:active {
+    filter: brightness(0.8);
+  }
+
+  @media (max-width: 550px) {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+.icon {
+  height: 20px;
+  width: 18px;
+}
+
+.text {
+  color: $dark-gray-color;
+}

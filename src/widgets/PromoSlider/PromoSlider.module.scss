@@ -1,0 +1,210 @@
+@use '../../shared/styles/variables' as *;
+
+.slider {
+  position: relative;
+  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden;
+  color: #fff;
+  z-index: 120;
+}
+
+.viewport {
+  position: relative;
+  height: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transition: opacity 0.7s ease;
+}
+
+.slideActive {
+  opacity: 1;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgb(12 18 24 / 82%) 0%, rgb(12 18 24 / 52%) 48%, rgb(12 18 24 / 18%) 100%),
+    linear-gradient(180deg, rgb(0 0 0 / 8%) 0%, rgb(0 0 0 / 42%) 100%);
+}
+
+.content {
+  position: absolute;
+  top: 50%;
+  left: clamp(56px, 8vw, 88px);
+  z-index: 2;
+  max-width: min(420px, calc(100% - 160px));
+  transform: translateY(-50%);
+
+  @media (max-width: 1280px) {
+    left: 48px;
+    max-width: min(360px, calc(100% - 136px));
+  }
+
+  @media (max-width: 1024px) {
+    left: 64px;
+    max-width: min(520px, calc(100% - 160px));
+  }
+
+  @media (max-width: 550px) {
+    left: 24px;
+    max-width: calc(100% - 72px);
+  }
+}
+
+.title {
+  font-size: 40px;
+  font-weight: 500;
+
+  @media (max-width: 1280px) {
+    font-size: 32px;
+  }
+}
+
+.description {
+  margin-top: 8px;
+  color: $light-gray-color;
+  font-size: 24px;
+  font-weight: 300;
+
+  @media (max-width: 1280px) {
+    font-size: 22px;
+  }
+}
+
+.navButton {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 3;
+  width: 72px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.2s ease;
+
+  &::before,
+  &::after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    content: '';
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+
+  @media (max-width: 1280px) {
+    width: 56px;
+  }
+}
+
+.navButtonLeft {
+  left: 0;
+
+  &::before {
+    left: 0;
+    width: 100%;
+    background: linear-gradient(90deg, rgb(61 67 72 / 92%) 0%, rgb(61 67 72 / 78%) 55%, rgb(61 67 72 / 0%) 100%);
+  }
+}
+
+.navButtonRight {
+  right: 0;
+
+  &::before {
+    right: 0;
+    width: 100%;
+    background: linear-gradient(270deg, rgb(15 196 97 / 20%) 0%, rgb(16 23 28 / 34%) 42%, rgb(16 23 28 / 0%) 100%);
+  }
+
+  &::after {
+    left: 12px;
+    width: 22px;
+    background: rgb(14 194 97 / 22%);
+  }
+
+  @media (max-width: 1280px) {
+    &::after {
+      left: 10px;
+      width: 18px;
+    }
+  }
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  left: 22px;
+  z-index: 1;
+  display: block;
+  height: 24px;
+  width: 24px;
+  transform: translateY(-50%) rotate(45deg);
+  border-bottom: 3px solid #fff;
+  border-left: 3px solid #fff;
+
+  @media (max-width: 1280px) {
+    left: 16px;
+  }
+}
+
+.arrowRight {
+  left: auto;
+  right: 22px;
+  transform: translateY(-50%) rotate(-135deg);
+
+  @media (max-width: 1280px) {
+    right: 16px;
+  }
+}
+
+.pagination {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  z-index: 3;
+  display: flex;
+  gap: 8px;
+  transform: translateX(-50%);
+}
+
+.bullet {
+  height: 8px;
+  width: 8px;
+  border: 0;
+  border-radius: 50%;
+  background: $light-gray-color;
+  cursor: pointer;
+  padding: 0;
+}
+
+.bulletActive {
+  background: $primary-color;
+}
+
+.menuOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  visibility: hidden;
+  background: #151b1f;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+.menuOverlayActive {
+  visibility: visible;
+  opacity: 0.81;
+}
