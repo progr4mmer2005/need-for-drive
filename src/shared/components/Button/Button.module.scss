@@ -1,0 +1,65 @@
+.button {
+  display: block;
+  border: 0;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 15px 24px;
+  text-align: center;
+  transition: filter 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    filter: brightness(0.9);
+  }
+
+  &:active {
+    filter: brightness(0.8);
+  }
+}
+
+.tonePrimary {
+  background-image: linear-gradient(to right, #0ec261, #039f67);
+}
+
+.toneDarkGreen {
+  background-image: linear-gradient(to right, #13493f, #0c7b1b);
+}
+
+.toneCyan {
+  background-image: linear-gradient(to right, #132949, #0c7b67);
+}
+
+.toneDarkRed {
+  background-image: linear-gradient(to right, #493013, #7b0c3b);
+}
+
+.tonePurple {
+  background-image: linear-gradient(to right, #281349, #720c7b);
+}
+
+.sizeHero {
+  margin-top: 60px;
+  width: 250px;
+}
+
+.sizeSlider {
+  margin-top: 32px;
+  min-width: 164px;
+  width: fit-content;
+  border-radius: 6px;
+  font-size: 18px;
+  padding-inline: 34px;
+}
+
+.fullWidthOnMobile {
+  @media (max-width: 550px) {
+    margin-left: -16px;
+    margin-right: -16px;
+    margin-top: auto;
+    width: calc(100% + 32px);
+    border-radius: 0;
+    padding: 21px 24px;
+  }
+}

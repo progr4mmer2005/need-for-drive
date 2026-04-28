@@ -1,0 +1,53 @@
+@use '../../styles/variables' as *;
+
+.button {
+  display: flex;
+  height: 48px;
+  width: 48px;
+  transform: translateY(50%);
+  align-items: center;
+  justify-content: center;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.2s ease, filter 0.2s ease;
+
+  &:hover {
+    border-color: #fff;
+    filter: brightness(0.9);
+  }
+
+  &:hover .label {
+    color: #fff;
+  }
+
+  &:active {
+    border-color: #fff;
+    filter: brightness(0.8);
+  }
+
+  &:active .label {
+    color: $primary-color;
+  }
+}
+
+.label {
+  color: $primary-color;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.buttonCompact {
+  display: none;
+  transform: translateX(-25%);
+
+  .label {
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  @media (max-width: 550px) {
+    display: flex;
+  }
+}

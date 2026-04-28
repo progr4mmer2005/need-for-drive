@@ -1,0 +1,41 @@
+const slide1 = new URL('../../assets/images/slider/1.jpg', import.meta.url).toString();
+const slide2 = new URL('../../assets/images/slider/2.png', import.meta.url).toString();
+const slide3 = new URL('../../assets/images/slider/3.png', import.meta.url).toString();
+const slide4 = new URL('../../assets/images/slider/4.png', import.meta.url).toString();
+
+type SlideTone = 'darkGreen' | 'cyan' | 'darkRed' | 'purple';
+
+export type SliderSlide = {
+  description: string;
+  image: string;
+  title: string;
+  tone: SlideTone;
+};
+
+export const sliderSlides: SliderSlide[] = [
+  {
+    title: 'Бесплатная парковка',
+    description:
+      'Оставляйте машину на платных городских парковках и разрешенных местах, не нарушая ПДД, а также в аэропортах.',
+    image: slide1,
+    tone: 'darkGreen',
+  },
+  {
+    title: 'Страховка',
+    description: 'Полная страховка автомобиля.',
+    image: slide2,
+    tone: 'cyan',
+  },
+  {
+    title: 'Бензин',
+    description: 'Полный бак на любой заправке города за наш счёт',
+    image: slide3,
+    tone: 'darkRed',
+  },
+  {
+    title: 'Обслуживание',
+    description: 'Автомобиль проходит еженедельное ТО',
+    image: slide4,
+    tone: 'purple',
+  },
+];
