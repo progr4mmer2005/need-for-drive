@@ -1,0 +1,77 @@
+.autocomplete {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+
+  &__label {
+    min-width: 120px;
+    font-size: 16px;
+    color: #333;
+  }
+
+  &__inputWrapper {
+    position: relative;
+    flex: 1;
+    max-width: 300px;
+  }
+
+  &__input {
+    width: 100%;
+    padding: 8px 40px 8px 0;
+    border: none;
+    border-bottom: 1px solid #999;
+    font-size: 16px;
+    background: transparent;
+    outline: none;
+
+    &::placeholder {
+      color: #ccc;
+    }
+  }
+
+  &__clear {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #333;
+    padding: 4px;
+
+    &:hover {
+      color: #00b850;
+    }
+  }
+
+  &__dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    z-index: 10;
+    margin-top: -1px;
+  }
+
+  &__option {
+    padding: 10px 12px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #999;
+
+    &:hover,
+    &.active {
+      color: #00b850;
+      background: #f8f8f8;
+    }
+  }
+}
