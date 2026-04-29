@@ -9,6 +9,7 @@ type ButtonSize = 'hero' | 'slider';
 type ButtonProps = PropsWithChildren<
   ButtonHTMLAttributes<HTMLButtonElement> & {
     fullWidthOnMobile?: boolean;
+    squareOnMobile?: boolean;
     size?: ButtonSize;
     tone?: ButtonTone;
   }
@@ -31,6 +32,7 @@ export function Button({
   children,
   className,
   fullWidthOnMobile = false,
+  squareOnMobile = false,
   size = 'hero',
   tone = 'primary',
   type = 'button',
@@ -43,6 +45,7 @@ export function Button({
         toneClassName[tone],
         sizeClassName[size],
         fullWidthOnMobile && styles.fullWidthOnMobile,
+        squareOnMobile && styles.squareOnMobile,
         className,
       )}
       type={type}

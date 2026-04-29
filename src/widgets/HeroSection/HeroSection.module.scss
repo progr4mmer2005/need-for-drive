@@ -1,30 +1,64 @@
 @use '../../shared/styles/variables' as *;
 
-.hero {
+.heroContent {
   display: flex;
-  min-height: 100vh;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 24px 64px;
-
-  @media (max-width: 650px) {
-    padding: 24px 32px;
-  }
+  
+  height: 100%;
 
   @media (max-width: 550px) {
-    justify-content: flex-start;
-    gap: 24px;
-    padding: 16px 16px 0;
+    justify-content: space-between;
   }
 }
 
+.promo-button-container {
+  padding: 0 64px;
+  margin-top: 60px;
+
+  @media (max-width: 650px) {
+    padding: 0 32px;
+  }
+
+
+  @media (max-width: 550px) {
+    margin-top: 32px;
+    padding: 0;
+    width: 100%;
+    
+  }
+}
+
+
+.container {
+  padding: 0 64px;
+
+  @media (max-width: 650px) {
+    padding: 0 32px;
+  }
+
+  @media (max-width: 550px) {
+    padding: 0 16px;
+  }
+}
+
+.promo-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
+
+
+  @media (max-width: 550px) {
+    margin-top: 10%;
+    
+  }
+
+}
 
 .promo {
   display: flex;
   flex-direction: column;
 
   @media (max-width: 550px) {
-    margin-top: 10vh;
   }
 }
 
@@ -40,7 +74,7 @@
 }
 
 .subtitle {
-  margin-top: 30px;
+  margin-top: 34px;
   color: $dark-gray-color;
   font-size: clamp(18px, 3.5vw, 26px);
   font-weight: 300;
@@ -48,24 +82,37 @@
 
   @media (max-width: 550px) {
     margin-top: 16px;
-    margin-bottom: 32px;
   }
 }
 
 .footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  justify-content: flex-end;
+  margin-top: auto;
 
   @media (max-width: 550px) {
-    margin: auto -16px 0;
-    width: calc(100% + 32px);
+    width: 100%;
+    background: #151b1f;
+  }
+}
+
+.footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+@media (max-width: 550px) {
+  .footer {
     flex-direction: column;
     align-items: flex-end;
-    gap: 8px;
-    background: #151b1f;
-    padding: 18px 16px 32px;
+    gap: 6px;
+    padding-top: 16px;
+    padding-bottom: 16px;
   }
 }
 
@@ -83,10 +130,12 @@
   color: $primary-black-color;
   font-size: 13px;
   text-decoration: none;
-  transition: filter 0.2s ease;
+  transition: color 0.2s ease, filter 0.2s ease;
 
-  &:hover {
-    filter: brightness(0.9);
+  @media (min-width: 551px) {
+    &:hover {
+      color: $primary-color;
+    }
   }
 
   &:active {
