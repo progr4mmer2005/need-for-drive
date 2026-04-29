@@ -1,0 +1,11 @@
+.header {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+
+  @media (max-width: 550px) {
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+}

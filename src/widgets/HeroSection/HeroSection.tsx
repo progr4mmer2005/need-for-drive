@@ -3,6 +3,7 @@ import { Button } from '../../shared/components/Button';
 import { Logo } from '../../shared/components/Logo';
 import { Waypoint } from '../../shared/components/Waypoint';
 import * as styles from './HeroSection.module.scss';
+import { Header } from '../Header';
 
 type HeroSectionProps = {
   isMenuOpen: boolean;
@@ -12,11 +13,7 @@ type HeroSectionProps = {
 export function HeroSection({ isMenuOpen, onMenuToggle }: HeroSectionProps) {
   return (
     <section className={styles.hero}>
-      <header className={styles.header}>
-        <BurgerButton color="dark" isActive={isMenuOpen} mobileOnly onClick={onMenuToggle} />
-        <Logo />
-        <Waypoint city="Ульяновск" />
-      </header>
+      <Header isMenuOpen={isMenuOpen} onMenuToggle={onMenuToggle} />
 
       <div className={styles.promo}>
         <h1 className={styles.title}>
