@@ -46,8 +46,32 @@
   }
 }
 
-.buttonMobileOnly.buttonActive .line {
-  background: $light-gray-color;
+@media (max-width: 550px) {
+  .buttonMobileOnly.buttonActive {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .buttonMobileOnly.buttonActive .line {
+    background: $primary-black-color;
+  }
+
+  .buttonMobileOnly.buttonActive .line:nth-child(1) {
+    top: 0;
+    transform: none;
+  }
+
+  .buttonMobileOnly.buttonActive .line:nth-child(2) {
+    opacity: 1;
+    transform: translateY(-50%);
+  }
+
+  .buttonMobileOnly.buttonActive .line:nth-child(3) {
+    top: auto;
+    bottom: 0;
+    transform: none;
+  }
 }
 
 .buttonActive .line:nth-child(1) {

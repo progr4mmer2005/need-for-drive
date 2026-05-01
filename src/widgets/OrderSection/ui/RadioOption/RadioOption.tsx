@@ -11,7 +11,8 @@ type RadioOptionProps = {
 export function RadioOption({ checked, name, label, onChange, disabled = false }: RadioOptionProps) {
   return (
     <label className={`${styles.radioLabel} ${checked ? styles.checked : ''} ${disabled ? styles.disabled : ''}`}>
-      <input checked={checked} name={name} type="radio" onChange={onChange} disabled={disabled} />
+      <input className={styles.radioInput} checked={checked} name={name} type="radio" onChange={onChange} disabled={disabled} />
+      <span className={styles.radioMark} aria-hidden />
       {label}
     </label>
   );

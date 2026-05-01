@@ -57,7 +57,13 @@ export function StepExtras({
         onChange={onDateFromChange}
         onClear={() => onDateFromChange('')}
       />
-      <DateInputRow prefix="По" value={dateTo} placeholder="Введите дату и время" onChange={onDateToChange} />
+      <DateInputRow
+        prefix="По"
+        value={dateTo}
+        showClear
+        onChange={onDateToChange}
+        onClear={() => onDateToChange('')}
+      />
 
       <SectionTitle text="Тариф" />
       <div className={styles.column}>

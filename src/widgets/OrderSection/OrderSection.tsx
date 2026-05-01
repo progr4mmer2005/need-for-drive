@@ -15,6 +15,22 @@ type OrderSectionProps = {
   onMenuToggle: () => void;
 };
 
+const formatAvailableAt = (value: string) => {
+  if (!value) {
+    return 'Не выбрана';
+  }
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}.${month}.${year} 12:00`;
+};
+
 export function OrderSection({ isMenuOpen, onMenuToggle }: OrderSectionProps) {
   const navigate = useNavigate();
 
@@ -28,7 +44,7 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: OrderSectionProps) {
   const [selectedCarId, setSelectedCarId] = useState<string | null>(null);
 
   const [selectedColor, setSelectedColor] = useState('Голубой');
-  const [dateFrom, setDateFrom] = useState('12.06.2019 12:00');
+  const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
   const [selectedRateId, setSelectedRateId] = useState('daily');
   const [selectedExtraIds, setSelectedExtraIds] = useState<string[]>(['fullTank']);
@@ -72,6 +88,7 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: OrderSectionProps) {
   const selectedCar = orderData.cars.find((car) => car.id === selectedCarId) || null;
   const selectedRate = orderData.rentalRates.find((rate) => rate.id === selectedRateId) || null;
   const selectedExtras = orderData.extras.filter((extra) => selectedExtraIds.includes(extra.id));
+  const availableAt = formatAvailableAt(dateFrom || dateTo);
 
   const canGoToStep2 = Boolean(selectedCity && selectedPickup);
   const canGoToStep3 = Boolean(selectedCar);
@@ -193,7 +210,7 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: OrderSectionProps) {
       rate: selectedRate?.id === 'daily' ? 'На сутки' : 'Поминутно',
       fullTank: selectedExtraIds.includes('fullTank') ? 'Да' : 'Нет',
       totalPrice,
-      availableAt: dateFrom,
+      availableAt,
     };
 
     localStorage.setItem(ORDER_STORAGE_KEY, JSON.stringify(completedOrder));
@@ -262,7 +279,7 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: OrderSectionProps) {
                 />
               )}
 
-              {step === 4 && selectedCar && <StepSummary car={selectedCar} dateFrom={dateFrom} />}
+              {step === 4 && selectedCar && <StepSummary car={selectedCar} dateFrom={availableAt} />}
             </HorizontalContentContainer>
           </section>
 

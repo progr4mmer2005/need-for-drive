@@ -1,7 +1,7 @@
 ﻿.checkboxLabel {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   font-size: 14px;
   color: #999;
 }
@@ -13,24 +13,29 @@
 .checkboxLabel input {
   appearance: none;
   margin: 0;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   border: 1px solid #999;
-  border-radius: 2px;
+  border-radius: 0;
   background: #fff;
-  display: inline-grid;
-  place-content: center;
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
   cursor: pointer;
 }
 
 .checkboxLabel input::before {
   content: '';
-  width: 10px;
-  height: 10px;
-  transform: scale(0);
+  position: absolute;
+  left: 4px;
+  top: -4px;
+  width: 7px;
+  height: 14px;
+  border-right: 3px solid #121212;
+  border-bottom: 3px solid #121212;
+  transform: rotate(45deg) scale(0);
+  transform-origin: center;
   transition: transform 120ms ease-in-out;
-  background: #0ec261;
-  clip-path: polygon(14% 44%, 0 59%, 42% 100%, 100% 14%, 84% 0, 42% 62%);
 }
 
 .checkboxLabel input:checked {
@@ -38,7 +43,7 @@
 }
 
 .checkboxLabel input:checked::before {
-  transform: scale(1);
+  transform: rotate(45deg) scale(1);
 }
 
 .disabled {

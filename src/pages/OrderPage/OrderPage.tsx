@@ -1,4 +1,4 @@
-﻿import { useMemo, useState } from 'react';
+﻿import { useEffect, useMemo, useState } from 'react';
 import { useOutletContext, useParams } from 'react-router-dom';
 
 import { OrderSection } from '../../widgets/OrderSection/OrderSection';
@@ -27,11 +27,29 @@ type StoredOrder = {
 };
 
 const orderStorageKey = 'need-for-drive-order';
+const getCarImageCandidates = (source: string) => {
+  if (!source) {
+    return [];
+  }
+
+  const fileName = source.split('/').filter(Boolean).pop();
+  if (!fileName) {
+    return [source];
+  }
+
+  const routeDepth = window.location.pathname.split('/').filter(Boolean).length;
+  const relativePrefix = routeDepth > 0 ? '../'.repeat(routeDepth) : '';
+  const absolutePath = `/uploads/cars/${fileName}`;
+  const relativePath = `${relativePrefix}uploads/cars/${fileName}`;
+
+  return [absolutePath, relativePath];
+};
 
 export function OrderPage() {
   const { isMenuOpen, toggleMenu } = useOutletContext<ContextType>();
   const { orderId } = useParams();
   const [hasImageError, setHasImageError] = useState(false);
+  const [candidateIndex, setCandidateIndex] = useState(0);
 
   const storedOrder = useMemo(() => {
     if (!orderId) {
@@ -50,6 +68,24 @@ export function OrderPage() {
       return null;
     }
   }, [orderId]);
+
+  const [imageSource, setImageSource] = useState('');
+  const imageCandidates = getCarImageCandidates(imageSource);
+  const imageSrc = imageCandidates[candidateIndex] || '';
+
+  useEffect(() => {
+    setImageSource(storedOrder?.carImage || '');
+    setCandidateIndex(0);
+    setHasImageError(false);
+  }, [storedOrder?.carImage]);
+
+  const handleImageError = () => {
+    if (candidateIndex < imageCandidates.length - 1) {
+      setCandidateIndex((current) => current + 1);
+      return;
+    }
+    setHasImageError(true);
+  };
 
   if (!orderId || !storedOrder) {
     return <OrderSection isMenuOpen={isMenuOpen} onMenuToggle={toggleMenu} />;
@@ -76,12 +112,12 @@ export function OrderPage() {
               <b>Доступна с</b> {storedOrder.availableAt}
             </div>
             <div className={styles.successCarMock}>
-              {storedOrder.carImage && !hasImageError ? (
+              {imageSrc && !hasImageError ? (
                 <img
                   className={styles.successImage}
-                  src={storedOrder.carImage}
+                  src={imageSrc}
                   alt={storedOrder.carName}
-                  onError={() => setHasImageError(true)}
+                  onError={handleImageError}
                 />
               ) : null}
             </div>

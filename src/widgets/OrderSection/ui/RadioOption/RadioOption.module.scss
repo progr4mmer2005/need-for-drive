@@ -10,46 +10,36 @@
   color: #121212;
 }
 
-.radioLabel input {
-  appearance: none;
+.radioInput {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.radioMark {
   margin: 0;
   width: 16px;
   height: 16px;
-  border: 1.5px solid #999;
+  border: 2px solid #999;
   border-radius: 50%;
-  background: transparent;
-  display: inline-grid;
-  place-content: center;
+  background: #fff;
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
   cursor: pointer;
 }
 
-.radioLabel input::before {
-  content: '';
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  transform: scale(0);
-  transition: transform 120ms ease-in-out;
-  background: #0ec261;
-}
-
-.radioLabel input:checked {
+.radioInput:checked + .radioMark {
   border-color: #0ec261;
-}
-
-.radioLabel input:checked::before {
-  transform: scale(1);
+  border-width: 4px;
 }
 
 .disabled {
   color: #b8b8b8;
 }
 
-.disabled input {
+.disabled .radioMark {
   border-color: #b8b8b8;
   cursor: default;
 }
 
-.disabled input::before {
-  background: #b8b8b8;
-}

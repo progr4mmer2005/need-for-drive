@@ -10,8 +10,8 @@
   font-size: 14px;
   color: #666;
   text-align: right;
-  line-height: 1;
-  padding-bottom: 4px;
+  line-height: 20px;
+  padding-bottom: 2px;
 }
 
 .autocomplete__inputWrapper {
@@ -22,14 +22,16 @@
 
 .autocomplete__input {
   width: 100%;
-  padding: 0 20px 4px 0;
+  height: 24px;
+  padding: 1px 20px 1px 0;
   border: none;
   border-bottom: 1px solid #999;
   font-size: 14px;
-  line-height: 1;
+  line-height: 20px;
   font-weight: 400;
   background: transparent;
   outline: none;
+  box-sizing: border-box;
 
   &::placeholder {
     color: #999;
