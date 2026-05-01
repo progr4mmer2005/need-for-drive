@@ -1,8 +1,8 @@
-import { Button } from '../../shared/components/Button';
+﻿import { Button } from '../../shared/components/Button';
 import { HorizontalContentContainer } from '../../shared/components/HorizontalContentContainer';
 import { BaseSection } from '../BaseSection';
 import * as styles from './HeroSection.module.scss';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 type HeroSectionProps = {
   isMenuOpen: boolean;
@@ -13,7 +13,6 @@ export function HeroSection({ isMenuOpen, onMenuToggle }: HeroSectionProps) {
   return (
     <BaseSection isMenuOpen={isMenuOpen} onMenuToggle={onMenuToggle}>
       <div className={styles['hero-content']}>
-
         <div className={styles['promo-container']}>
           <HorizontalContentContainer>
             <div className={styles.promo}>
@@ -23,32 +22,23 @@ export function HeroSection({ isMenuOpen, onMenuToggle }: HeroSectionProps) {
                 Need for drive
               </h1>
 
-              <p className={styles.subtitle}>
-                Поминутная аренда авто твоего города
-              </p>
-
-              
+              <p className={styles.subtitle}>Поминутная аренда авто твоего города</p>
             </div>
           </HorizontalContentContainer>
 
           <div className={styles['promo-button-container']}>
-            <Link to="/order">
+            <Link className={styles.bookLink} to="/order">
               <Button fullWidthOnMobile size="hero" squareOnMobile>
                 Забронировать
               </Button>
             </Link>
           </div>
-
         </div>
-
-        
 
         <footer className={styles.footer}>
           <HorizontalContentContainer>
             <div className={styles.footerInner}>
-              <p className={styles.copyright}>
-                © 2016-2019 «Need for drive»
-              </p>
+              <p className={styles.copyright}>© 2016-2019 «Need for drive»</p>
 
               <a className={styles.phone} href="tel:84952342244">
                 8 (495) 234-22-44
@@ -56,7 +46,6 @@ export function HeroSection({ isMenuOpen, onMenuToggle }: HeroSectionProps) {
             </div>
           </HorizontalContentContainer>
         </footer>
-
       </div>
     </BaseSection>
   );

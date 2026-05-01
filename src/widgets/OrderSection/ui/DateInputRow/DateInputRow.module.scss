@@ -1,0 +1,57 @@
+﻿.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.prefix {
+  width: 20px;
+  font-size: 14px;
+  color: #121212;
+  line-height: 1;
+}
+
+.inputWrap {
+  position: relative;
+  width: 260px;
+}
+
+.inputWrap input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #999;
+  padding: 0 28px 4px 0;
+  font-size: 14px;
+  line-height: 1.2;
+  height: 24px;
+  color: #121212;
+  background: transparent;
+  outline: none;
+  box-shadow: none;
+
+  &::placeholder {
+    color: #999;
+  }
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+    box-shadow: none;
+    border-bottom-color: #999;
+  }
+}
+
+.clearBtn {
+  position: absolute;
+  right: -2px;
+  top: 50%;
+  transform: translateY(-58%);
+  border: none;
+  background: transparent;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  color: #121212;
+  padding: 0;
+}

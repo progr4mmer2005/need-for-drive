@@ -1,10 +1,8 @@
-@use '../../styles/variables' as *;
-
-
+﻿@use '../../styles/variables' as *;
 
 .orderDetails {
   width: 100%;
-  margin: 16px 0;
+  margin-top: 8px;
 }
 
 .list {
@@ -14,11 +12,11 @@
 }
 
 .item {
-  display: flex;
-  align-items: baseline; // Выравнивание по базовой линии текста
-  margin-bottom: 8px;
-  width: 100%;
-  gap: 4px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: end;
+  margin-bottom: 10px;
+  gap: 8px;
 }
 
 .label {
@@ -29,14 +27,13 @@
 }
 
 .dots {
-  flex: 1;
+  min-width: 40px;
   height: 4px;
-  // Делаем точки жирными и управляемыми через radial-gradient
-  background-image: radial-gradient(circle, $dark-gray-color 1.5px, transparent 1.5px);
-  background-position: bottom;
-  background-size: 6px 4px; // 6px — расстояние между точками
+  background-image: radial-gradient(circle, #999 0.8px, transparent 0.8px);
+  background-size: 3.5px 3.5px;
   background-repeat: repeat-x;
-  margin-bottom: 4px; 
+  background-position: 0 100%;
+  margin-bottom: 4px;
 }
 
 .value {
@@ -44,20 +41,25 @@
   font-size: 14px;
   color: $dark-gray-color;
   text-align: right;
-  max-width: 65%; // Ограничиваем, чтобы текст имел место для переноса
-  word-break: break-all; // Или break-word, чтобы Нариманова не ломала верстку
+  max-width: 126px;
   line-height: 1.2;
+  word-break: normal;
 }
 
 .price {
   margin-top: 24px;
-  font-size: 16px;
+}
 
-  &Label {
-    font-weight: 700;
-  }
+.priceLabel,
+.priceValue {
+  font-size: 18px;
+  line-height: 1.1;
+}
 
-  &Value {
-    font-weight: 400;
-  }
+.priceLabel {
+  font-weight: 700;
+}
+
+.priceValue {
+  font-weight: 400;
 }

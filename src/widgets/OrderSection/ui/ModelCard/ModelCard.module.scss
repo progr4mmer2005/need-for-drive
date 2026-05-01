@@ -1,0 +1,44 @@
+﻿.card {
+  border: none;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  background: #fff;
+  min-height: 222px;
+  max-height: 222px;
+  padding: 18px 16px 12px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.selected {
+  box-shadow: inset 0 0 0 1px #0ec261;
+}
+
+.name {
+  font-size: 18px;
+  line-height: 1;
+  margin-bottom: 6px;
+  font-weight: 400;
+}
+
+.price {
+  font-size: 14px;
+  line-height: 1;
+  color: #999;
+}
+
+.imageWrap {
+  margin-top: auto;
+  height: 110px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.image {
+  max-width: 100%;
+  max-height: 92px;
+  object-fit: contain;
+}

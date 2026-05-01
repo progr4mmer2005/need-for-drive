@@ -1,11 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
-import styles from './AutocompleteInput.module.scss';
+﻿import React, { useEffect, useMemo, useRef, useState } from 'react';
+import * as styles from './AutocompleteInput.module.scss';
 
 interface AutocompleteInputProps {
   label: string;
   value: string;
   placeholder?: string;
   options: string[];
+  disabled?: boolean;
   onChange: (value: string) => void;
 }
 
@@ -14,14 +15,20 @@ export const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
   value,
   placeholder,
   options,
+  disabled = false,
   onChange,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState(value);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const filteredOptions = options.filter(option =>
-    option.toLowerCase().startsWith(inputValue.toLowerCase())
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
+
+  const filteredOptions = useMemo(
+    () => options.filter((option) => option.toLowerCase().includes(inputValue.toLowerCase())),
+    [inputValue, options],
   );
 
   useEffect(() => {
@@ -36,7 +43,9 @@ export const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+    const nextValue = e.target.value;
+    setInputValue(nextValue);
+    onChange(nextValue);
     setIsOpen(true);
   };
 
@@ -49,6 +58,7 @@ export const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
   const handleClear = () => {
     setInputValue('');
     onChange('');
+    setIsOpen(true);
   };
 
   return (
@@ -62,22 +72,24 @@ export const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
           onChange={handleInputChange}
           onFocus={() => setIsOpen(true)}
           placeholder={placeholder}
+          disabled={disabled}
         />
-        {inputValue && (
-          <button className={styles.autocomplete__clear} onClick={handleClear}>
-            ✕
+        {inputValue && !disabled && (
+          <button className={styles.autocomplete__clear} type="button" onClick={handleClear}>
+            ×
           </button>
         )}
-        {isOpen && filteredOptions.length > 0 && (
+        {isOpen && !disabled && filteredOptions.length > 0 && (
           <div className={styles.autocomplete__dropdown}>
             {filteredOptions.map((option) => (
-              <div
+              <button
                 key={option}
                 className={styles.autocomplete__option}
+                type="button"
                 onClick={() => handleOptionClick(option)}
               >
                 {option}
-              </div>
+              </button>
             ))}
           </div>
         )}
@@ -85,3 +97,4 @@ export const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
     </div>
   );
 };
+

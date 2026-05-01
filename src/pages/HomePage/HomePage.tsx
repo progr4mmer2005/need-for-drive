@@ -1,8 +1,8 @@
-import { useOutletContext } from 'react-router-dom';
+﻿import { useOutletContext } from 'react-router-dom';
 
 import { HeroSection } from '../../widgets/HeroSection';
 import { PromoSlider } from '../../widgets/PromoSlider';
-import styles from './HomePage.module.scss';
+import * as styles from './HomePage.module.scss';
 
 type ContextType = {
   isMenuOpen: boolean;

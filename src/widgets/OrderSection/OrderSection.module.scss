@@ -1,23 +1,32 @@
-@use '../../shared/styles/variables' as *;
+﻿@use '../../shared/styles/variables' as *;
+
+.orderContent {
+  height: 100%;
+}
 
 .breadcrumbsContainer {
-    border-top: $light-gray-color 2px solid;
-    border-bottom: $light-gray-color 2px solid;
-    padding: 7px 0;
+  border-top: 1px solid $light-gray-color;
+  border-bottom: 1px solid $light-gray-color;
+  padding: 8px 0;
 }
 
-
-.orderSplit {
+.split {
   display: grid;
-  grid-template-columns: 60% 40%;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  min-height: calc(100vh - 138px);
 }
 
-
-
-.orderTopMarginContainer {
-    margin-top: 32px;
+.leftPane {
+  padding: 24px 0 0;
+  min-height: 0;
 }
 
-.orderMapSelectionContainer {
-  margin-top: 45px;
+.stepPanel {
+  max-width: 735px;
+}
+
+@media (max-width: 1120px) {
+  .split {
+    grid-template-columns: 1fr;
+  }
 }

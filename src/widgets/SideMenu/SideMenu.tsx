@@ -1,4 +1,4 @@
-import { LanguageToggle } from '../../shared/components/LanguageToggle';
+﻿import { LanguageToggle } from '../../shared/components/LanguageToggle';
 import { SocialLinks } from '../../shared/components/SocialLinks';
 import * as styles from './SideMenu.module.scss';
 

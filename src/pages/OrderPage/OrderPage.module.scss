@@ -1,23 +1,96 @@
-.layout {
+﻿@use '../../shared/styles/variables' as *;
+
+.successHeader {
+  border-top: 1px solid $light-gray-color;
+  border-bottom: 1px solid $light-gray-color;
+  padding: 14px 0;
+}
+
+.successOrderNumber {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.successSplit {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  min-height: 100vh;
-  padding-left: 64px;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  min-height: calc(100vh - 146px);
+}
 
-  @media (max-width: 1280px) {
-    grid-template-columns: 60% 40%;
-  }
+.successMain {
+  padding-top: 26px;
+}
 
-  @media (max-width: 1024px) {
+.successTitle {
+  font-size: 40px;
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+
+.successCar {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.successPlate {
+  display: inline-block;
+  border: 1px solid #999;
+  border-radius: 4px;
+  padding: 2px 8px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.successLine {
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.successCarMock {
+  margin-top: 16px;
+  max-width: 320px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.successImage {
+  max-width: 100%;
+  max-height: 90px;
+  object-fit: contain;
+}
+
+.successAside {
+  border-left: 1px solid $light-gray-color;
+  padding: 30px;
+}
+
+.successAsideTitle {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+.cancelButton {
+  width: 100%;
+  height: 48px;
+  margin-top: 26px;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  background: linear-gradient(90deg, #493013, #7b0c3b);
+}
+
+@media (max-width: 1120px) {
+  .successSplit {
     grid-template-columns: 1fr;
   }
 
-  @media (max-width: 550px) {
-    padding-left: 0;
+  .successAside {
+    border-left: none;
+    border-top: 1px solid $light-gray-color;
   }
-
 }
-
-
-
-

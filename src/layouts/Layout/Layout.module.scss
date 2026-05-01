@@ -1,9 +1,23 @@
-.layout {
+﻿.layout {
   min-height: 100vh;
   padding-left: 64px;
+  display: flex;
+  justify-content: center;
+}
 
+.layout > * {
+  width: 100%;
+  max-width: 1516px;
+  background: #fff;
+  min-height: 100vh;
+}
 
-  @media (max-width: 550px) {
+@media (max-width: 550px) {
+  .layout {
     padding-left: 0;
+  }
+
+  .layout > * {
+    max-width: none;
   }
 }

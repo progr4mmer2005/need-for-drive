@@ -1,5 +1,6 @@
-import { ReactNode } from 'react';
+﻿import { ReactNode } from 'react';
 import { Header } from '../Header';
+import { HorizontalContentContainer } from '../../shared/components/HorizontalContentContainer';
 import * as styles from './BaseSection.module.scss';
 
 type BaseSectionProps = {
@@ -16,12 +17,12 @@ export function BaseSection({
   return (
     <section className={styles.section}>
       <div className={styles.headerContainer}>
-        <Header isMenuOpen={isMenuOpen} onMenuToggle={onMenuToggle} />
+        <HorizontalContentContainer>
+          <Header isMenuOpen={isMenuOpen} onMenuToggle={onMenuToggle} />
+        </HorizontalContentContainer>
       </div>
 
-      <div className={styles.content}>
-        {children}
-      </div>
+      <div className={styles.content}>{children}</div>
     </section>
   );
 }

@@ -1,20 +1,33 @@
-.breadcrumbs {
+﻿.breadcrumbs {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+}
 
-  &__item {
-    font-size: 14px;
-    font-weight: 500;
-    color: #999;
+.item {
+  border: none;
+  background: none;
+  color: #121212;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
 
-    &.active {
-      color: #00b850;
-    }
-  }
+.active {
+  color: #0ec261;
+}
 
-  &__separator {
-    color: #999;
-    font-size: 12px;
-  }
+.disabled {
+  color: #999;
+  cursor: default;
+}
+
+.separator {
+  color: #999;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 700;
+  transform: translateY(-1px);
 }

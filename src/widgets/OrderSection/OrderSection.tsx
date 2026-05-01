@@ -1,12 +1,14 @@
+﻿import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
+import orderData from '../../shared/model/orderData.json';
 import { BaseSection } from '../BaseSection';
 import * as styles from './OrderSection.module.scss';
 import { Breadcrumbs } from '../../shared/components/Breadcrumbs';
-import {Link} from 'react-router-dom';
 import { HorizontalContentContainer } from '../../shared/components/HorizontalContentContainer';
-import { AutocompleteInput } from '../../shared/components/AutocompleteInput';
-import { MapSelection } from '../../shared/components/MapSelection';
-import { OrderDetails } from '../../shared/components/OrderDetails';
+import { ConfirmModal, OrderSidebar, StepExtras, StepLocation, StepModels, StepSummary } from './ui';
+import { CompletedOrder, ORDER_STORAGE_KEY, STEP_LABELS, Step } from './model/types';
+import { formatPrice } from './model/formatPrice';
 
 type OrderSectionProps = {
   isMenuOpen: boolean;
@@ -14,58 +16,269 @@ type OrderSectionProps = {
 };
 
 export function OrderSection({ isMenuOpen, onMenuToggle }: OrderSectionProps) {
-  const orderData = [
-  { label: 'Пункт выдачи', value: 'Ульяновск, Нариманова 42' },
-  { label: 'Модель', value: 'Hyundai, i30 N' },
-  { label: 'Цвет', value: 'Голубой' },
-  { label: 'Запас топлива', value: '100%' },
-];
+  const navigate = useNavigate();
+
+  const [step, setStep] = useState<Step>(1);
+
+  const [cityInput, setCityInput] = useState('Ульяновск');
+  const [pickupInput, setPickupInput] = useState('');
+  const [selectedPickupId, setSelectedPickupId] = useState<string | null>(null);
+
+  const [selectedCategory, setSelectedCategory] = useState('Все модели');
+  const [selectedCarId, setSelectedCarId] = useState<string | null>(null);
+
+  const [selectedColor, setSelectedColor] = useState('Голубой');
+  const [dateFrom, setDateFrom] = useState('12.06.2019 12:00');
+  const [dateTo, setDateTo] = useState('');
+  const [selectedRateId, setSelectedRateId] = useState('daily');
+  const [selectedExtraIds, setSelectedExtraIds] = useState<string[]>(['fullTank']);
+
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+  const cities = orderData.cities;
+  const cityOptions = cities.map((city) => city.name);
+
+  const selectedCity = useMemo(
+    () => cities.find((city) => city.name.toLowerCase() === cityInput.trim().toLowerCase()) || null,
+    [cities, cityInput],
+  );
+
+  const pickupOptions = selectedCity ? selectedCity.pickupPoints.map((point) => point.name) : [];
+
+  const selectedPickup = useMemo(() => {
+    if (!selectedCity) {
+      return null;
+    }
+
+    if (selectedPickupId) {
+      return selectedCity.pickupPoints.find((point) => point.id === selectedPickupId) || null;
+    }
+
+    return (
+      selectedCity.pickupPoints.find(
+        (point) => point.name.toLowerCase() === pickupInput.trim().toLowerCase(),
+      ) || null
+    );
+  }, [pickupInput, selectedCity, selectedPickupId]);
+
+  const filteredCars = useMemo(() => {
+    if (selectedCategory === 'Все модели') {
+      return orderData.cars;
+    }
+
+    return orderData.cars.filter((car) => car.category === selectedCategory);
+  }, [selectedCategory]);
+
+  const selectedCar = orderData.cars.find((car) => car.id === selectedCarId) || null;
+  const selectedRate = orderData.rentalRates.find((rate) => rate.id === selectedRateId) || null;
+  const selectedExtras = orderData.extras.filter((extra) => selectedExtraIds.includes(extra.id));
+
+  const canGoToStep2 = Boolean(selectedCity && selectedPickup);
+  const canGoToStep3 = Boolean(selectedCar);
+  const canGoToStep4 = Boolean(selectedCar && selectedRate);
+
+  const minPrice = selectedCar?.priceMin || 8000;
+  const maxPrice = selectedCar?.priceMax || 12000;
+
+  const totalPrice = useMemo(() => {
+    if (!selectedCar) {
+      return `от ${formatPrice(minPrice)} до ${formatPrice(maxPrice)}`;
+    }
+
+    const extrasPrice = selectedExtras.reduce((acc, extra) => acc + extra.price, 0);
+    const basePrice = selectedCar.priceMin;
+    const ratePrice = selectedRate?.id === 'daily' ? selectedRate.price : 0;
+    return formatPrice(basePrice + extrasPrice + ratePrice);
+  }, [maxPrice, minPrice, selectedCar, selectedExtras, selectedRate]);
+
+  const orderItems = [
+    { label: 'Пункт выдачи', value: selectedPickup ? `${selectedCity?.name}, ${selectedPickup.name}` : null },
+    { label: 'Модель', value: selectedCar ? `${selectedCar.brand}, ${selectedCar.name}` : null },
+    { label: 'Цвет', value: step >= 3 ? selectedColor : null },
+    { label: 'Длительность аренды', value: step >= 3 ? '1д 2ч' : null },
+    { label: 'Тариф', value: step >= 3 ? (selectedRate?.id === 'daily' ? 'На сутки' : 'Поминутно') : null },
+    {
+      label: 'Полный бак',
+      value: step >= 3 ? (selectedExtraIds.includes('fullTank') ? 'Да' : 'Нет') : null,
+    },
+  ];
+
+  const isStepEnabled = (stepIndex: Step) => {
+    if (stepIndex === 1) {
+      return true;
+    }
+    if (stepIndex === 2) {
+      return canGoToStep2;
+    }
+    if (stepIndex === 3) {
+      return canGoToStep3;
+    }
+    return canGoToStep4;
+  };
+
+  const handleStepTransition = (nextStep: Step) => {
+    if (isStepEnabled(nextStep)) {
+      setStep(nextStep);
+    }
+  };
+
+  const resetAfterLocation = () => {
+    setSelectedCarId(null);
+    setSelectedCategory('Все модели');
+    setSelectedColor('Голубой');
+    setSelectedRateId('daily');
+    setSelectedExtraIds(['fullTank']);
+    setStep(1);
+  };
+
+  const handleCityChange = (value: string) => {
+    setCityInput(value);
+    setPickupInput('');
+    setSelectedPickupId(null);
+    resetAfterLocation();
+  };
+
+  const handlePickupChange = (value: string) => {
+    setPickupInput(value);
+    setSelectedPickupId(null);
+    resetAfterLocation();
+  };
+
+  const handlePickupSelectFromMap = (pickupId: string) => {
+    if (!selectedCity) {
+      return;
+    }
+
+    const point = selectedCity.pickupPoints.find((pickup) => pickup.id === pickupId);
+    if (!point) {
+      return;
+    }
+
+    setSelectedPickupId(point.id);
+    setPickupInput(point.name);
+    setStep(1);
+  };
+
+  const handleCarSelect = (carId: string) => {
+    setSelectedCarId(carId);
+    setSelectedColor('Голубой');
+    setSelectedRateId('daily');
+    setSelectedExtraIds(['fullTank']);
+    setDateTo('');
+    setStep(2);
+  };
+
+  const handleExtraToggle = (extraId: string) => {
+    setSelectedExtraIds((current) =>
+      current.includes(extraId)
+        ? current.filter((item) => item !== extraId)
+        : [...current, extraId],
+    );
+  };
+
+  const handleSubmitOrder = () => {
+    if (!selectedCity || !selectedPickup || !selectedCar) {
+      return;
+    }
+
+    const orderId = `RUS${Math.floor(100000000 + Math.random() * 900000000)}`;
+    const completedOrder: CompletedOrder = {
+      orderId,
+      city: selectedCity.name,
+      pickupPoint: selectedPickup.name,
+      carName: `${selectedCar.brand}, ${selectedCar.name}`,
+      carImage: selectedCar.image,
+      color: selectedColor,
+      duration: '1д 2ч',
+      rate: selectedRate?.id === 'daily' ? 'На сутки' : 'Поминутно',
+      fullTank: selectedExtraIds.includes('fullTank') ? 'Да' : 'Нет',
+      totalPrice,
+      availableAt: dateFrom,
+    };
+
+    localStorage.setItem(ORDER_STORAGE_KEY, JSON.stringify(completedOrder));
+    navigate(`/order/success/${orderId}`);
+  };
+
   return (
     <BaseSection isMenuOpen={isMenuOpen} onMenuToggle={onMenuToggle}>
-      <div className={styles['order-content']}>
-
+      <div className={styles.orderContent}>
         <div className={styles.breadcrumbsContainer}>
           <HorizontalContentContainer>
-          <Breadcrumbs items={[
-            {label: "Местоположение"},
-            {label: "Модель"},
-            {label: "Дополнительно"},
-            {label: "Итого"}
-          ]}/>
+            <Breadcrumbs
+              items={([1, 2, 3, 4] as Step[]).map((stepKey) => ({
+                key: stepKey,
+                label: STEP_LABELS[stepKey],
+                active: stepKey === step,
+                enabled: isStepEnabled(stepKey),
+              }))}
+              onStepClick={(nextStep) => handleStepTransition(nextStep as Step)}
+            />
           </HorizontalContentContainer>
         </div>
 
-        <div className={styles.orderSplit}>
-
-            <div className={styles.orderTopMarginContainer}>
-              <HorizontalContentContainer>
-                <AutocompleteInput label='Город' value='' placeholder='Ульяновск' options={['Ульяновск']} onChange={() => {}}>
-                </AutocompleteInput>
-
-                <AutocompleteInput label='Пункт выдачи' value='' placeholder='Ульяновск' options={['Ульяновск']} onChange={() => {}}>
-                </AutocompleteInput>
-
-
-                <div className={styles.orderMapSelectionContainer}>
-                  <MapSelection points={[]}>
-
-                  </MapSelection>
+        <div className={styles.split}>
+          <section className={styles.leftPane}>
+            <HorizontalContentContainer>
+              {step === 1 && (
+                <div className={styles.stepPanel}>
+                  <StepLocation
+                    cityInput={cityInput}
+                    pickupInput={pickupInput}
+                    cityOptions={cityOptions}
+                    pickupOptions={pickupOptions}
+                    selectedCity={selectedCity}
+                    selectedPickupId={selectedPickup?.id}
+                    onCityChange={handleCityChange}
+                    onPickupChange={handlePickupChange}
+                    onPickupSelectFromMap={handlePickupSelectFromMap}
+                  />
                 </div>
-              </HorizontalContentContainer>
-            </div>
+              )}
 
-            
+              {step === 2 && (
+                <StepModels
+                  selectedCategory={selectedCategory}
+                  selectedCarId={selectedCarId}
+                  cars={filteredCars}
+                  onCategoryChange={setSelectedCategory}
+                  onCarSelect={handleCarSelect}
+                />
+              )}
 
-            <div className={styles.orderResultsContainer}> 
-              <div className={styles.orderTopMarginContainer}>
-                <div className={styles.orderResutlsTitle}>Ваш заказ</div>
-                <OrderDetails items={orderData} priceMin={8000} priceMax={12000} />
+              {step === 3 && selectedCar && (
+                <StepExtras
+                  selectedCar={selectedCar}
+                  selectedColor={selectedColor}
+                  dateFrom={dateFrom}
+                  dateTo={dateTo}
+                  selectedRateId={selectedRateId}
+                  selectedExtraIds={selectedExtraIds}
+                  onColorChange={setSelectedColor}
+                  onDateFromChange={setDateFrom}
+                  onDateToChange={setDateTo}
+                  onRateChange={setSelectedRateId}
+                  onExtraToggle={handleExtraToggle}
+                />
+              )}
 
-            </div>
-          </div>
+              {step === 4 && selectedCar && <StepSummary car={selectedCar} dateFrom={dateFrom} />}
+            </HorizontalContentContainer>
+          </section>
+
+          <OrderSidebar
+            step={step}
+            items={orderItems}
+            priceText={selectedCar ? totalPrice : `от ${formatPrice(minPrice)} до ${formatPrice(maxPrice)}`}
+            canGoToStep2={canGoToStep2}
+            canGoToStep3={canGoToStep3}
+            onStepChange={handleStepTransition}
+            onOpenConfirm={() => setIsConfirmOpen(true)}
+          />
         </div>
-
       </div>
+
+      <ConfirmModal isOpen={isConfirmOpen} onConfirm={handleSubmitOrder} onCancel={() => setIsConfirmOpen(false)} />
     </BaseSection>
   );
 }

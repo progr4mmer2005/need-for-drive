@@ -1,4 +1,4 @@
-import { BurgerButton } from '../../shared/components/BurgerButton';
+﻿import { BurgerButton } from '../../shared/components/BurgerButton';
 import { Logo } from '../../shared/components/Logo';
 import { Waypoint } from '../../shared/components/Waypoint';
 import * as styles from './Header.module.scss';

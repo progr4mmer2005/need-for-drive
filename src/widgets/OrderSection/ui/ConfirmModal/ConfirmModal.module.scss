@@ -1,0 +1,44 @@
+﻿.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgb(255 255 255 / 86%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 40;
+}
+
+.modalContent {
+  text-align: center;
+}
+
+.title {
+  font-size: 36px;
+  font-weight: 400;
+  margin-bottom: 28px;
+}
+
+.modalActions {
+  display: flex;
+  gap: 12px;
+}
+
+.mainAction,
+.cancelAction {
+  width: 177px;
+  height: 48px;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.mainAction {
+  background: #0ec261;
+}
+
+.cancelAction {
+  background: linear-gradient(90deg, #493013, #7b0c3b);
+}
