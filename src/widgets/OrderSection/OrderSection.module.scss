@@ -1,0 +1,23 @@
+@use '../../shared/styles/variables' as *;
+
+.breadcrumbsContainer {
+    border-top: $light-gray-color 2px solid;
+    border-bottom: $light-gray-color 2px solid;
+    padding: 7px 0;
+}
+
+
+.orderSplit {
+  display: grid;
+  grid-template-columns: 60% 40%;
+}
+
+
+
+.orderTopMarginContainer {
+    margin-top: 32px;
+}
+
+.orderMapSelectionContainer {
+  margin-top: 45px;
+}

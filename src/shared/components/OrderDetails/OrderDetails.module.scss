@@ -1,0 +1,63 @@
+@use '../../styles/variables' as *;
+
+
+
+.orderDetails {
+  width: 100%;
+  margin: 16px 0;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.item {
+  display: flex;
+  align-items: baseline; // Выравнивание по базовой линии текста
+  margin-bottom: 8px;
+  width: 100%;
+  gap: 4px;
+}
+
+.label {
+  font-weight: 300;
+  font-size: 14px;
+  color: $primary-black-color;
+  white-space: nowrap;
+}
+
+.dots {
+  flex: 1;
+  height: 4px;
+  // Делаем точки жирными и управляемыми через radial-gradient
+  background-image: radial-gradient(circle, $dark-gray-color 1.5px, transparent 1.5px);
+  background-position: bottom;
+  background-size: 6px 4px; // 6px — расстояние между точками
+  background-repeat: repeat-x;
+  margin-bottom: 4px; 
+}
+
+.value {
+  font-weight: 300;
+  font-size: 14px;
+  color: $dark-gray-color;
+  text-align: right;
+  max-width: 65%; // Ограничиваем, чтобы текст имел место для переноса
+  word-break: break-all; // Или break-word, чтобы Нариманова не ломала верстку
+  line-height: 1.2;
+}
+
+.price {
+  margin-top: 24px;
+  font-size: 16px;
+
+  &Label {
+    font-weight: 700;
+  }
+
+  &Value {
+    font-weight: 400;
+  }
+}

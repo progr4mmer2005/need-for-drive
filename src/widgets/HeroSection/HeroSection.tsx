@@ -1,7 +1,8 @@
 import { Button } from '../../shared/components/Button';
+import { HorizontalContentContainer } from '../../shared/components/HorizontalContentContainer';
 import { BaseSection } from '../BaseSection';
 import * as styles from './HeroSection.module.scss';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 type HeroSectionProps = {
   isMenuOpen: boolean;
@@ -11,10 +12,10 @@ type HeroSectionProps = {
 export function HeroSection({ isMenuOpen, onMenuToggle }: HeroSectionProps) {
   return (
     <BaseSection isMenuOpen={isMenuOpen} onMenuToggle={onMenuToggle}>
-      <div className={styles.heroContent}>
+      <div className={styles['hero-content']}>
 
         <div className={styles['promo-container']}>
-          <div className={styles.container}>
+          <HorizontalContentContainer>
             <div className={styles.promo}>
               <h1 className={styles.title}>
                 <span className={styles.titleBlack}>Каршеринг</span>
@@ -28,7 +29,7 @@ export function HeroSection({ isMenuOpen, onMenuToggle }: HeroSectionProps) {
 
               
             </div>
-          </div>
+          </HorizontalContentContainer>
 
           <div className={styles['promo-button-container']}>
             <Link to="/order">
@@ -43,15 +44,17 @@ export function HeroSection({ isMenuOpen, onMenuToggle }: HeroSectionProps) {
         
 
         <footer className={styles.footer}>
-          <div className={styles.container}>
-            <p className={styles.copyright}>
-              © 2016-2019 «Need for drive»
-            </p>
+          <HorizontalContentContainer>
+            <div className={styles.footerInner}>
+              <p className={styles.copyright}>
+                © 2016-2019 «Need for drive»
+              </p>
 
-            <a className={styles.phone} href="tel:84952342244">
-              8 (495) 234-22-44
-            </a>
-          </div>
+              <a className={styles.phone} href="tel:84952342244">
+                8 (495) 234-22-44
+              </a>
+            </div>
+          </HorizontalContentContainer>
         </footer>
 
       </div>

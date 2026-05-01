@@ -19,7 +19,7 @@
 
   &__input {
     width: 100%;
-    padding: 8px 40px 8px 0;
+    padding: 0 0px 4px 10px;
     border: none;
     border-bottom: 1px solid #999;
     font-size: 16px;
@@ -41,7 +41,8 @@
     font-size: 20px;
     cursor: pointer;
     color: #333;
-    padding: 4px;
+    padding-bottom: 8px;
+    padding-right: 10px;
 
     &:hover {
       color: #00b850;

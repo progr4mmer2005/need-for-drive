@@ -1,14 +1,12 @@
 @use '../../shared/styles/variables' as *;
 
-.heroContent {
+.hero-content {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   
   height: 100%;
 
-  @media (max-width: 550px) {
-    justify-content: space-between;
-  }
 }
 
 .promo-button-container {
@@ -29,17 +27,7 @@
 }
 
 
-.container {
-  padding: 0 64px;
 
-  @media (max-width: 650px) {
-    padding: 0 32px;
-  }
-
-  @media (max-width: 550px) {
-    padding: 0 16px;
-  }
-}
 
 .promo-container {
   display: flex;
@@ -86,28 +74,26 @@
 }
 
 .footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
   margin-top: auto;
 
   @media (max-width: 550px) {
-    width: 100%;
-    background: #151b1f;
+    background-color: $primary-black-color;
   }
+  
 }
 
-.footer {
-  width: 100%;
+.footerInner{
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  
+  width: 100%;
   padding-top: 24px;
   padding-bottom: 24px;
-}
 
-@media (max-width: 550px) {
-  .footer {
+  @media (max-width: 550px) {
+    width: 100%;
+    
     flex-direction: column;
     align-items: flex-end;
     gap: 6px;
@@ -115,6 +101,9 @@
     padding-bottom: 16px;
   }
 }
+
+
+
 
 .copyright {
   color: $dark-gray-color;
