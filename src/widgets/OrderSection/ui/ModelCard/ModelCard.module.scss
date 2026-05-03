@@ -1,7 +1,9 @@
-﻿.card {
+﻿@use '../../../../shared/styles/_variables.scss' as *;
+
+.card {
   border: none;
-  border-right: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
+  border-right: 1px solid $light-gray-color;
+  border-bottom: 1px solid $light-gray-color;
   background: #fff;
   min-height: 222px;
   max-height: 222px;
@@ -13,7 +15,7 @@
 }
 
 .selected {
-  box-shadow: inset 0 0 0 1px #0ec261;
+  box-shadow: inset 0 0 0 1px $primary-black-color;
 }
 
 .name {
@@ -26,7 +28,7 @@
 .price {
   font-size: 14px;
   line-height: 1;
-  color: #999;
+  color: $dark-gray-color;
 }
 
 .imageWrap {
@@ -34,11 +36,11 @@
   height: 110px;
   display: flex;
   align-items: flex-end;
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 .image {
   max-width: 100%;
-  max-height: 92px;
+  max-height: 116px;
   object-fit: contain;
 }

@@ -9,6 +9,7 @@ import { HorizontalContentContainer } from '../../shared/components/HorizontalCo
 import { ConfirmModal, OrderSidebar, StepExtras, StepLocation, StepModels, StepSummary } from './ui';
 import { CompletedOrder, ORDER_STORAGE_KEY, STEP_LABELS, Step } from './model/types';
 import { formatPrice } from './model/formatPrice';
+import { StepOrderConfirmed } from './ui/StepOrderConfirmed';
 
 type OrderSectionProps = {
   isMenuOpen: boolean;
@@ -32,7 +33,7 @@ const formatAvailableAt = (value: string) => {
 };
 
 export function OrderSection({ isMenuOpen, onMenuToggle }: OrderSectionProps) {
-  const navigate = useNavigate();
+  const [orderId, setOrderId] = useState<string>('');
 
   const [step, setStep] = useState<Step>(1);
 
@@ -199,6 +200,7 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: OrderSectionProps) {
     }
 
     const orderId = `RUS${Math.floor(100000000 + Math.random() * 900000000)}`;
+    setOrderId(orderId);
     const completedOrder: CompletedOrder = {
       orderId,
       city: selectedCity.name,
@@ -214,7 +216,8 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: OrderSectionProps) {
     };
 
     localStorage.setItem(ORDER_STORAGE_KEY, JSON.stringify(completedOrder));
-    navigate(`/order/success/${orderId}`);
+    setIsConfirmOpen(false);
+    setStep(5);
   };
 
   return (
@@ -222,7 +225,7 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: OrderSectionProps) {
       <div className={styles.orderContent}>
         <div className={styles.breadcrumbsContainer}>
           <HorizontalContentContainer>
-            <Breadcrumbs
+            {step !== 5 && <Breadcrumbs
               items={([1, 2, 3, 4] as Step[]).map((stepKey) => ({
                 key: stepKey,
                 label: STEP_LABELS[stepKey],
@@ -230,7 +233,9 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: OrderSectionProps) {
                 enabled: isStepEnabled(stepKey),
               }))}
               onStepClick={(nextStep) => handleStepTransition(nextStep as Step)}
-            />
+            />}
+
+            {step === 5 && <div className={styles.orderNumber}>Заказ номер {orderId}</div>}
           </HorizontalContentContainer>
         </div>
 
@@ -280,6 +285,8 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: OrderSectionProps) {
               )}
 
               {step === 4 && selectedCar && <StepSummary car={selectedCar} dateFrom={availableAt} />}
+
+              {step === 5 && selectedCar && <StepOrderConfirmed car={selectedCar} dateFrom={availableAt}/>}
             </HorizontalContentContainer>
           </section>
 

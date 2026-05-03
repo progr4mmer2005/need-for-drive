@@ -1,4 +1,5 @@
-﻿import { OrderDetails } from '../../../../shared/components/OrderDetails';
+﻿import { Button } from '../../../../shared/components/Button'
+import { OrderDetails } from '../../../../shared/components/OrderDetails';
 import { Step } from '../../model/types';
 import * as styles from './OrderSidebar.module.scss';
 
@@ -26,30 +27,41 @@ export function OrderSidebar({
       <div className={styles.box}>
         <h3 className={styles.title}>Ваш заказ:</h3>
         <OrderDetails items={items} priceText={priceText} />
+          <div className={styles.buttonContainer}>
 
-        {step === 1 && (
-          <button className={styles.mainAction} disabled={!canGoToStep2} type="button" onClick={() => onStepChange(2)}>
-            Выбрать модель
-          </button>
-        )}
+          
+            {step === 1 && (
+              <Button size='full'  disabled={!canGoToStep2} onClick={() => onStepChange(2)}>
+                Выбрать модель
+              </Button>
+            )}
 
-        {step === 2 && (
-          <button className={styles.mainAction} disabled={!canGoToStep3} type="button" onClick={() => onStepChange(3)}>
-            Дополнительно
-          </button>
-        )}
+            {step === 2 && (
+              <Button size='full' disabled={!canGoToStep3} type="button" onClick={() => onStepChange(3)}>
+                Дополнительно
+              </Button>
+            )}
 
-        {step === 3 && (
-          <button className={styles.mainAction} type="button" onClick={() => onStepChange(4)}>
-            Итого
-          </button>
-        )}
+            {step === 3 && (
+              <Button size='full'  onClick={() => onStepChange(4)}>
+                Итого
+              </Button>
+            )}
 
-        {step === 4 && (
-          <button className={styles.mainAction} type="button" onClick={onOpenConfirm}>
-            Заказать
-          </button>
-        )}
+            {step === 4 && (
+              <Button size='full' onClick={onOpenConfirm}>
+                Заказать
+              </Button>
+            )}
+
+            {step === 5 && (
+              <Button size='full' tone='darkRed'>
+                Отменить
+              </Button>
+            )
+
+            }
+        </div>
       </div>
     </aside>
   );

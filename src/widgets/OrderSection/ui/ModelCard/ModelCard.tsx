@@ -1,7 +1,8 @@
-﻿import { useEffect, useState } from 'react';
+﻿import { useState } from 'react';
 
 import { Car } from '../../model/types';
 import { formatPrice } from '../../model/formatPrice';
+import { carImages } from './carImages';
 import * as styles from './ModelCard.module.scss';
 
 type ModelCardProps = {
@@ -10,42 +11,14 @@ type ModelCardProps = {
   onSelect: (carId: string) => void;
 };
 
-const getCarImageCandidates = (source: string) => {
-  if (!source) {
-    return [];
-  }
-
-  const fileName = source.split('/').filter(Boolean).pop();
-  if (!fileName) {
-    return [source];
-  }
-
-  const routeDepth = window.location.pathname.split('/').filter(Boolean).length;
-  const relativePrefix = routeDepth > 0 ? '../'.repeat(routeDepth) : '';
-  const absolutePath = `/uploads/cars/${fileName}`;
-  const relativePath = `${relativePrefix}uploads/cars/${fileName}`;
-
-  return [absolutePath, relativePath];
-};
-
 export function ModelCard({ car, selected, onSelect }: ModelCardProps) {
   const [hasImageError, setHasImageError] = useState(false);
-  const [candidateIndex, setCandidateIndex] = useState(0);
-  const imageCandidates = getCarImageCandidates(car.image);
-  const imageSrc = imageCandidates[candidateIndex] || '';
+  
+  const imageSrc = carImages[car.id];
   const hasImage = Boolean(imageSrc) && !hasImageError;
 
-  useEffect(() => {
-    setCandidateIndex(0);
-    setHasImageError(false);
-  }, [car.image]);
-
   const handleImageError = () => {
-    if (candidateIndex < imageCandidates.length - 1) {
-      setCandidateIndex((current) => current + 1);
-      return;
-    }
-
+    console.error('Failed to load image for:', car.id, imageSrc);
     setHasImageError(true);
   };
 

@@ -2,14 +2,14 @@
 
 import { Car } from '../../model/types';
 import { carImages } from '../ModelCard/carImages';
-import * as styles from './StepSummary.module.scss';
+import * as styles from './StepOrderConfirmed.module.scss';
 
-type StepSummaryProps = {
+type StepOrderConfirmed = {
   car: Car;
   dateFrom: string;
 };
 
-export function StepSummary({ car, dateFrom}: StepSummaryProps) {
+export function StepOrderConfirmed({ car, dateFrom}: StepOrderConfirmed) {
   const [hasImageError, setHasImageError] = useState(false);
 
   const imageSrc = carImages[car.id];
@@ -19,7 +19,9 @@ export function StepSummary({ car, dateFrom}: StepSummaryProps) {
     <div className={styles.panel}>
 
       <div className={styles.top}>
+        
         <div>
+          <div className={styles.successTitle}>Ваш заказ подтверждён</div>
           <div className={styles.carName}>{`${car.brand}, ${car.name}`}</div>
           <div className={styles.plate}>{car.plate}</div>
           <div className={styles.line}>
