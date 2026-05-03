@@ -1,0 +1,100 @@
+﻿import React, { useEffect, useMemo, useRef, useState } from 'react';
+import * as styles from './AutocompleteInput.module.scss';
+
+interface AutocompleteInputProps {
+  label: string;
+  value: string;
+  placeholder?: string;
+  options: string[];
+  disabled?: boolean;
+  onChange: (value: string) => void;
+}
+
+export const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
+  label,
+  value,
+  placeholder,
+  options,
+  disabled = false,
+  onChange,
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [inputValue, setInputValue] = useState(value);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
+
+  const filteredOptions = useMemo(
+    () => options.filter((option) => option.toLowerCase().includes(inputValue.toLowerCase())),
+    [inputValue, options],
+  );
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const nextValue = e.target.value;
+    setInputValue(nextValue);
+    onChange(nextValue);
+    setIsOpen(true);
+  };
+
+  const handleOptionClick = (option: string) => {
+    setInputValue(option);
+    onChange(option);
+    setIsOpen(false);
+  };
+
+  const handleClear = () => {
+    setInputValue('');
+    onChange('');
+    setIsOpen(true);
+  };
+
+  return (
+    <div className={styles.autocomplete} ref={wrapperRef}>
+      <label className={styles.autocomplete__label}>{label}</label>
+      <div className={styles.autocomplete__inputWrapper}>
+        <input
+          type="text"
+          className={styles.autocomplete__input}
+          value={inputValue}
+          onChange={handleInputChange}
+          onFocus={() => setIsOpen(true)}
+          placeholder={placeholder}
+          disabled={disabled}
+        />
+        {inputValue && !disabled && (
+          <button className={styles.autocomplete__clear} type="button" onClick={handleClear}>
+            ×
+          </button>
+        )}
+        {isOpen && !disabled && filteredOptions.length > 0 && (
+          <div className={styles.autocomplete__dropdown}>
+            {filteredOptions.map((option) => (
+              <button
+                key={option}
+                className={styles.autocomplete__option}
+                type="button"
+                onClick={() => handleOptionClick(option)}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+

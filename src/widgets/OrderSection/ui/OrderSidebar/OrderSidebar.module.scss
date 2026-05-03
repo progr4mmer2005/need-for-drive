@@ -1,0 +1,40 @@
+﻿@use '../../../../shared/styles/variables' as *;
+
+
+.buttonContainer {
+  width: 100%;
+  margin-top: 32px;
+}
+
+.sidebar {
+  border-left: 1px solid $light-gray-color;
+  padding: 28px 32px;
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: calc(100vh - 138px);
+  background: #fff;
+}
+
+
+
+.title {
+  text-align: right;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+
+@media (max-width: 1120px) {
+  .sidebar {
+    position: static;
+    height: auto;
+    border-left: none;
+    border-top: 1px solid $light-gray-color;
+  }
+
+  .box {
+    max-width: 300px;
+  }
+}

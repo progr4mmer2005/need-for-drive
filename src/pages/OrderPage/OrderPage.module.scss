@@ -1,0 +1,33 @@
+﻿@use '../../shared/styles/variables' as *;
+
+.successSplit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  min-height: calc(100vh - 146px);
+}
+
+.successMain {
+  padding-top: 26px;
+}
+
+.successAside {
+  border-left: 1px solid $light-gray-color;
+  padding: 30px;
+}
+
+.successAsideTitle {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+@media (max-width: 1120px) {
+  .successSplit {
+    grid-template-columns: 1fr;
+  }
+
+  .successAside {
+    border-left: none;
+    border-top: 1px solid $light-gray-color;
+  }
+}

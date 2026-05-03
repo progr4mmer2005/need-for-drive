@@ -1,0 +1,37 @@
+﻿@use '../../shared/styles/variables' as *;
+
+.orderContent {
+  height: 100%;
+}
+
+.orderNumber {
+  font-weight: 500;
+}
+
+.breadcrumbsContainer {
+  border-top: 1px solid $light-gray-color;
+  border-bottom: 1px solid $light-gray-color;
+  padding: 8px 0;
+  min-height: 32px;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 390px;
+  min-height: calc(100vh - 138px);
+}
+
+.leftPane {
+  padding: 24px 0 0;
+  min-height: 0;
+}
+
+.stepPanel {
+  max-width: 735px;
+}
+
+@media (max-width: 1120px) {
+  .split {
+    grid-template-columns: 1fr;
+  }
+}

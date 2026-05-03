@@ -1,0 +1,45 @@
+﻿.radioLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #999;
+}
+
+.checked {
+  color: #121212;
+}
+
+.radioInput {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.radioMark {
+  margin: 0;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #999;
+  border-radius: 50%;
+  background: #fff;
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.radioInput:checked + .radioMark {
+  border-color: #0ec261;
+  border-width: 4px;
+}
+
+.disabled {
+  color: #b8b8b8;
+}
+
+.disabled .radioMark {
+  border-color: #b8b8b8;
+  cursor: default;
+}
+

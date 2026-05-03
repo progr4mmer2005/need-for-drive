@@ -1,37 +1,26 @@
-import { useState } from 'react';
+﻿import { useOutletContext } from 'react-router-dom';
 
 import { HeroSection } from '../../widgets/HeroSection';
 import { PromoSlider } from '../../widgets/PromoSlider';
-import { SideMenu } from '../../widgets/SideMenu';
-import { Sidebar } from '../../widgets/Sidebar';
 import * as styles from './HomePage.module.scss';
 
-export function HomePage() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [language, setLanguage] = useState<'Eng' | 'Рус'>('Eng');
+type ContextType = {
+  isMenuOpen: boolean;
+  toggleMenu: () => void;
+};
 
-  const toggleMenu = () => setIsMenuOpen((value) => !value);
-  const toggleLanguage = () => setLanguage((value) => (value === 'Eng' ? 'Рус' : 'Eng'));
+export function HomePage() {
+  const { isMenuOpen, toggleMenu } = useOutletContext<ContextType>();
 
   return (
     <>
-      <SideMenu
-        activeItem=""
-        isOpen={isMenuOpen}
-        language={language}
-        onClose={toggleMenu}
-        onLanguageToggle={toggleLanguage}
+      <div className={styles.homePageContent}>
+      <HeroSection
+        isMenuOpen={isMenuOpen}
+        onMenuToggle={toggleMenu}
       />
-
-      <Sidebar isMenuOpen={isMenuOpen} language={language} onMenuToggle={toggleMenu} onLanguageToggle={toggleLanguage} />
-
-      <main className={styles.layout}>
-        <HeroSection
-          isMenuOpen={isMenuOpen}
-          onMenuToggle={toggleMenu}
-        />
-        <PromoSlider isDimmed={isMenuOpen} />
-      </main>
+      <PromoSlider isDimmed={isMenuOpen} />
+      </div>
     </>
   );
 }

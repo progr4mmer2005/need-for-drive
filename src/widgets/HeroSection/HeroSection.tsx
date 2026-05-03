@@ -1,8 +1,8 @@
-import { BurgerButton } from '../../shared/components/BurgerButton';
-import { Button } from '../../shared/components/Button';
-import { Logo } from '../../shared/components/Logo';
-import { Waypoint } from '../../shared/components/Waypoint';
+﻿import { Button } from '../../shared/components/Button';
+import { HorizontalContentContainer } from '../../shared/components/HorizontalContentContainer';
+import { BaseSection } from '../BaseSection';
 import * as styles from './HeroSection.module.scss';
+import { Link } from 'react-router-dom';
 
 type HeroSectionProps = {
   isMenuOpen: boolean;
@@ -11,33 +11,42 @@ type HeroSectionProps = {
 
 export function HeroSection({ isMenuOpen, onMenuToggle }: HeroSectionProps) {
   return (
-    <section className={styles.hero}>
-      <header className={styles.header}>
-        <BurgerButton color="dark" isActive={isMenuOpen} mobileOnly onClick={onMenuToggle} />
-        <Logo />
-        <Waypoint city="Ульяновск" />
-      </header>
+    <BaseSection isMenuOpen={isMenuOpen} onMenuToggle={onMenuToggle}>
+      <div className={styles['hero-content']}>
+        <div className={styles['promo-container']}>
+          <HorizontalContentContainer>
+            <div className={styles.promo}>
+              <h1 className={styles.title}>
+                <span className={styles.titleBlack}>Каршеринг</span>
+                <br />
+                Need for drive
+              </h1>
 
-      <div className={styles.promo}>
-        <h1 className={styles.title}>
-          <span className={styles.titleBlack}>Каршеринг</span>
-          <br />
-          Need for drive
-        </h1>
+              <p className={styles.subtitle}>Поминутная аренда авто твоего города</p>
+            </div>
+          </HorizontalContentContainer>
 
-        <p className={styles.subtitle}>Поминутная аренда авто твоего города</p>
+          <div className={styles['promo-button-container']}>
+            <Link className={styles.bookLink} to="/order">
+              <Button fullWidthOnMobile size="hero" squareOnMobile>
+                Забронировать
+              </Button>
+            </Link>
+          </div>
+        </div>
 
-        <Button fullWidthOnMobile size="hero">
-          Забронировать
-        </Button>
+        <footer className={styles.footer}>
+          <HorizontalContentContainer>
+            <div className={styles.footerInner}>
+              <p className={styles.copyright}>© 2016-2019 «Need for drive»</p>
+
+              <a className={styles.phone} href="tel:84952342244">
+                8 (495) 234-22-44
+              </a>
+            </div>
+          </HorizontalContentContainer>
+        </footer>
       </div>
-
-      <footer className={styles.footer}>
-        <p className={styles.copyright}>© 2016-2019 «Need for drive»</p>
-        <a className={styles.phone} href="tel:84952342244">
-          8 (495) 234-22-44
-        </a>
-      </footer>
-    </section>
+    </BaseSection>
   );
 }

@@ -1,0 +1,33 @@
+﻿.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.item {
+  border: none;
+  background: none;
+  color: #121212;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+
+.active {
+  color: #0ec261;
+}
+
+.disabled {
+  color: #999;
+  cursor: default;
+}
+
+.separator {
+  color: #999;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 700;
+  transform: translateY(-1px);
+}

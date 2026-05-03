@@ -7,6 +7,13 @@
   overflow: hidden;
   color: #fff;
   z-index: 120;
+
+  
+  @media (max-width: 1024px) {
+    display: none;
+  
+}
+
 }
 
 .viewport {

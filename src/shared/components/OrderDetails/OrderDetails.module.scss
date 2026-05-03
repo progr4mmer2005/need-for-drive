@@ -1,0 +1,65 @@
+﻿@use '../../styles/variables' as *;
+
+.orderDetails {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: end;
+  margin-bottom: 10px;
+  gap: 8px;
+}
+
+.label {
+  font-weight: 300;
+  font-size: 14px;
+  color: $primary-black-color;
+  white-space: nowrap;
+}
+
+.dots {
+  min-width: 40px;
+  height: 4px;
+  background-image: radial-gradient(circle, #999 0.8px, transparent 0.8px);
+  background-size: 3.5px 3.5px;
+  background-repeat: repeat-x;
+  background-position: 0 100%;
+  margin-bottom: 4px;
+}
+
+.value {
+  font-weight: 300;
+  font-size: 14px;
+  color: $dark-gray-color;
+  text-align: right;
+  justify-self: end;
+  line-height: 1.2;
+  word-break: normal;
+}
+
+.price {
+  margin-top: 24px;
+}
+
+.priceLabel,
+.priceValue {
+  font-size: 18px;
+  line-height: 1.1;
+}
+
+.priceLabel {
+  font-weight: 700;
+}
+
+.priceValue {
+  font-weight: 400;
+}

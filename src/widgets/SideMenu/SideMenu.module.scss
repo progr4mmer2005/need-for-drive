@@ -46,6 +46,12 @@
   cursor: pointer;
   font-size: 34px;
   line-height: 1;
+
+  @media (max-width: 550px) {
+    top: 16px;
+    left: 20px;
+    font-size: 40px;
+  }
 }
 
 .main {
