@@ -1,15 +1,15 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 
-import { Car } from '@/widgets/OrderSection/model/types';
+import { TCar } from '@/widgets/OrderSection/model/types';
 import { carImages } from '@/widgets/OrderSection/ui/ModelCard/carImages';
 import * as styles from './StepOrderConfirmed.module.scss';
 
 type TStepOrderConfirmed = {
-  car: Car;
+  car: TCar;
   dateFrom: string;
 };
 
-export function StepOrderConfirmed({ car, dateFrom }: TStepOrderConfirmed) {
+export const StepOrderConfirmed = memo(function StepOrderConfirmed({ car, dateFrom }: TStepOrderConfirmed) {
   const [hasImageError, setHasImageError] = useState(false);
 
   const imageSrc = carImages[car.id];
@@ -44,4 +44,4 @@ export function StepOrderConfirmed({ car, dateFrom }: TStepOrderConfirmed) {
       </div>
     </div>
   );
-}
+});

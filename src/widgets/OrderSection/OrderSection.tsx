@@ -1,22 +1,40 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import orderData from '@/shared/model/orderData.json';
 import { BaseSection } from '@/widgets/BaseSection';
 import { Breadcrumbs } from '@/shared/components/Breadcrumbs';
 import { HorizontalContentContainer } from '@/shared/components/HorizontalContentContainer';
+import { ORDER_DEFAULTS } from '@/config/orderDefaults';
 import * as styles from './OrderSection.module.scss';
 import {
-  ConfirmModal, OrderSidebar, StepExtras, StepLocation, StepModels, StepSummary,
+  ConfirmModal, OrderSidebar,
 } from './ui';
+import { OrderStepRenderer } from './ui/OrderStepRenderer';
 import {
-  CompletedOrder, ORDER_STORAGE_KEY, STEP_LABELS, Step,
+  STEP_LABELS, Step, type TCity,
 } from './model/types';
 import { formatPrice } from './model/formatPrice';
-import { StepOrderConfirmed } from './ui/StepOrderConfirmed';
+import { useOrderSubmit } from './model/useOrderSubmit';
 
 type TOrderSectionProps = {
   isMenuOpen: boolean;
   onMenuToggle: () => void;
+};
+
+type TOrderState = {
+  step: Step;
+  cityInput: string;
+  pickupInput: string;
+  selectedPickupId: string | null;
+  selectedCategory: string;
+  selectedCarId: string | null;
+  selectedColor: string;
+  dateFrom: string;
+  dateTo: string;
+  selectedRateId: string;
+  selectedExtraIds: string[];
+  isConfirmOpen: boolean;
+  orderId: string;
 };
 
 const formatAvailableAt = (value: string) => {
@@ -36,70 +54,71 @@ const formatAvailableAt = (value: string) => {
 };
 
 export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
-  const [orderId, setOrderId] = useState<string>('');
-
-  const [step, setStep] = useState<Step>(1);
-
-  const [cityInput, setCityInput] = useState('Ульяновск');
-  const [pickupInput, setPickupInput] = useState('');
-  const [selectedPickupId, setSelectedPickupId] = useState<string | null>(null);
-
-  const [selectedCategory, setSelectedCategory] = useState('Все модели');
-  const [selectedCarId, setSelectedCarId] = useState<string | null>(null);
-
-  const [selectedColor, setSelectedColor] = useState('Голубой');
-  const [dateFrom, setDateFrom] = useState('');
-  const [dateTo, setDateTo] = useState('');
-  const [selectedRateId, setSelectedRateId] = useState('daily');
-  const [selectedExtraIds, setSelectedExtraIds] = useState<string[]>(['fullTank']);
-
-  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [orderState, setOrderState] = useState<TOrderState>({
+    step: 1 as Step,
+    cityInput: ORDER_DEFAULTS.CITY,
+    pickupInput: '',
+    selectedPickupId: null,
+    selectedCategory: ORDER_DEFAULTS.CATEGORY,
+    selectedCarId: null,
+    selectedColor: ORDER_DEFAULTS.COLOR,
+    dateFrom: '',
+    dateTo: '',
+    selectedRateId: ORDER_DEFAULTS.RATE_ID,
+    selectedExtraIds: [...ORDER_DEFAULTS.EXTRAS],
+    isConfirmOpen: false,
+    orderId: '',
+  });
 
   const { cities } = orderData;
   const cityOptions = cities.map((city) => city.name);
 
   const selectedCity = useMemo(
-    () => cities.find((city) => city.name.toLowerCase() === cityInput.trim().toLowerCase()) || null,
-    [cities, cityInput],
+    () => cities.find((city) => city.name.toLowerCase() === orderState.cityInput.trim().toLowerCase()) || null,
+    [cities, orderState.cityInput],
   );
 
-  const pickupOptions = selectedCity ? selectedCity.pickupPoints.map((point) => point.name) : [];
+  const pickupOptions = selectedCity
+    ? (selectedCity as TCity).pickupPoints.map((point) => point.name)
+    : [];
 
   const selectedPickup = useMemo(() => {
     if (!selectedCity) {
       return null;
     }
 
-    if (selectedPickupId) {
-      return selectedCity.pickupPoints.find((point) => point.id === selectedPickupId) || null;
+    if (orderState.selectedPickupId) {
+      return (selectedCity as TCity).pickupPoints.find(
+        (point) => point.id === orderState.selectedPickupId,
+      ) || null;
     }
 
     return (
-      selectedCity.pickupPoints.find(
-        (point) => point.name.toLowerCase() === pickupInput.trim().toLowerCase(),
+      (selectedCity as TCity).pickupPoints.find(
+        (point) => point.name.toLowerCase() === orderState.pickupInput.trim().toLowerCase(),
       ) || null
     );
-  }, [pickupInput, selectedCity, selectedPickupId]);
+  }, [orderState.pickupInput, selectedCity, orderState.selectedPickupId]);
 
   const filteredCars = useMemo(() => {
-    if (selectedCategory === 'Все модели') {
+    if (orderState.selectedCategory === 'Все модели') {
       return orderData.cars;
     }
 
-    return orderData.cars.filter((car) => car.category === selectedCategory);
-  }, [selectedCategory]);
+    return orderData.cars.filter((car) => car.category === orderState.selectedCategory);
+  }, [orderState.selectedCategory]);
 
-  const selectedCar = orderData.cars.find((car) => car.id === selectedCarId) || null;
-  const selectedRate = orderData.rentalRates.find((rate) => rate.id === selectedRateId) || null;
-  const selectedExtras = orderData.extras.filter((extra) => selectedExtraIds.includes(extra.id));
-  const availableAt = formatAvailableAt(dateFrom || dateTo);
+  const selectedCar = orderData.cars.find((car) => car.id === orderState.selectedCarId) || null;
+  const selectedRate = orderData.rentalRates.find((rate) => rate.id === orderState.selectedRateId) || null;
+  const selectedExtras = orderData.extras.filter((extra) => orderState.selectedExtraIds.includes(extra.id));
+  const availableAt = formatAvailableAt(orderState.dateFrom || orderState.dateTo);
 
   const canGoToStep2 = Boolean(selectedCity && selectedPickup);
   const canGoToStep3 = Boolean(selectedCar);
   const canGoToStep4 = Boolean(selectedCar && selectedRate);
 
-  const minPrice = selectedCar?.priceMin || 8000;
-  const maxPrice = selectedCar?.priceMax || 12000;
+  const minPrice = selectedCar?.priceMin || ORDER_DEFAULTS.MIN_PRICE;
+  const maxPrice = selectedCar?.priceMax || ORDER_DEFAULTS.MAX_PRICE;
 
   const totalPrice = useMemo(() => {
     if (!selectedCar) {
@@ -113,14 +132,14 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
   }, [maxPrice, minPrice, selectedCar, selectedExtras, selectedRate]);
 
   const orderItems = [
-    { label: 'Пункт выдачи', value: selectedPickup ? `${selectedCity?.name}, ${selectedPickup.name}` : null },
+    { label: 'Пункт выдачи', value: selectedPickup ? `${(selectedCity as TCity | null)?.name}, ${selectedPickup.name}` : null },
     { label: 'Модель', value: selectedCar ? `${selectedCar.brand}, ${selectedCar.name}` : null },
-    { label: 'Цвет', value: step >= 3 ? selectedColor : null },
-    { label: 'Длительность аренды', value: step >= 3 ? '1д 2ч' : null },
-    { label: 'Тариф', value: step >= 3 ? (selectedRate?.id === 'daily' ? 'На сутки' : 'Поминутно') : null },
+    { label: 'Цвет', value: orderState.step >= 3 ? orderState.selectedColor : null },
+    { label: 'Длительность аренды', value: orderState.step >= 3 ? '1д 2ч' : null },
+    { label: 'Тариф', value: orderState.step >= 3 ? (selectedRate?.id === 'daily' ? 'На сутки' : 'Поминутно') : null },
     {
       label: 'Полный бак',
-      value: step >= 3 ? (selectedExtraIds.includes('fullTank') ? 'Да' : 'Нет') : null,
+      value: orderState.step >= 3 ? (orderState.selectedExtraIds.includes('fullTank') ? 'Да' : 'Нет') : null,
     },
   ];
 
@@ -139,171 +158,182 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
 
   const handleStepTransition = (nextStep: Step) => {
     if (isStepEnabled(nextStep)) {
-      setStep(nextStep);
+      setOrderState((prev) => ({ ...prev, step: nextStep }));
     }
   };
 
-  const resetAfterLocation = () => {
-    setSelectedCarId(null);
-    setSelectedCategory('Все модели');
-    setSelectedColor('Голубой');
-    setSelectedRateId('daily');
-    setSelectedExtraIds(['fullTank']);
-    setStep(1);
-  };
+  const resetAfterLocation = useCallback(() => {
+    setOrderState((prev) => ({
+      ...prev,
+      selectedCarId: null,
+      selectedCategory: ORDER_DEFAULTS.CATEGORY,
+      selectedColor: ORDER_DEFAULTS.COLOR,
+      selectedRateId: ORDER_DEFAULTS.RATE_ID,
+      selectedExtraIds: [...ORDER_DEFAULTS.EXTRAS],
+      step: 1 as Step,
+    }));
+  }, []);
 
-  const handleCityChange = (value: string) => {
-    setCityInput(value);
-    setPickupInput('');
-    setSelectedPickupId(null);
+  const handleCityChange = useCallback((value: string) => {
+    setOrderState((prev) => ({
+      ...prev,
+      cityInput: value,
+      pickupInput: '',
+      selectedPickupId: null,
+    }));
     resetAfterLocation();
-  };
+  }, [resetAfterLocation]);
 
-  const handlePickupChange = (value: string) => {
-    setPickupInput(value);
-    setSelectedPickupId(null);
+  const handlePickupChange = useCallback((value: string) => {
+    setOrderState((prev) => ({
+      ...prev,
+      pickupInput: value,
+      selectedPickupId: null,
+    }));
     resetAfterLocation();
-  };
+  }, [resetAfterLocation]);
 
-  const handlePickupSelectFromMap = (pickupId: string) => {
-    if (!selectedCity) {
-      return;
-    }
+  const handlePickupSelectFromMap = useCallback((pickupId: string) => {
+    setOrderState((prev) => {
+      if (!selectedCity) {
+        return prev;
+      }
 
-    const point = selectedCity.pickupPoints.find((pickup) => pickup.id === pickupId);
-    if (!point) {
-      return;
-    }
+      const point = (selectedCity as TCity).pickupPoints.find((pickup) => pickup.id === pickupId);
+      if (!point) {
+        return prev;
+      }
 
-    setSelectedPickupId(point.id);
-    setPickupInput(point.name);
-    setStep(1);
-  };
+      return {
+        ...prev,
+        selectedPickupId: point.id,
+        pickupInput: point.name,
+        step: 1 as Step,
+      };
+    });
+  }, [selectedCity]);
 
-  const handleCarSelect = (carId: string) => {
-    setSelectedCarId(carId);
-    setSelectedColor('Голубой');
-    setSelectedRateId('daily');
-    setSelectedExtraIds(['fullTank']);
-    setDateTo('');
-    setStep(2);
-  };
+  const handleCarSelect = useCallback((carId: string) => {
+    setOrderState((prev) => ({
+      ...prev,
+      selectedCarId: carId,
+      selectedColor: ORDER_DEFAULTS.COLOR,
+      selectedRateId: ORDER_DEFAULTS.RATE_ID,
+      selectedExtraIds: [...ORDER_DEFAULTS.EXTRAS],
+      dateTo: '',
+      step: 2 as Step,
+    }));
+  }, []);
 
-  const handleExtraToggle = (extraId: string) => {
-    setSelectedExtraIds((current) => (current.includes(extraId)
-      ? current.filter((item) => item !== extraId)
-      : [...current, extraId]));
-  };
+  const handleExtraToggle = useCallback((extraId: string) => {
+    setOrderState((prev) => ({
+      ...prev,
+      selectedExtraIds: prev.selectedExtraIds.includes(extraId)
+        ? prev.selectedExtraIds.filter((item) => item !== extraId)
+        : [...prev.selectedExtraIds, extraId],
+    }));
+  }, []);
 
-  const handleSubmitOrder = () => {
-    if (!selectedCity || !selectedPickup || !selectedCar) {
-      return;
-    }
+  const handleCategoryChange = useCallback((category: string) => {
+    setOrderState((prev) => ({ ...prev, selectedCategory: category }));
+  }, []);
 
-    const orderId = `RUS${Math.floor(100000000 + Math.random() * 900000000)}`;
-    setOrderId(orderId);
-    const completedOrder: CompletedOrder = {
-      orderId,
-      city: selectedCity.name,
-      pickupPoint: selectedPickup.name,
-      carName: `${selectedCar.brand}, ${selectedCar.name}`,
-      carImage: selectedCar.image,
-      color: selectedColor,
-      duration: '1д 2ч',
-      rate: selectedRate?.id === 'daily' ? 'На сутки' : 'Поминутно',
-      fullTank: selectedExtraIds.includes('fullTank') ? 'Да' : 'Нет',
-      totalPrice,
+  const handleColorChange = useCallback((color: string) => {
+    setOrderState((prev) => ({ ...prev, selectedColor: color }));
+  }, []);
+
+  const handleDateFromChange = useCallback((value: string) => {
+    setOrderState((prev) => ({ ...prev, dateFrom: value }));
+  }, []);
+
+  const handleDateToChange = useCallback((value: string) => {
+    setOrderState((prev) => ({ ...prev, dateTo: value }));
+  }, []);
+
+  const handleRateChange = useCallback((rateId: string) => {
+    setOrderState((prev) => ({ ...prev, selectedRateId: rateId }));
+  }, []);
+
+  const { handleSubmitOrder } = useOrderSubmit(
+    orderState,
+    {
+      selectedCity: selectedCity as { name: string } | null,
+      selectedPickup: selectedPickup as { name: string; id: string } | null,
+      selectedCar: selectedCar as { id: string; brand: string; name: string; image?: string; priceMin: number } | null,
+      selectedRate: selectedRate as { id: string; price: number } | null,
+      selectedColor: orderState.selectedColor,
+      selectedExtraIds: orderState.selectedExtraIds,
       availableAt,
-    };
-
-    localStorage.setItem(ORDER_STORAGE_KEY, JSON.stringify(completedOrder));
-    setIsConfirmOpen(false);
-    setStep(5);
-  };
+      totalPrice,
+    },
+    setOrderState,
+  );
 
   return (
     <BaseSection isMenuOpen={isMenuOpen} onMenuToggle={onMenuToggle}>
       <div className={styles.orderContent}>
         <div className={styles.breadcrumbsContainer}>
           <HorizontalContentContainer>
-            {step !== 5 && <Breadcrumbs
+            {orderState.step !== 5 && <Breadcrumbs
               items={([1, 2, 3, 4] as Step[]).map((stepKey) => ({
                 key: stepKey,
                 label: STEP_LABELS[stepKey],
-                active: stepKey === step,
+                active: stepKey === orderState.step,
                 enabled: isStepEnabled(stepKey),
               }))}
               onStepClick={(nextStep) => handleStepTransition(nextStep as Step)}
             />}
 
-            {step === 5 && <div className={styles.orderNumber}>Заказ номер {orderId}</div>}
+            {orderState.step === 5 && <div className={styles.orderNumber}>Заказ номер {orderState.orderId}</div>}
           </HorizontalContentContainer>
         </div>
 
         <div className={styles.split}>
           <section className={styles.leftPane}>
-            <HorizontalContentContainer>
-              {step === 1 && (
-                <div className={styles.stepPanel}>
-                  <StepLocation
-                    cityInput={cityInput}
-                    pickupInput={pickupInput}
-                    cityOptions={cityOptions}
-                    pickupOptions={pickupOptions}
-                    selectedCity={selectedCity}
-                    selectedPickupId={selectedPickup?.id}
-                    onCityChange={handleCityChange}
-                    onPickupChange={handlePickupChange}
-                    onPickupSelectFromMap={handlePickupSelectFromMap}
-                  />
-                </div>
-              )}
-
-              {step === 2 && (
-                <StepModels
-                  selectedCategory={selectedCategory}
-                  selectedCarId={selectedCarId}
-                  cars={filteredCars}
-                  onCategoryChange={setSelectedCategory}
-                  onCarSelect={handleCarSelect}
-                />
-              )}
-
-              {step === 3 && selectedCar && (
-                <StepExtras
-                  selectedCar={selectedCar}
-                  selectedColor={selectedColor}
-                  dateFrom={dateFrom}
-                  dateTo={dateTo}
-                  selectedRateId={selectedRateId}
-                  selectedExtraIds={selectedExtraIds}
-                  onColorChange={setSelectedColor}
-                  onDateFromChange={setDateFrom}
-                  onDateToChange={setDateTo}
-                  onRateChange={setSelectedRateId}
-                  onExtraToggle={handleExtraToggle}
-                />
-              )}
-
-              {step === 4 && selectedCar && <StepSummary car={selectedCar} dateFrom={availableAt} />}
-
-              {step === 5 && selectedCar && <StepOrderConfirmed car={selectedCar} dateFrom={availableAt}/>}
-            </HorizontalContentContainer>
+            <OrderStepRenderer
+              step={orderState.step}
+              cityInput={orderState.cityInput}
+              pickupInput={orderState.pickupInput}
+              cityOptions={cityOptions}
+              pickupOptions={pickupOptions}
+              selectedCity={selectedCity}
+              selectedPickup={selectedPickup}
+              selectedCarId={orderState.selectedCarId}
+              selectedCategory={orderState.selectedCategory}
+              selectedColor={orderState.selectedColor}
+              dateFrom={orderState.dateFrom}
+              dateTo={orderState.dateTo}
+              selectedRateId={orderState.selectedRateId}
+              selectedExtraIds={orderState.selectedExtraIds}
+              filteredCars={filteredCars}
+              selectedCar={selectedCar}
+              availableAt={availableAt}
+              onCityChange={handleCityChange}
+              onPickupChange={handlePickupChange}
+              onPickupSelectFromMap={handlePickupSelectFromMap}
+              onCategoryChange={handleCategoryChange}
+              onCarSelect={handleCarSelect}
+              onColorChange={handleColorChange}
+              onDateFromChange={handleDateFromChange}
+              onDateToChange={handleDateToChange}
+              onRateChange={handleRateChange}
+              onExtraToggle={handleExtraToggle}
+            />
           </section>
 
           <OrderSidebar
-            step={step}
+            step={orderState.step}
             items={orderItems}
             priceText={selectedCar ? totalPrice : `от ${formatPrice(minPrice)} до ${formatPrice(maxPrice)}`}
             canGoToStep2={canGoToStep2}
             canGoToStep3={canGoToStep3}
             onStepChange={handleStepTransition}
-            onOpenConfirm={() => setIsConfirmOpen(true)}
+            onOpenConfirm={() => setOrderState((prev) => ({ ...prev, isConfirmOpen: true }))}
           />
         </div>
       </div>
 
-      <ConfirmModal isOpen={isConfirmOpen} onConfirm={handleSubmitOrder} onCancel={() => setIsConfirmOpen(false)} />
+      <ConfirmModal isOpen={orderState.isConfirmOpen} onConfirm={handleSubmitOrder} onCancel={() => setOrderState((prev) => ({ ...prev, isConfirmOpen: false }))} />
     </BaseSection>
   );
 }

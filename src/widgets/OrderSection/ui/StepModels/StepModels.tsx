@@ -1,5 +1,6 @@
+import { memo } from 'react';
 import orderData from '@/shared/model/orderData.json';
-import { Car } from '@/widgets/OrderSection/model/types';
+import { TCar } from '@/widgets/OrderSection/model/types';
 import { ModelCard } from '@/widgets/OrderSection/ui/ModelCard';
 import { RadioOption } from '@/widgets/OrderSection/ui/RadioOption';
 import * as styles from './StepModels.module.scss';
@@ -7,12 +8,12 @@ import * as styles from './StepModels.module.scss';
 type TStepModelsProps = {
   selectedCategory: string;
   selectedCarId: string | null;
-  cars: Car[];
+  cars: TCar[];
   onCategoryChange: (category: string) => void;
   onCarSelect: (carId: string) => void;
 };
 
-export function StepModels({
+export const StepModels = memo(function StepModels({
   selectedCategory,
   selectedCarId,
   cars,
@@ -40,4 +41,4 @@ export function StepModels({
       </div>
     </div>
   );
-}
+});

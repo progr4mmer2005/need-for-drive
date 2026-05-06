@@ -1,12 +1,12 @@
 import { useState } from 'react';
 
-import { Car } from '@/widgets/OrderSection/model/types';
+import { TCar } from '@/widgets/OrderSection/model/types';
 import { formatPrice } from '@/widgets/OrderSection/model/formatPrice';
 import { carImages } from '@/widgets/OrderSection/ui/ModelCard/carImages';
 import * as styles from './ModelCard.module.scss';
 
 type TModelCardProps = {
-  car: Car;
+  car: TCar;
   selected: boolean;
   onSelect: (carId: string) => void;
 };

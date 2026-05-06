@@ -1,6 +1,7 @@
+import { memo } from 'react';
 import { AutocompleteInput } from '@/shared/components/AutocompleteInput';
 import { MapSelection } from '@/shared/components/MapSelection';
-import { City } from '@/widgets/OrderSection/model/types';
+import { TCity } from '@/widgets/OrderSection/model/types';
 import * as styles from './StepLocation.module.scss';
 
 type TStepLocationProps = {
@@ -8,14 +9,14 @@ type TStepLocationProps = {
   pickupInput: string;
   cityOptions: string[];
   pickupOptions: string[];
-  selectedCity: City | null;
+  selectedCity: TCity | null;
   selectedPickupId?: string;
   onCityChange: (value: string) => void;
   onPickupChange: (value: string) => void;
   onPickupSelectFromMap: (pickupId: string) => void;
 };
 
-export function StepLocation({
+export const StepLocation = memo(function StepLocation({
   cityInput,
   pickupInput,
   cityOptions,
@@ -57,4 +58,4 @@ export function StepLocation({
       />
     </div>
   );
-}
+});
