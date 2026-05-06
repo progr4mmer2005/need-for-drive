@@ -2,13 +2,13 @@ import orderData from '@/shared/model/orderData.json';
 
 export type Step = 1 | 2 | 3 | 4 | 5;
 
-export type City = (typeof orderData.cities)[number];
-export type PickupPoint = City['pickupPoints'][number];
-export type Car = (typeof orderData.cars)[number];
-export type RentalRate = (typeof orderData.rentalRates)[number];
-export type Extra = (typeof orderData.extras)[number];
+export type TCity = (typeof orderData.cities)[number];
+export type TPickupPoint = TCity['pickupPoints'][number];
+export type TCar = (typeof orderData.cars)[number];
+export type TRentalRate = (typeof orderData.rentalRates)[number];
+export type TExtra = (typeof orderData.extras)[number];
 
-export type CompletedOrder = {
+export type TCompletedOrder = {
   orderId: string;
   city: string;
   pickupPoint: string;

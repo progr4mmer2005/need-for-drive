@@ -6,12 +6,12 @@ import { OrderSection } from '@/widgets/OrderSection/OrderSection';
 import orderData from '@/shared/model/orderData.json';
 import { ORDER_STORAGE_KEY } from '@/widgets/OrderSection/model/types';
 
-type ContextType = {
+type TContextType = {
   isMenuOpen: boolean;
   toggleMenu: () => void;
 };
 
-type StoredOrder = {
+type TStoredOrder = {
   orderId: string;
   city: string;
   pickupPoint: string;
@@ -25,7 +25,7 @@ type StoredOrder = {
 };
 
 export function OrderPage() {
-  const { isMenuOpen, toggleMenu } = useOutletContext<ContextType>();
+  const { isMenuOpen, toggleMenu } = useOutletContext<TContextType>();
   const { orderId } = useParams();
 
   const storedOrder = useMemo(() => {
@@ -33,7 +33,7 @@ export function OrderPage() {
     try {
       const raw = localStorage.getItem(ORDER_STORAGE_KEY);
       if (!raw) return null;
-      const parsed = JSON.parse(raw) as StoredOrder;
+      const parsed = JSON.parse(raw) as TStoredOrder;
       return parsed.orderId === orderId ? parsed : null;
     } catch {
       return null;

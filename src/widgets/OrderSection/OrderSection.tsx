@@ -14,7 +14,7 @@ import {
 import { formatPrice } from './model/formatPrice';
 import { StepOrderConfirmed } from './ui/StepOrderConfirmed';
 
-type OrderSectionProps = {
+type TOrderSectionProps = {
   isMenuOpen: boolean;
   onMenuToggle: () => void;
 };
@@ -35,7 +35,7 @@ const formatAvailableAt = (value: string) => {
   return `${day}.${month}.${year} 12:00`;
 };
 
-export function OrderSection({ isMenuOpen, onMenuToggle }: OrderSectionProps) {
+export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
   const [orderId, setOrderId] = useState<string>('');
 
   const [step, setStep] = useState<Step>(1);

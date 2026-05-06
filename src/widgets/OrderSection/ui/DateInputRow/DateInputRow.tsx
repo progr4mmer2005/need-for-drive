@@ -1,6 +1,6 @@
 import * as styles from './DateInputRow.module.scss';
 
-type DateInputRowProps = {
+type TDateInputRowProps = {
   prefix: string;
   value: string;
   placeholder?: string;
@@ -16,7 +16,7 @@ export function DateInputRow({
   showClear = false,
   onChange,
   onClear,
-}: DateInputRowProps) {
+}: TDateInputRowProps) {
   return (
     <div className={styles.row}>
       <span className={styles.prefix}>{prefix}</span>

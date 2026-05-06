@@ -3,7 +3,7 @@ import { Header } from '@/widgets/Header';
 import { HorizontalContentContainer } from '@/shared/components/HorizontalContentContainer';
 import * as styles from './BaseSection.module.scss';
 
-type BaseSectionProps = {
+type TBaseSectionProps = {
   isMenuOpen: boolean;
   onMenuToggle: () => void;
   children: ReactNode;
@@ -13,7 +13,7 @@ export function BaseSection({
   isMenuOpen,
   onMenuToggle,
   children,
-}: BaseSectionProps) {
+}: TBaseSectionProps) {
   return (
     <section className={styles.section}>
       <div className={styles.headerContainer}>

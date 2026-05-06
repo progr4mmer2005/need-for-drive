@@ -1,10 +1,10 @@
 import * as styles from './Waypoint.module.scss';
 
-type WaypointProps = {
+type TWaypointProps = {
   city: string;
 };
 
-export function Waypoint({ city }: WaypointProps) {
+export function Waypoint({ city }: TWaypointProps) {
   return (
     <a className={styles.waypoint} href="#">
       <svg className={styles.icon} fill="none" viewBox="0 0 18 20" xmlns="http://www.w3.org/2000/svg">

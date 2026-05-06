@@ -4,12 +4,12 @@ import { BaseSection } from '@/widgets/BaseSection';
 import { Link } from 'react-router-dom';
 import * as styles from './HeroSection.module.scss';
 
-type HeroSectionProps = {
+type THeroSectionProps = {
   isMenuOpen: boolean;
   onMenuToggle: () => void;
 };
 
-export function HeroSection({ isMenuOpen, onMenuToggle }: HeroSectionProps) {
+export function HeroSection({ isMenuOpen, onMenuToggle }: THeroSectionProps) {
   return (
     <BaseSection isMenuOpen={isMenuOpen} onMenuToggle={onMenuToggle}>
       <div className={styles['hero-content']}>

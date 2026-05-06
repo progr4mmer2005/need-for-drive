@@ -1,19 +1,19 @@
 import React from 'react';
 import * as styles from './Breadcrumbs.module.scss';
 
-export interface BreadcrumbItem {
+export interface IBreadcrumbItem {
   key: number;
   label: string;
   active?: boolean;
   enabled?: boolean;
 }
 
-interface BreadcrumbsProps {
-  items: BreadcrumbItem[];
+interface IBreadcrumbsProps {
+  items: IBreadcrumbItem[];
   onStepClick?: (step: number) => void;
 }
 
-export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, onStepClick }) => (
+export const Breadcrumbs: React.FC<IBreadcrumbsProps> = ({ items, onStepClick }) => (
     <div className={styles.breadcrumbs}>
       {items.map((item, index) => {
         const isClickable = Boolean(item.enabled && onStepClick);

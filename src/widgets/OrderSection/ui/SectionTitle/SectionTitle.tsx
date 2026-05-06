@@ -1,9 +1,9 @@
 import * as styles from './SectionTitle.module.scss';
 
-type SectionTitleProps = {
+type TSectionTitleProps = {
   text: string;
 };
 
-export function SectionTitle({ text }: SectionTitleProps) {
+export function SectionTitle({ text }: TSectionTitleProps) {
   return <div className={styles.title}>{text}</div>;
 }

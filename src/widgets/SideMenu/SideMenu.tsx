@@ -4,7 +4,7 @@ import * as styles from './SideMenu.module.scss';
 
 const menuItems = ['Парковка', 'Страховка', 'Бензин', 'Обслуживание'];
 
-type SideMenuProps = {
+type TSideMenuProps = {
   activeItem: string;
   isOpen: boolean;
   language: string;
@@ -14,7 +14,7 @@ type SideMenuProps = {
 
 export function SideMenu({
   activeItem, isOpen, language, onClose, onLanguageToggle,
-}: SideMenuProps) {
+}: TSideMenuProps) {
   return (
     <div className={`${styles.menu} ${isOpen ? styles.menuOpen : ''}`}>
       <div className={styles.content}>

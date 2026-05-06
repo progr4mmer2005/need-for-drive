@@ -5,13 +5,13 @@ import { formatPrice } from '@/widgets/OrderSection/model/formatPrice';
 import { carImages } from '@/widgets/OrderSection/ui/ModelCard/carImages';
 import * as styles from './ModelCard.module.scss';
 
-type ModelCardProps = {
+type TModelCardProps = {
   car: Car;
   selected: boolean;
   onSelect: (carId: string) => void;
 };
 
-export function ModelCard({ car, selected, onSelect }: ModelCardProps) {
+export function ModelCard({ car, selected, onSelect }: TModelCardProps) {
   const [hasImageError, setHasImageError] = useState(false);
 
   const imageSrc = carImages[car.id];

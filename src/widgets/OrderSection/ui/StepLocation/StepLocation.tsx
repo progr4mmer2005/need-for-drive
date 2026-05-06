@@ -3,7 +3,7 @@ import { MapSelection } from '@/shared/components/MapSelection';
 import { City } from '@/widgets/OrderSection/model/types';
 import * as styles from './StepLocation.module.scss';
 
-type StepLocationProps = {
+type TStepLocationProps = {
   cityInput: string;
   pickupInput: string;
   cityOptions: string[];
@@ -25,7 +25,7 @@ export function StepLocation({
   onCityChange,
   onPickupChange,
   onPickupSelectFromMap,
-}: StepLocationProps) {
+}: TStepLocationProps) {
   return (
     <div className={styles.panel}>
       <AutocompleteInput

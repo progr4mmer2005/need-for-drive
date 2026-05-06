@@ -7,7 +7,7 @@ import { RadioOption } from '@/widgets/OrderSection/ui/RadioOption';
 import { SectionTitle } from '@/widgets/OrderSection/ui/SectionTitle';
 import * as styles from './StepExtras.module.scss';
 
-type StepExtrasProps = {
+type TStepExtrasProps = {
   selectedCar: Car;
   selectedColor: string;
   dateFrom: string;
@@ -33,7 +33,7 @@ export function StepExtras({
   onDateToChange,
   onRateChange,
   onExtraToggle,
-}: StepExtrasProps) {
+}: TStepExtrasProps) {
   return (
     <div className={styles.panel}>
       <SectionTitle text="Цвет" />
