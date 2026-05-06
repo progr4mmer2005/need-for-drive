@@ -1,8 +1,11 @@
+import { Suspense, lazy } from 'react';
 import { useOutletContext } from 'react-router-dom';
 
 import { HeroSection } from '@/widgets/HeroSection';
-import { PromoSlider } from '@/widgets/PromoSlider';
+import { Loader } from '@/shared/components/Loader';
 import * as styles from './HomePage.module.scss';
+
+const PromoSlider = lazy(() => import('@/widgets/PromoSlider').then((m) => ({ default: m.PromoSlider })));
 
 type ContextType = {
   isMenuOpen: boolean;
@@ -19,7 +22,9 @@ export function HomePage() {
         isMenuOpen={isMenuOpen}
         onMenuToggle={toggleMenu}
       />
-      <PromoSlider isDimmed={isMenuOpen} />
+      <Suspense fallback={<Loader />}>
+        <PromoSlider isDimmed={isMenuOpen} />
+      </Suspense>
       </div>
     </>
   );
