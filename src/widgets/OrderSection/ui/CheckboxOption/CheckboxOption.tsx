@@ -1,6 +1,6 @@
 import * as styles from './CheckboxOption.module.scss';
 
-type CheckboxOptionProps = {
+type TCheckboxOptionProps = {
   checked: boolean;
   label: string;
   onChange: () => void;
@@ -9,7 +9,7 @@ type CheckboxOptionProps = {
 
 export function CheckboxOption({
   checked, label, onChange, disabled = false,
-}: CheckboxOptionProps) {
+}: TCheckboxOptionProps) {
   return (
     <label className={`${styles.checkboxLabel} ${checked ? styles.checked : ''} ${disabled ? styles.disabled : ''}`}>
       <input checked={checked} type="checkbox" onChange={onChange} disabled={disabled} />

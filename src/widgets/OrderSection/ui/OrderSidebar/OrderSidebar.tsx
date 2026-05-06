@@ -3,7 +3,7 @@ import { OrderDetails } from '@/shared/components/OrderDetails';
 import { Step } from '@/widgets/OrderSection/model/types';
 import * as styles from './OrderSidebar.module.scss';
 
-type OrderSidebarProps = {
+type TOrderSidebarProps = {
   step: Step;
   items: Array<{ label: string; value: string | null }>;
   priceText: string;
@@ -21,7 +21,7 @@ export function OrderSidebar({
   canGoToStep3,
   onStepChange,
   onOpenConfirm,
-}: OrderSidebarProps) {
+}: TOrderSidebarProps) {
   return (
     <aside className={styles.sidebar}>
       <div className={styles.box}>

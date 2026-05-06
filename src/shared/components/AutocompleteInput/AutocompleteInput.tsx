@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import * as styles from './AutocompleteInput.module.scss';
 
-interface AutocompleteInputProps {
+interface IAutocompleteInputProps {
   label: string;
   value: string;
   placeholder?: string;
@@ -12,7 +12,7 @@ interface AutocompleteInputProps {
   onChange: (value: string) => void;
 }
 
-export const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
+export const AutocompleteInput: React.FC<IAutocompleteInputProps> = ({
   label,
   value,
   placeholder,

@@ -4,7 +4,7 @@ import { ModelCard } from '@/widgets/OrderSection/ui/ModelCard';
 import { RadioOption } from '@/widgets/OrderSection/ui/RadioOption';
 import * as styles from './StepModels.module.scss';
 
-type StepModelsProps = {
+type TStepModelsProps = {
   selectedCategory: string;
   selectedCarId: string | null;
   cars: Car[];
@@ -18,7 +18,7 @@ export function StepModels({
   cars,
   onCategoryChange,
   onCarSelect,
-}: StepModelsProps) {
+}: TStepModelsProps) {
   return (
     <div className={styles.panel}>
       <div className={styles.filtersRow}>

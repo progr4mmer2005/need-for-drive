@@ -4,12 +4,12 @@ import { Car } from '@/widgets/OrderSection/model/types';
 import { carImages } from '@/widgets/OrderSection/ui/ModelCard/carImages';
 import * as styles from './StepOrderConfirmed.module.scss';
 
-type StepOrderConfirmed = {
+type TStepOrderConfirmed = {
   car: Car;
   dateFrom: string;
 };
 
-export function StepOrderConfirmed({ car, dateFrom }: StepOrderConfirmed) {
+export function StepOrderConfirmed({ car, dateFrom }: TStepOrderConfirmed) {
   const [hasImageError, setHasImageError] = useState(false);
 
   const imageSrc = carImages[car.id];

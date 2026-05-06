@@ -7,13 +7,13 @@ import * as styles from './HomePage.module.scss';
 
 const PromoSlider = lazy(() => import('@/widgets/PromoSlider').then((m) => ({ default: m.PromoSlider })));
 
-type ContextType = {
+type TContextType = {
   isMenuOpen: boolean;
   toggleMenu: () => void;
 };
 
 export function HomePage() {
-  const { isMenuOpen, toggleMenu } = useOutletContext<ContextType>();
+  const { isMenuOpen, toggleMenu } = useOutletContext<TContextType>();
 
   return (
     <>

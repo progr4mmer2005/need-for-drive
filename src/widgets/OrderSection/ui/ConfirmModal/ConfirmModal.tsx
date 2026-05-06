@@ -1,12 +1,12 @@
 import * as styles from './ConfirmModal.module.scss';
 
-type ConfirmModalProps = {
+type TConfirmModalProps = {
   isOpen: boolean;
   onConfirm: () => void;
   onCancel: () => void;
 };
 
-export function ConfirmModal({ isOpen, onConfirm, onCancel }: ConfirmModalProps) {
+export function ConfirmModal({ isOpen, onConfirm, onCancel }: TConfirmModalProps) {
   if (!isOpen) {
     return null;
   }

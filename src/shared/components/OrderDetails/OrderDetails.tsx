@@ -1,17 +1,17 @@
 import React from 'react';
 import * as styles from './OrderDetails.module.scss';
 
-interface OrderItem {
+interface IOrderItem {
   label: string;
   value: string | null | undefined;
 }
 
-interface OrderDetailsProps {
-  items: OrderItem[];
+interface IOrderDetailsProps {
+  items: IOrderItem[];
   priceText: string;
 }
 
-export function OrderDetails({ items, priceText }: OrderDetailsProps) {
+export function OrderDetails({ items, priceText }: IOrderDetailsProps) {
   return (
     <div className={styles.orderDetails}>
       <ul className={styles.list}>

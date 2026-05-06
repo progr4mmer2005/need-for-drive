@@ -4,12 +4,12 @@ import { Car } from '@/widgets/OrderSection/model/types';
 import { carImages } from '@/widgets/OrderSection/ui/ModelCard/carImages';
 import * as styles from './StepSummary.module.scss';
 
-type StepSummaryProps = {
+type TStepSummaryProps = {
   car: Car;
   dateFrom: string;
 };
 
-export function StepSummary({ car, dateFrom }: StepSummaryProps) {
+export function StepSummary({ car, dateFrom }: TStepSummaryProps) {
   const [hasImageError, setHasImageError] = useState(false);
 
   const imageSrc = carImages[car.id];

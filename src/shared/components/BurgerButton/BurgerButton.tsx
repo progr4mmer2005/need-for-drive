@@ -1,7 +1,7 @@
 import { classNames } from '@/shared/lib/classNames';
 import * as styles from './BurgerButton.module.scss';
 
-type BurgerButtonProps = {
+type TBurgerButtonProps = {
   color?: 'light' | 'dark';
   isActive?: boolean;
   mobileOnly?: boolean;
@@ -13,7 +13,7 @@ export function BurgerButton({
   isActive = false,
   mobileOnly = false,
   onClick,
-}: BurgerButtonProps) {
+}: TBurgerButtonProps) {
   return (
     <button
       aria-label={isActive ? 'Закрыть меню' : 'Открыть меню'}

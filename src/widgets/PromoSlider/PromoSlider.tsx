@@ -5,11 +5,11 @@ import { classNames } from '@/shared/lib/classNames';
 import { sliderSlides } from '@/shared/model/sliderSlides';
 import * as styles from './PromoSlider.module.scss';
 
-type PromoSliderProps = {
+type TPromoSliderProps = {
   isDimmed: boolean;
 };
 
-export function PromoSlider({ isDimmed }: PromoSliderProps) {
+export function PromoSlider({ isDimmed }: TPromoSliderProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const totalSlides = sliderSlides.length;
