@@ -1,1 +1,1 @@
-﻿export { CheckboxOption } from './CheckboxOption';
+export { CheckboxOption } from './CheckboxOption';

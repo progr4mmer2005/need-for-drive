@@ -1,1 +1,1 @@
-﻿export { StepLocation } from './StepLocation';
+export { StepLocation } from './StepLocation';

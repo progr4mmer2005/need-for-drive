@@ -1,4 +1,4 @@
-﻿import * as styles from './SectionTitle.module.scss';
+import * as styles from './SectionTitle.module.scss';
 
 type SectionTitleProps = {
   text: string;

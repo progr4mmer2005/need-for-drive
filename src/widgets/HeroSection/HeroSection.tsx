@@ -1,8 +1,8 @@
-﻿import { Button } from '../../shared/components/Button';
-import { HorizontalContentContainer } from '../../shared/components/HorizontalContentContainer';
-import { BaseSection } from '../BaseSection';
-import * as styles from './HeroSection.module.scss';
+import { Button } from '@/shared/components/Button';
+import { HorizontalContentContainer } from '@/shared/components/HorizontalContentContainer';
+import { BaseSection } from '@/widgets/BaseSection';
 import { Link } from 'react-router-dom';
+import * as styles from './HeroSection.module.scss';
 
 type HeroSectionProps = {
   isMenuOpen: boolean;

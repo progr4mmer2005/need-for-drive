@@ -1,7 +1,7 @@
-﻿import { useOutletContext } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
 
-import { HeroSection } from '../../widgets/HeroSection';
-import { PromoSlider } from '../../widgets/PromoSlider';
+import { HeroSection } from '@/widgets/HeroSection';
+import { PromoSlider } from '@/widgets/PromoSlider';
 import * as styles from './HomePage.module.scss';
 
 type ContextType = {

@@ -1,14 +1,10 @@
-﻿import { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useOutletContext, useParams } from 'react-router-dom';
 
-import { OrderSection } from '../../widgets/OrderSection/OrderSection';
-import { BaseSection } from '../../widgets/BaseSection';
-import { HorizontalContentContainer } from '../../shared/components/HorizontalContentContainer';
-import { OrderDetails } from '../../shared/components/OrderDetails';
-import { StepSummary } from '../../widgets/OrderSection/ui/StepSummary';
-import orderData from '../../shared/model/orderData.json';
-import { ORDER_STORAGE_KEY } from '../../widgets/OrderSection/model/types';
-import * as styles from './OrderPage.module.scss';
+import { OrderSection } from '@/widgets/OrderSection/OrderSection';
+
+import orderData from '@/shared/model/orderData.json';
+import { ORDER_STORAGE_KEY } from '@/widgets/OrderSection/model/types';
 
 type ContextType = {
   isMenuOpen: boolean;
@@ -60,6 +56,4 @@ export function OrderPage() {
     { label: 'Тариф', value: storedOrder.rate },
     { label: 'Полный бак', value: storedOrder.fullTank },
   ];
-
-  
 }

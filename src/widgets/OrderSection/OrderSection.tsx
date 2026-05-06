@@ -1,13 +1,16 @@
-﻿import { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useMemo, useState } from 'react';
 
-import orderData from '../../shared/model/orderData.json';
-import { BaseSection } from '../BaseSection';
+import orderData from '@/shared/model/orderData.json';
+import { BaseSection } from '@/widgets/BaseSection';
+import { Breadcrumbs } from '@/shared/components/Breadcrumbs';
+import { HorizontalContentContainer } from '@/shared/components/HorizontalContentContainer';
 import * as styles from './OrderSection.module.scss';
-import { Breadcrumbs } from '../../shared/components/Breadcrumbs';
-import { HorizontalContentContainer } from '../../shared/components/HorizontalContentContainer';
-import { ConfirmModal, OrderSidebar, StepExtras, StepLocation, StepModels, StepSummary } from './ui';
-import { CompletedOrder, ORDER_STORAGE_KEY, STEP_LABELS, Step } from './model/types';
+import {
+  ConfirmModal, OrderSidebar, StepExtras, StepLocation, StepModels, StepSummary,
+} from './ui';
+import {
+  CompletedOrder, ORDER_STORAGE_KEY, STEP_LABELS, Step,
+} from './model/types';
 import { formatPrice } from './model/formatPrice';
 import { StepOrderConfirmed } from './ui/StepOrderConfirmed';
 
@@ -52,7 +55,7 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: OrderSectionProps) {
 
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
-  const cities = orderData.cities;
+  const { cities } = orderData;
   const cityOptions = cities.map((city) => city.name);
 
   const selectedCity = useMemo(
@@ -187,11 +190,9 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: OrderSectionProps) {
   };
 
   const handleExtraToggle = (extraId: string) => {
-    setSelectedExtraIds((current) =>
-      current.includes(extraId)
-        ? current.filter((item) => item !== extraId)
-        : [...current, extraId],
-    );
+    setSelectedExtraIds((current) => (current.includes(extraId)
+      ? current.filter((item) => item !== extraId)
+      : [...current, extraId]));
   };
 
   const handleSubmitOrder = () => {

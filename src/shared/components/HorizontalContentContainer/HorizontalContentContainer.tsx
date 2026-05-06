@@ -7,5 +7,5 @@ interface HorizontalContentContainerProps {
 export function HorizontalContentContainer({ children }: HorizontalContentContainerProps) {
   return <div className={styles.container}>
     {children}
-  </div>
+  </div>;
 }

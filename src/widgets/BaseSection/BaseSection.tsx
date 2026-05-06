@@ -1,6 +1,6 @@
-﻿import { ReactNode } from 'react';
-import { Header } from '../Header';
-import { HorizontalContentContainer } from '../../shared/components/HorizontalContentContainer';
+import { ReactNode } from 'react';
+import { Header } from '@/widgets/Header';
+import { HorizontalContentContainer } from '@/shared/components/HorizontalContentContainer';
 import * as styles from './BaseSection.module.scss';
 
 type BaseSectionProps = {

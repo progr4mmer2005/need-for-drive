@@ -1,7 +1,7 @@
-﻿import orderData from '../../../../shared/model/orderData.json';
-import { Car } from '../../model/types';
-import { ModelCard } from '../ModelCard';
-import { RadioOption } from '../RadioOption';
+import orderData from '@/shared/model/orderData.json';
+import { Car } from '@/widgets/OrderSection/model/types';
+import { ModelCard } from '@/widgets/OrderSection/ui/ModelCard';
+import { RadioOption } from '@/widgets/OrderSection/ui/RadioOption';
 import * as styles from './StepModels.module.scss';
 
 type StepModelsProps = {

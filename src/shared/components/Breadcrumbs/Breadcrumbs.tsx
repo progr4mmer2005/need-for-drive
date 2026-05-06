@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import * as styles from './Breadcrumbs.module.scss';
 
 export interface BreadcrumbItem {
@@ -13,8 +13,7 @@ interface BreadcrumbsProps {
   onStepClick?: (step: number) => void;
 }
 
-export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, onStepClick }) => {
-  return (
+export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, onStepClick }) => (
     <div className={styles.breadcrumbs}>
       {items.map((item, index) => {
         const isClickable = Boolean(item.enabled && onStepClick);
@@ -34,6 +33,4 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, onStepClick }) 
         );
       })}
     </div>
-  );
-};
-
+);

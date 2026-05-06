@@ -1,10 +1,10 @@
-﻿import orderData from '../../../../shared/model/orderData.json';
-import { Car } from '../../model/types';
-import { formatPrice } from '../../model/formatPrice';
-import { CheckboxOption } from '../CheckboxOption';
-import { DateInputRow } from '../DateInputRow';
-import { RadioOption } from '../RadioOption';
-import { SectionTitle } from '../SectionTitle';
+import orderData from '@/shared/model/orderData.json';
+import { Car } from '@/widgets/OrderSection/model/types';
+import { formatPrice } from '@/widgets/OrderSection/model/formatPrice';
+import { CheckboxOption } from '@/widgets/OrderSection/ui/CheckboxOption';
+import { DateInputRow } from '@/widgets/OrderSection/ui/DateInputRow';
+import { RadioOption } from '@/widgets/OrderSection/ui/RadioOption';
+import { SectionTitle } from '@/widgets/OrderSection/ui/SectionTitle';
 import * as styles from './StepExtras.module.scss';
 
 type StepExtrasProps = {

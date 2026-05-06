@@ -1,8 +1,8 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import { SideMenu } from '../../widgets/SideMenu';
-import { Sidebar } from '../../widgets/Sidebar';
+import { SideMenu } from '@/widgets/SideMenu';
+import { Sidebar } from '@/widgets/Sidebar';
 import * as styles from './Layout.module.scss';
 
 export function Layout() {

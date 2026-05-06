@@ -1,7 +1,7 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 
-import { Car } from '../../model/types';
-import { carImages } from '../ModelCard/carImages';
+import { Car } from '@/widgets/OrderSection/model/types';
+import { carImages } from '@/widgets/OrderSection/ui/ModelCard/carImages';
 import * as styles from './StepOrderConfirmed.module.scss';
 
 type StepOrderConfirmed = {
@@ -9,7 +9,7 @@ type StepOrderConfirmed = {
   dateFrom: string;
 };
 
-export function StepOrderConfirmed({ car, dateFrom}: StepOrderConfirmed) {
+export function StepOrderConfirmed({ car, dateFrom }: StepOrderConfirmed) {
   const [hasImageError, setHasImageError] = useState(false);
 
   const imageSrc = carImages[car.id];
@@ -19,7 +19,7 @@ export function StepOrderConfirmed({ car, dateFrom}: StepOrderConfirmed) {
     <div className={styles.panel}>
 
       <div className={styles.top}>
-        
+
         <div>
           <div className={styles.successTitle}>Ваш заказ подтверждён</div>
           <div className={styles.carName}>{`${car.brand}, ${car.name}`}</div>

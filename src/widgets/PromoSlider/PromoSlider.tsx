@@ -1,8 +1,8 @@
-﻿import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-import { Button } from '../../shared/components/Button';
-import { classNames } from '../../shared/lib/classNames';
-import { sliderSlides } from '../../shared/model/sliderSlides';
+import { Button } from '@/shared/components/Button';
+import { classNames } from '@/shared/lib/classNames';
+import { sliderSlides } from '@/shared/model/sliderSlides';
 import * as styles from './PromoSlider.module.scss';
 
 type PromoSliderProps = {

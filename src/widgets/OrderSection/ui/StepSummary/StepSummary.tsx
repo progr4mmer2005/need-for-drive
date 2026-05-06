@@ -1,7 +1,7 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 
-import { Car } from '../../model/types';
-import { carImages } from '../ModelCard/carImages';
+import { Car } from '@/widgets/OrderSection/model/types';
+import { carImages } from '@/widgets/OrderSection/ui/ModelCard/carImages';
 import * as styles from './StepSummary.module.scss';
 
 type StepSummaryProps = {
@@ -9,7 +9,7 @@ type StepSummaryProps = {
   dateFrom: string;
 };
 
-export function StepSummary({ car, dateFrom}: StepSummaryProps) {
+export function StepSummary({ car, dateFrom }: StepSummaryProps) {
   const [hasImageError, setHasImageError] = useState(false);
 
   const imageSrc = carImages[car.id];
