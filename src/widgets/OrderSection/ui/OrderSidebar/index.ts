@@ -1,1 +1,1 @@
-﻿export { OrderSidebar } from './OrderSidebar';
+export { OrderSidebar } from './OrderSidebar';

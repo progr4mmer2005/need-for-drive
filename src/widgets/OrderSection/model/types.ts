@@ -1,4 +1,4 @@
-﻿import orderData from '../../../shared/model/orderData.json';
+import orderData from '@/shared/model/orderData.json';
 
 export type Step = 1 | 2 | 3 | 4 | 5;
 
@@ -27,7 +27,7 @@ export const STEP_LABELS: Record<Step, string> = {
   2: 'Модель',
   3: 'Дополнительно',
   4: 'Итого',
-  5: ' '
+  5: ' ',
 };
 
 export const ORDER_STORAGE_KEY = 'need-for-drive-order';

@@ -1,4 +1,4 @@
-﻿import * as styles from './ConfirmModal.module.scss';
+import * as styles from './ConfirmModal.module.scss';
 
 type ConfirmModalProps = {
   isOpen: boolean;

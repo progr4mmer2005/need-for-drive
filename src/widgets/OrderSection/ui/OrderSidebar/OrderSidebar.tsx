@@ -1,6 +1,6 @@
-﻿import { Button } from '../../../../shared/components/Button'
-import { OrderDetails } from '../../../../shared/components/OrderDetails';
-import { Step } from '../../model/types';
+import { Button } from '@/shared/components/Button';
+import { OrderDetails } from '@/shared/components/OrderDetails';
+import { Step } from '@/widgets/OrderSection/model/types';
 import * as styles from './OrderSidebar.module.scss';
 
 type OrderSidebarProps = {
@@ -29,9 +29,8 @@ export function OrderSidebar({
         <OrderDetails items={items} priceText={priceText} />
           <div className={styles.buttonContainer}>
 
-          
             {step === 1 && (
-              <Button size='full'  disabled={!canGoToStep2} onClick={() => onStepChange(2)}>
+              <Button size='full' disabled={!canGoToStep2} onClick={() => onStepChange(2)}>
                 Выбрать модель
               </Button>
             )}
@@ -43,7 +42,7 @@ export function OrderSidebar({
             )}
 
             {step === 3 && (
-              <Button size='full'  onClick={() => onStepChange(4)}>
+              <Button size='full' onClick={() => onStepChange(4)}>
                 Итого
               </Button>
             )}

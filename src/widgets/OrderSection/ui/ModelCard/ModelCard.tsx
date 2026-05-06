@@ -1,8 +1,8 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 
-import { Car } from '../../model/types';
-import { formatPrice } from '../../model/formatPrice';
-import { carImages } from './carImages';
+import { Car } from '@/widgets/OrderSection/model/types';
+import { formatPrice } from '@/widgets/OrderSection/model/formatPrice';
+import { carImages } from '@/widgets/OrderSection/ui/ModelCard/carImages';
 import * as styles from './ModelCard.module.scss';
 
 type ModelCardProps = {
@@ -13,7 +13,7 @@ type ModelCardProps = {
 
 export function ModelCard({ car, selected, onSelect }: ModelCardProps) {
   const [hasImageError, setHasImageError] = useState(false);
-  
+
   const imageSrc = carImages[car.id];
   const hasImage = Boolean(imageSrc) && !hasImageError;
 

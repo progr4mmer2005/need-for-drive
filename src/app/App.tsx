@@ -1,7 +1,7 @@
-﻿import { HashRouter, Routes, Route } from 'react-router-dom';
-import { Layout } from '../layouts/Layout';
-import { HomePage } from '../pages/HomePage';
-import { OrderPage } from '../pages/OrderPage';
+import { HashRouter, Routes, Route } from 'react-router-dom';
+import { Layout } from '@/layouts/Layout';
+import { HomePage } from '@/pages/HomePage';
+import { OrderPage } from '@/pages/OrderPage';
 
 export function App() {
   return (

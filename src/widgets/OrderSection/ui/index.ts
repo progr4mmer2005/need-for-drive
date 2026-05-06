@@ -1,4 +1,4 @@
-﻿export { ConfirmModal } from './ConfirmModal';
+export { ConfirmModal } from './ConfirmModal';
 export { ModelCard } from './ModelCard';
 export { OrderSidebar } from './OrderSidebar';
 export { StepExtras } from './StepExtras';

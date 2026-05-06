@@ -1,6 +1,6 @@
-﻿import { AutocompleteInput } from '../../../../shared/components/AutocompleteInput';
-import { MapSelection } from '../../../../shared/components/MapSelection';
-import { City } from '../../model/types';
+import { AutocompleteInput } from '@/shared/components/AutocompleteInput';
+import { MapSelection } from '@/shared/components/MapSelection';
+import { City } from '@/widgets/OrderSection/model/types';
 import * as styles from './StepLocation.module.scss';
 
 type StepLocationProps = {

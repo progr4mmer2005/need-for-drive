@@ -1,5 +1,5 @@
-﻿import { LanguageToggle } from '../../shared/components/LanguageToggle';
-import { SocialLinks } from '../../shared/components/SocialLinks';
+import { LanguageToggle } from '@/shared/components/LanguageToggle';
+import { SocialLinks } from '@/shared/components/SocialLinks';
 import * as styles from './SideMenu.module.scss';
 
 const menuItems = ['Парковка', 'Страховка', 'Бензин', 'Обслуживание'];
@@ -12,7 +12,9 @@ type SideMenuProps = {
   onLanguageToggle: () => void;
 };
 
-export function SideMenu({ activeItem, isOpen, language, onClose, onLanguageToggle }: SideMenuProps) {
+export function SideMenu({
+  activeItem, isOpen, language, onClose, onLanguageToggle,
+}: SideMenuProps) {
   return (
     <div className={`${styles.menu} ${isOpen ? styles.menuOpen : ''}`}>
       <div className={styles.content}>

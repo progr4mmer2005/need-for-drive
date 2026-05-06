@@ -1,5 +1,5 @@
-import { BurgerButton } from '../../shared/components/BurgerButton';
-import { LanguageToggle } from '../../shared/components/LanguageToggle';
+import { BurgerButton } from '@/shared/components/BurgerButton';
+import { LanguageToggle } from '@/shared/components/LanguageToggle';
 import * as styles from './Sidebar.module.scss';
 
 type SidebarProps = {
@@ -9,7 +9,9 @@ type SidebarProps = {
   onLanguageToggle: () => void;
 };
 
-export function Sidebar({ isMenuOpen, language, onMenuToggle, onLanguageToggle }: SidebarProps) {
+export function Sidebar({
+  isMenuOpen, language, onMenuToggle, onLanguageToggle,
+}: SidebarProps) {
   return (
     <aside className={styles.sidebar}>
       <BurgerButton isActive={isMenuOpen} onClick={onMenuToggle} />

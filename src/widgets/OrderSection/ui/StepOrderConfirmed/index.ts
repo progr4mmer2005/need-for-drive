@@ -1,1 +1,1 @@
-﻿export { StepOrderConfirmed } from './StepOrderConfirmed';
+export { StepOrderConfirmed } from './StepOrderConfirmed';

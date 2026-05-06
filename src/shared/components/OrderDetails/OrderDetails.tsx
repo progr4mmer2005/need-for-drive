@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import * as styles from './OrderDetails.module.scss';
 
 interface OrderItem {
@@ -16,14 +16,13 @@ export function OrderDetails({ items, priceText }: OrderDetailsProps) {
     <div className={styles.orderDetails}>
       <ul className={styles.list}>
         {items.map(
-          (item) =>
-            item.value && (
+          (item) => item.value && (
               <li key={item.label} className={styles.item}>
                 <span className={styles.label}>{item.label}</span>
                 <div className={styles.dots} />
                 <span className={styles.value}>{item.value}</span>
               </li>
-            ),
+          ),
         )}
       </ul>
 

@@ -1,4 +1,4 @@
-﻿import * as styles from './RadioOption.module.scss';
+import * as styles from './RadioOption.module.scss';
 
 type RadioOptionProps = {
   checked: boolean;
@@ -8,7 +8,9 @@ type RadioOptionProps = {
   disabled?: boolean;
 };
 
-export function RadioOption({ checked, name, label, onChange, disabled = false }: RadioOptionProps) {
+export function RadioOption({
+  checked, name, label, onChange, disabled = false,
+}: RadioOptionProps) {
   return (
     <label className={`${styles.radioLabel} ${checked ? styles.checked : ''} ${disabled ? styles.disabled : ''}`}>
       <input className={styles.radioInput} checked={checked} name={name} type="radio" onChange={onChange} disabled={disabled} />

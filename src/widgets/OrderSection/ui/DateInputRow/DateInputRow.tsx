@@ -1,4 +1,4 @@
-﻿import * as styles from './DateInputRow.module.scss';
+import * as styles from './DateInputRow.module.scss';
 
 type DateInputRowProps = {
   prefix: string;

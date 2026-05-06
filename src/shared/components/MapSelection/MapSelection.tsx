@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import * as styles from './MapSelection.module.scss';
 
 interface MapPoint {
@@ -14,8 +14,7 @@ interface MapSelectionProps {
   onPointSelect?: (point: MapPoint) => void;
 }
 
-export const MapSelection: React.FC<MapSelectionProps> = ({ points, selectedId, onPointSelect }) => {
-  return (
+export const MapSelection: React.FC<MapSelectionProps> = ({ points, selectedId, onPointSelect }) => (
     <div className={styles.mapSelection}>
       <div className={styles.mapSelection__title}>Выбрать на карте:</div>
       <div className={styles.mapSelection__map}>
@@ -31,6 +30,4 @@ export const MapSelection: React.FC<MapSelectionProps> = ({ points, selectedId, 
         ))}
       </div>
     </div>
-  );
-};
-
+);

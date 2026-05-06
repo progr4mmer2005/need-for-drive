@@ -1,4 +1,6 @@
-﻿import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useEffect, useMemo, useRef, useState,
+} from 'react';
 import * as styles from './AutocompleteInput.module.scss';
 
 interface AutocompleteInputProps {
@@ -97,4 +99,3 @@ export const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
     </div>
   );
 };
-

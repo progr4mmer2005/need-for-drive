@@ -1,4 +1,4 @@
-﻿import { classNames } from '../../lib/classNames';
+import { classNames } from '@/shared/lib/classNames';
 import * as styles from './BurgerButton.module.scss';
 
 type BurgerButtonProps = {

@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 
-import { classNames } from '../../lib/classNames';
+import { classNames } from '@/shared/lib/classNames';
 import * as styles from './Button.module.scss';
 
 type ButtonTone = 'primary' | 'darkGreen' | 'cyan' | 'darkRed' | 'purple';
