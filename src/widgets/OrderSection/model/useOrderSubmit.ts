@@ -1,5 +1,13 @@
-import { useCallback } from 'react';
-import { ORDER_STORAGE_KEY, Step, type TCompletedOrder } from './types';
+import { useCallback, Dispatch, SetStateAction } from 'react';
+import {
+  ORDER_STORAGE_KEY,
+  Step,
+  type TCompletedOrder,
+  type TSelectedCity,
+  type TSelectedPickup,
+  type TSelectedCar,
+  type TSelectedRate,
+} from './types';
 import { formatPrice } from './formatPrice';
 
 type TOrderState = {
@@ -19,10 +27,10 @@ type TOrderState = {
 };
 
 type TOrderSubmitDeps = {
-  selectedCity: { name: string } | null;
-  selectedPickup: { name: string; id: string } | null;
-  selectedCar: { id: string; brand: string; name: string; image?: string; priceMin: number } | null;
-  selectedRate: { id: string; price: number } | null;
+  selectedCity: TSelectedCity;
+  selectedPickup: TSelectedPickup;
+  selectedCar: TSelectedCar;
+  selectedRate: TSelectedRate;
   selectedColor: string;
   selectedExtraIds: string[];
   availableAt: string;
@@ -32,9 +40,18 @@ type TOrderSubmitDeps = {
 export function useOrderSubmit(
   orderState: TOrderState,
   deps: TOrderSubmitDeps,
-  setOrderState: React.Dispatch<React.SetStateAction<TOrderState>>,
+  setOrderState: Dispatch<SetStateAction<TOrderState>>,
 ) {
-  const { selectedCity, selectedPickup, selectedCar, selectedRate, selectedColor, selectedExtraIds, availableAt, totalPrice } = deps;
+  const {
+    selectedCity,
+    selectedPickup,
+    selectedCar,
+    selectedRate,
+    selectedColor,
+    selectedExtraIds,
+    availableAt,
+    totalPrice,
+  } = deps;
 
   const handleSubmitOrder = useCallback(() => {
     if (!selectedCity || !selectedPickup || !selectedCar) {
@@ -67,7 +84,17 @@ export function useOrderSubmit(
       step: 5 as Step,
       orderId,
     }));
-  }, [selectedCity, selectedPickup, selectedCar, selectedRate, selectedColor, selectedExtraIds, availableAt, totalPrice, setOrderState]);
+  }, [
+    selectedCity,
+    selectedPickup,
+    selectedCar,
+    selectedRate,
+    selectedColor,
+    selectedExtraIds,
+    availableAt,
+    totalPrice,
+    setOrderState,
+  ]);
 
   return { handleSubmitOrder };
 }

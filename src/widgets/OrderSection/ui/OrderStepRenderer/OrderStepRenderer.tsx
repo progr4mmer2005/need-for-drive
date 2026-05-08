@@ -1,4 +1,6 @@
-import { TCar, TCity, Step } from '@/widgets/OrderSection/model/types';
+import {
+  TCar, TCity, Step, TSelectedPickup,
+} from '@/widgets/OrderSection/model/types';
 import { HorizontalContentContainer } from '@/shared/components/HorizontalContentContainer';
 import { StepLocation } from '@/widgets/OrderSection/ui/StepLocation';
 import { StepModels } from '@/widgets/OrderSection/ui/StepModels';
@@ -14,7 +16,7 @@ type TOrderStepRendererProps = {
   cityOptions: string[];
   pickupOptions: string[];
   selectedCity: TCity | null;
-  selectedPickup: { id: string; name: string } | null;
+  selectedPickup: TSelectedPickup;
   selectedCarId: string | null;
   selectedCategory: string;
   selectedColor: string;

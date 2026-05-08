@@ -6,12 +6,16 @@ import { Breadcrumbs } from '@/shared/components/Breadcrumbs';
 import { HorizontalContentContainer } from '@/shared/components/HorizontalContentContainer';
 import { ORDER_DEFAULTS } from '@/config/orderDefaults';
 import * as styles from './OrderSection.module.scss';
-import {
-  ConfirmModal, OrderSidebar,
-} from './ui';
+import { ConfirmModal, OrderSidebar } from './ui';
 import { OrderStepRenderer } from './ui/OrderStepRenderer';
 import {
-  STEP_LABELS, Step, type TCity,
+  STEP_LABELS,
+  Step,
+  type TCity,
+  type TSelectedCity,
+  type TSelectedPickup,
+  type TSelectedCar,
+  type TSelectedRate,
 } from './model/types';
 import { formatPrice } from './model/formatPrice';
 import { useOrderSubmit } from './model/useOrderSubmit';
@@ -74,7 +78,9 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
   const cityOptions = cities.map((city) => city.name);
 
   const selectedCity = useMemo(
-    () => cities.find((city) => city.name.toLowerCase() === orderState.cityInput.trim().toLowerCase()) || null,
+    () => cities.find(
+      (city) => city.name.toLowerCase() === orderState.cityInput.trim().toLowerCase(),
+    ) || null,
     [cities, orderState.cityInput],
   );
 
@@ -88,9 +94,11 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
     }
 
     if (orderState.selectedPickupId) {
-      return (selectedCity as TCity).pickupPoints.find(
-        (point) => point.id === orderState.selectedPickupId,
-      ) || null;
+      return (
+        (selectedCity as TCity).pickupPoints.find(
+          (point) => point.id === orderState.selectedPickupId,
+        ) || null
+      );
     }
 
     return (
@@ -132,14 +140,28 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
   }, [maxPrice, minPrice, selectedCar, selectedExtras, selectedRate]);
 
   const orderItems = [
-    { label: 'Пункт выдачи', value: selectedPickup ? `${(selectedCity as TCity | null)?.name}, ${selectedPickup.name}` : null },
+    {
+      label: 'Пункт выдачи',
+      value: selectedPickup
+        ? `${(selectedCity as TCity | null)?.name}, ${selectedPickup.name}`
+        : null,
+    },
     { label: 'Модель', value: selectedCar ? `${selectedCar.brand}, ${selectedCar.name}` : null },
     { label: 'Цвет', value: orderState.step >= 3 ? orderState.selectedColor : null },
     { label: 'Длительность аренды', value: orderState.step >= 3 ? '1д 2ч' : null },
-    { label: 'Тариф', value: orderState.step >= 3 ? (selectedRate?.id === 'daily' ? 'На сутки' : 'Поминутно') : null },
+    {
+      label: 'Тариф',
+      value:
+        orderState.step >= 3 ? (selectedRate?.id === 'daily' ? 'На сутки' : 'Поминутно') : null,
+    },
     {
       label: 'Полный бак',
-      value: orderState.step >= 3 ? (orderState.selectedExtraIds.includes('fullTank') ? 'Да' : 'Нет') : null,
+      value:
+        orderState.step >= 3
+          ? orderState.selectedExtraIds.includes('fullTank')
+            ? 'Да'
+            : 'Нет'
+          : null,
     },
   ];
 
@@ -174,44 +196,53 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
     }));
   }, []);
 
-  const handleCityChange = useCallback((value: string) => {
-    setOrderState((prev) => ({
-      ...prev,
-      cityInput: value,
-      pickupInput: '',
-      selectedPickupId: null,
-    }));
-    resetAfterLocation();
-  }, [resetAfterLocation]);
-
-  const handlePickupChange = useCallback((value: string) => {
-    setOrderState((prev) => ({
-      ...prev,
-      pickupInput: value,
-      selectedPickupId: null,
-    }));
-    resetAfterLocation();
-  }, [resetAfterLocation]);
-
-  const handlePickupSelectFromMap = useCallback((pickupId: string) => {
-    setOrderState((prev) => {
-      if (!selectedCity) {
-        return prev;
-      }
-
-      const point = (selectedCity as TCity).pickupPoints.find((pickup) => pickup.id === pickupId);
-      if (!point) {
-        return prev;
-      }
-
-      return {
+  const handleCityChange = useCallback(
+    (value: string) => {
+      setOrderState((prev) => ({
         ...prev,
-        selectedPickupId: point.id,
-        pickupInput: point.name,
-        step: 1 as Step,
-      };
-    });
-  }, [selectedCity]);
+        cityInput: value,
+        pickupInput: '',
+        selectedPickupId: null,
+      }));
+      resetAfterLocation();
+    },
+    [resetAfterLocation],
+  );
+
+  const handlePickupChange = useCallback(
+    (value: string) => {
+      setOrderState((prev) => ({
+        ...prev,
+        pickupInput: value,
+        selectedPickupId: null,
+      }));
+      resetAfterLocation();
+    },
+    [resetAfterLocation],
+  );
+
+  const handlePickupSelectFromMap = useCallback(
+    (pickupId: string) => {
+      setOrderState((prev) => {
+        if (!selectedCity) {
+          return prev;
+        }
+
+        const point = (selectedCity as TCity).pickupPoints.find((pickup) => pickup.id === pickupId);
+        if (!point) {
+          return prev;
+        }
+
+        return {
+          ...prev,
+          selectedPickupId: point.id,
+          pickupInput: point.name,
+          step: 1 as Step,
+        };
+      });
+    },
+    [selectedCity],
+  );
 
   const handleCarSelect = useCallback((carId: string) => {
     setOrderState((prev) => ({
@@ -257,10 +288,10 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
   const { handleSubmitOrder } = useOrderSubmit(
     orderState,
     {
-      selectedCity: selectedCity as { name: string } | null,
-      selectedPickup: selectedPickup as { name: string; id: string } | null,
-      selectedCar: selectedCar as { id: string; brand: string; name: string; image?: string; priceMin: number } | null,
-      selectedRate: selectedRate as { id: string; price: number } | null,
+      selectedCity: selectedCity as TSelectedCity,
+      selectedPickup: selectedPickup as TSelectedPickup,
+      selectedCar: selectedCar as TSelectedCar,
+      selectedRate: selectedRate as TSelectedRate,
       selectedColor: orderState.selectedColor,
       selectedExtraIds: orderState.selectedExtraIds,
       availableAt,
@@ -274,17 +305,21 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
       <div className={styles.orderContent}>
         <div className={styles.breadcrumbsContainer}>
           <HorizontalContentContainer>
-            {orderState.step !== 5 && <Breadcrumbs
-              items={([1, 2, 3, 4] as Step[]).map((stepKey) => ({
-                key: stepKey,
-                label: STEP_LABELS[stepKey],
-                active: stepKey === orderState.step,
-                enabled: isStepEnabled(stepKey),
-              }))}
-              onStepClick={(nextStep) => handleStepTransition(nextStep as Step)}
-            />}
+            {orderState.step !== 5 && (
+              <Breadcrumbs
+                items={([1, 2, 3, 4] as Step[]).map((stepKey) => ({
+                  key: stepKey,
+                  label: STEP_LABELS[stepKey],
+                  active: stepKey === orderState.step,
+                  enabled: isStepEnabled(stepKey),
+                }))}
+                onStepClick={(nextStep) => handleStepTransition(nextStep as Step)}
+              />
+            )}
 
-            {orderState.step === 5 && <div className={styles.orderNumber}>Заказ номер {orderState.orderId}</div>}
+            {orderState.step === 5 && (
+              <div className={styles.orderNumber}>Заказ номер {orderState.orderId}</div>
+            )}
           </HorizontalContentContainer>
         </div>
 
@@ -324,7 +359,9 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
           <OrderSidebar
             step={orderState.step}
             items={orderItems}
-            priceText={selectedCar ? totalPrice : `от ${formatPrice(minPrice)} до ${formatPrice(maxPrice)}`}
+            priceText={
+              selectedCar ? totalPrice : `от ${formatPrice(minPrice)} до ${formatPrice(maxPrice)}`
+            }
             canGoToStep2={canGoToStep2}
             canGoToStep3={canGoToStep3}
             onStepChange={handleStepTransition}
@@ -333,7 +370,11 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
         </div>
       </div>
 
-      <ConfirmModal isOpen={orderState.isConfirmOpen} onConfirm={handleSubmitOrder} onCancel={() => setOrderState((prev) => ({ ...prev, isConfirmOpen: false }))} />
+      <ConfirmModal
+        isOpen={orderState.isConfirmOpen}
+        onConfirm={handleSubmitOrder}
+        onCancel={() => setOrderState((prev) => ({ ...prev, isConfirmOpen: false }))}
+      />
     </BaseSection>
   );
 }
