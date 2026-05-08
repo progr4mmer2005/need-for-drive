@@ -8,6 +8,17 @@ export type TCar = (typeof orderData.cars)[number];
 export type TRentalRate = (typeof orderData.rentalRates)[number];
 export type TExtra = (typeof orderData.extras)[number];
 
+export type TSelectedCity = { name: string } | null;
+export type TSelectedPickup = { name: string; id: string } | null;
+export type TSelectedCar = {
+  id: string;
+  brand: string;
+  name: string;
+  image?: string;
+  priceMin: number;
+} | null;
+export type TSelectedRate = { id: string; price: number } | null;
+
 export type TCompletedOrder = {
   orderId: string;
   city: string;

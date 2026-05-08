@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Button } from '@/shared/components/Button';
 import { OrderDetails } from '@/shared/components/OrderDetails';
 import { Step } from '@/widgets/OrderSection/model/types';
@@ -13,7 +14,7 @@ type TOrderSidebarProps = {
   onOpenConfirm: () => void;
 };
 
-export function OrderSidebar({
+export const OrderSidebar = memo(function OrderSidebar({
   step,
   items,
   priceText,
@@ -64,4 +65,4 @@ export function OrderSidebar({
       </div>
     </aside>
   );
-}
+});

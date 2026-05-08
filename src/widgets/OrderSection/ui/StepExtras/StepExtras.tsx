@@ -1,5 +1,6 @@
+import { memo } from 'react';
 import orderData from '@/shared/model/orderData.json';
-import { Car } from '@/widgets/OrderSection/model/types';
+import { TCar } from '@/widgets/OrderSection/model/types';
 import { formatPrice } from '@/widgets/OrderSection/model/formatPrice';
 import { CheckboxOption } from '@/widgets/OrderSection/ui/CheckboxOption';
 import { DateInputRow } from '@/widgets/OrderSection/ui/DateInputRow';
@@ -8,7 +9,7 @@ import { SectionTitle } from '@/widgets/OrderSection/ui/SectionTitle';
 import * as styles from './StepExtras.module.scss';
 
 type TStepExtrasProps = {
-  selectedCar: Car;
+  selectedCar: TCar;
   selectedColor: string;
   dateFrom: string;
   dateTo: string;
@@ -21,7 +22,7 @@ type TStepExtrasProps = {
   onExtraToggle: (extraId: string) => void;
 };
 
-export function StepExtras({
+export const StepExtras = memo(function StepExtras({
   selectedCar,
   selectedColor,
   dateFrom,
@@ -91,4 +92,4 @@ export function StepExtras({
       </div>
     </div>
   );
-}
+});

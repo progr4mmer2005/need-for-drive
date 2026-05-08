@@ -1,15 +1,15 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 
-import { Car } from '@/widgets/OrderSection/model/types';
+import { TCar } from '@/widgets/OrderSection/model/types';
 import { carImages } from '@/widgets/OrderSection/ui/ModelCard/carImages';
 import * as styles from './StepSummary.module.scss';
 
 type TStepSummaryProps = {
-  car: Car;
+  car: TCar;
   dateFrom: string;
 };
 
-export function StepSummary({ car, dateFrom }: TStepSummaryProps) {
+export const StepSummary = memo(function StepSummary({ car, dateFrom }: TStepSummaryProps) {
   const [hasImageError, setHasImageError] = useState(false);
 
   const imageSrc = carImages[car.id];
@@ -42,4 +42,4 @@ export function StepSummary({ car, dateFrom }: TStepSummaryProps) {
       </div>
     </div>
   );
-}
+});
