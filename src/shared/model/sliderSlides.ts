@@ -1,7 +1,7 @@
-const slide1 = new URL('../../assets/images/slider/1.jpg', import.meta.url).toString();
-const slide2 = new URL('../../assets/images/slider/2.png', import.meta.url).toString();
-const slide3 = new URL('../../assets/images/slider/3.png', import.meta.url).toString();
-const slide4 = new URL('../../assets/images/slider/4.png', import.meta.url).toString();
+const slide1 = new URL('../../assets/images/slider/1.webp', import.meta.url).toString();
+const slide2 = new URL('../../assets/images/slider/2.webp', import.meta.url).toString();
+const slide3 = new URL('../../assets/images/slider/3.webp', import.meta.url).toString();
+const slide4 = new URL('../../assets/images/slider/4.webp', import.meta.url).toString();
 
 type SlideTone = 'darkGreen' | 'cyan' | 'darkRed' | 'purple';
 
