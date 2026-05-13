@@ -3,7 +3,7 @@ import * as styles from './OrderDetails.module.scss';
 
 interface IOrderItem {
   label: string;
-  value: string | null | undefined;
+  value?: string | null;
 }
 
 interface IOrderDetailsProps {
