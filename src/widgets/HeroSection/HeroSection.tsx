@@ -12,8 +12,8 @@ type THeroSectionProps = {
 export function HeroSection({ isMenuOpen, onMenuToggle }: THeroSectionProps) {
   return (
     <BaseSection isMenuOpen={isMenuOpen} onMenuToggle={onMenuToggle}>
-      <div className={styles['hero-content']}>
-        <div className={styles['promo-container']}>
+      <div className={styles.heroContent}>
+            <div className={styles.promoContainer}>
           <HorizontalContentContainer>
             <div className={styles.promo}>
               <h1 className={styles.title}>
@@ -26,7 +26,7 @@ export function HeroSection({ isMenuOpen, onMenuToggle }: THeroSectionProps) {
             </div>
           </HorizontalContentContainer>
 
-          <div className={styles['promo-button-container']}>
+          <div className={styles.promoButtonContainer}>
             <Link className={styles.bookLink} to="/order">
               <Button fullWidthOnMobile size="hero" squareOnMobile>
                 Забронировать

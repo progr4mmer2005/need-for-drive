@@ -16,12 +16,12 @@ interface IMapSelectionProps {
 
 export const MapSelection: React.FC<IMapSelectionProps> = ({ points, selectedId, onPointSelect }) => (
     <div className={styles.mapSelection}>
-      <div className={styles.mapSelection__title}>Выбрать на карте:</div>
-      <div className={styles.mapSelection__map}>
+      <div className={styles.mapSelectionTitle}>Выбрать на карте:</div>
+      <div className={styles.mapSelectionMap}>
         {points.map((point) => (
           <button
             key={point.id}
-            className={`${styles.mapSelection__marker} ${selectedId === point.id ? styles.selected : ''}`}
+            className={`${styles.mapSelectionMarker} ${selectedId === point.id ? styles.selected : ''}`}
             style={{ left: `${point.x}%`, top: `${point.y}%` }}
             type="button"
             onClick={() => onPointSelect?.(point)}

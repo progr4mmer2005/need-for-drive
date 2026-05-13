@@ -65,11 +65,11 @@ export const AutocompleteInput: React.FC<IAutocompleteInputProps> = ({
 
   return (
     <div className={styles.autocomplete} ref={wrapperRef}>
-      <label className={styles.autocomplete__label}>{label}</label>
-      <div className={styles.autocomplete__inputWrapper}>
+      <label className={styles.autocompleteLabel}>{label}</label>
+      <div className={styles.autocompleteInputWrapper}>
         <input
           type="text"
-          className={styles.autocomplete__input}
+          className={styles.autocompleteInput}
           value={inputValue}
           onChange={handleInputChange}
           onFocus={() => setIsOpen(true)}
@@ -77,16 +77,16 @@ export const AutocompleteInput: React.FC<IAutocompleteInputProps> = ({
           disabled={disabled}
         />
         {inputValue && !disabled && (
-          <button className={styles.autocomplete__clear} type="button" onClick={handleClear}>
+          <button className={styles.autocompleteClear} type="button" onClick={handleClear}>
             ×
           </button>
         )}
         {isOpen && !disabled && filteredOptions.length > 0 && (
-          <div className={styles.autocomplete__dropdown}>
+          <div className={styles.autocompleteDropdown}>
             {filteredOptions.map((option) => (
               <button
                 key={option}
-                className={styles.autocomplete__option}
+                className={styles.autocompleteOption}
                 type="button"
                 onClick={() => handleOptionClick(option)}
               >
