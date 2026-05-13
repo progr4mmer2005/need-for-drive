@@ -6,7 +6,7 @@
   margin-bottom: 12px;
 }
 
-.autocomplete__label {
+.autocompleteLabel {
   font-size: 14px;
   color: #666;
   text-align: right;
@@ -14,13 +14,13 @@
   padding-bottom: 2px;
 }
 
-.autocomplete__inputWrapper {
+.autocompleteInputWrapper {
   position: relative;
   width: 100%;
   max-width: 200px;
 }
 
-.autocomplete__input {
+.autocompleteInput {
   width: 100%;
   height: 24px;
   padding: 1px 20px 1px 0;
@@ -42,7 +42,7 @@
   }
 }
 
-.autocomplete__clear {
+.autocompleteClear {
   position: absolute;
   right: -2px;
   top: 50%;
@@ -55,7 +55,7 @@
   color: #555;
 }
 
-.autocomplete__dropdown {
+.autocompleteDropdown {
   position: absolute;
   top: calc(100% + 2px);
   left: 0;
@@ -67,7 +67,7 @@
   z-index: 10;
 }
 
-.autocomplete__option {
+.autocompleteOption {
   width: 100%;
   border: none;
   text-align: left;
@@ -88,7 +88,7 @@
     grid-template-columns: 95px minmax(160px, 1fr);
   }
 
-  .autocomplete__inputWrapper {
+  .autocompleteInputWrapper {
     max-width: 200px;
   }
 }

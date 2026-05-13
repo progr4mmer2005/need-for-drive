@@ -1,13 +1,13 @@
 @use '@/shared/styles/variables' as *;
 
-.hero-content {
+.heroContent {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
 }
 
-.promo-button-container {
+.promoButtonContainer {
   padding: 0 64px;
   margin-top: 60px;
 
@@ -29,8 +29,7 @@
 
 
 
-
-.promo-container {
+.promoContainer {
   display: flex;
   flex-direction: column;
   margin-top: auto;
@@ -94,8 +93,6 @@
     padding-bottom: 16px;
   }
 }
-
-
 
 
 .copyright {
