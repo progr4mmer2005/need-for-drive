@@ -1,4 +1,4 @@
-@use '@/shared/styles/_variables.scss' as *;
+@use '@/shared/styles/variables' as *;
 
 
 
@@ -25,11 +25,9 @@
   }
 
   &.disabled {
-    
     cursor: default;
     background: $light-gray-color;
     color: white;
-  
   }
 }
 
