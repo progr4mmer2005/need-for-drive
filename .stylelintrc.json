@@ -15,6 +15,14 @@
     "declaration-block-no-duplicate-properties": null,
     "color-function-notation": null,
     "alpha-value-notation": null,
-    "scss/load-partial-extension": null
+    "scss/load-partial-extension": null,
+    "block-closing-brace-empty-line-before": "never",
+    "block-closing-brace-newline-before": "always-multi-line",
+    "block-opening-brace-newline-after": "always-multi-line",
+    "declaration-empty-line-before": "never",
+    "rule-empty-line-before": ["always", {
+      "except": ["first-nested"],
+      "ignore": ["after-comment"]
+    }]
   }
 }
