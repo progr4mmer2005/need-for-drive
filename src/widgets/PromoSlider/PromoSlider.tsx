@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { Button } from '@/shared/components/Button';
 import { classNames } from '@/shared/lib/classNames';
@@ -9,28 +9,65 @@ type TPromoSliderProps = {
   isDimmed: boolean;
 };
 
+const AUTOPLAY_DELAY_MS = 3000;
+const AUTOPLAY_RESUME_DELAY_MS = 10000;
+
 export function PromoSlider({ isDimmed }: TPromoSliderProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isAutoPlayEnabled, setIsAutoPlayEnabled] = useState(true);
+  const resumeTimeoutRef = useRef<number | null>(null);
 
   const totalSlides = sliderSlides.length;
   const activeSlide = useMemo(() => sliderSlides[activeIndex], [activeIndex]);
 
   useEffect(() => {
+    if (!isAutoPlayEnabled) {
+      return undefined;
+    }
+
     const timerId = window.setInterval(() => {
       setActiveIndex((currentIndex) => (currentIndex + 1) % totalSlides);
-    }, 4000);
+    }, AUTOPLAY_DELAY_MS);
 
     return () => {
       window.clearInterval(timerId);
     };
-  }, [totalSlides]);
+  }, [isAutoPlayEnabled, totalSlides]);
+
+  useEffect(() => {
+    return () => {
+      if (resumeTimeoutRef.current !== null) {
+        window.clearTimeout(resumeTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const pauseAutoplayAndScheduleResume = () => {
+    setIsAutoPlayEnabled(false);
+
+    if (resumeTimeoutRef.current !== null) {
+      window.clearTimeout(resumeTimeoutRef.current);
+    }
+
+    resumeTimeoutRef.current = window.setTimeout(() => {
+      setIsAutoPlayEnabled(true);
+      resumeTimeoutRef.current = null;
+    }, AUTOPLAY_RESUME_DELAY_MS);
+  };
 
   const handlePrev = () => {
+    pauseAutoplayAndScheduleResume();
     setActiveIndex((currentIndex) => (currentIndex - 1 + totalSlides) % totalSlides);
   };
 
   const handleNext = () => {
+    pauseAutoplayAndScheduleResume();
     setActiveIndex((currentIndex) => (currentIndex + 1) % totalSlides);
+  };
+
+  const handleBulletClick = (index: number) => {
+    pauseAutoplayAndScheduleResume();
+    setActiveIndex(index);
   };
 
   return (
@@ -82,7 +119,7 @@ export function PromoSlider({ isDimmed }: TPromoSliderProps) {
               aria-label={`Перейти к слайду ${index + 1}`}
               className={classNames(styles.bullet, index === activeIndex && styles.bulletActive)}
               type="button"
-              onClick={() => setActiveIndex(index)}
+              onClick={() => handleBulletClick(index)}
             />
           ))}
         </div>
