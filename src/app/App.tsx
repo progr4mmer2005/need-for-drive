@@ -14,6 +14,7 @@ export function App() {
           <Route element={<Layout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/order" element={<OrderPage />} />
+            <Route path="/order/:stepSlug" element={<OrderPage />} />
             <Route path="/order/success/:orderId" element={<OrderPage />} />
           </Route>
         </Routes>

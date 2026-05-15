@@ -33,6 +33,8 @@ export type TCompletedOrder = {
   availableAt: string;
 };
 
+export type TOrderFlowStep = Exclude<Step, 5>;
+
 export const STEP_LABELS: Record<Step, string> = {
   1: 'Местоположение',
   2: 'Модель',
@@ -42,3 +44,17 @@ export const STEP_LABELS: Record<Step, string> = {
 };
 
 export const ORDER_STORAGE_KEY = 'need-for-drive-order';
+
+export const STEP_ROUTE_SEGMENTS: Record<TOrderFlowStep, string> = {
+  1: 'location',
+  2: 'model',
+  3: 'additional',
+  4: 'total',
+};
+
+export const ROUTE_SEGMENT_TO_STEP: Record<string, TOrderFlowStep> = {
+  location: 1,
+  model: 2,
+  additional: 3,
+  total: 4,
+};

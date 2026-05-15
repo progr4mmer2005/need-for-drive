@@ -1,4 +1,10 @@
-import { useCallback, useMemo, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import orderData from '@/shared/model/orderData.json';
 import { BaseSection } from '@/widgets/BaseSection';
@@ -9,8 +15,11 @@ import * as styles from './OrderSection.module.scss';
 import { ConfirmModal, OrderSidebar } from './ui';
 import { OrderStepRenderer } from './ui/OrderStepRenderer';
 import {
+  ROUTE_SEGMENT_TO_STEP,
+  STEP_ROUTE_SEGMENTS,
   STEP_LABELS,
   Step,
+  type TOrderFlowStep,
   type TCity,
   type TSelectedCity,
   type TSelectedPickup,
@@ -58,6 +67,9 @@ const formatAvailableAt = (value: string) => {
 };
 
 export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
+  const navigate = useNavigate();
+  const { stepSlug } = useParams<{ stepSlug?: string }>();
+
   const [orderState, setOrderState] = useState<TOrderState>({
     step: 1 as Step,
     cityInput: ORDER_DEFAULTS.CITY,
@@ -73,6 +85,11 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
     isConfirmOpen: false,
     orderId: '',
   });
+
+  const replaceOrderRouteStep = useCallback((step: TOrderFlowStep) => {
+    const nextPath = `/order/${STEP_ROUTE_SEGMENTS[step]}`;
+    navigate(nextPath, { replace: true });
+  }, [navigate]);
 
   const { cities } = orderData;
   const cityOptions = cities.map((city) => city.name);
@@ -121,9 +138,13 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
   const selectedExtras = orderData.extras.filter((extra) => orderState.selectedExtraIds.includes(extra.id));
   const availableAt = formatAvailableAt(orderState.dateFrom || orderState.dateTo);
 
-  const canGoToStep2 = Boolean(selectedCity && selectedPickup);
-  const canGoToStep3 = Boolean(selectedCar);
-  const canGoToStep4 = Boolean(selectedCar && selectedRate);
+  const isLocationStepComplete = Boolean(selectedCity && selectedPickup);
+  const isModelStepComplete = Boolean(isLocationStepComplete && selectedCar);
+  const isExtrasStepComplete = Boolean(isModelStepComplete && selectedRate && orderState.selectedColor);
+
+  const canGoToStep2 = isLocationStepComplete;
+  const canGoToStep3 = isModelStepComplete;
+  const canGoToStep4 = isExtrasStepComplete;
 
   const minPrice = selectedCar?.priceMin || ORDER_DEFAULTS.MIN_PRICE;
   const maxPrice = selectedCar?.priceMax || ORDER_DEFAULTS.MAX_PRICE;
@@ -165,60 +186,103 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
     },
   ];
 
-  const isStepEnabled = (stepIndex: Step) => {
-    if (stepIndex === 1) {
-      return true;
+  const maxAvailableStep = useMemo<TOrderFlowStep>(() => {
+    if (canGoToStep4) {
+      return 4;
     }
-    if (stepIndex === 2) {
-      return canGoToStep2;
+    if (canGoToStep3) {
+      return 3;
     }
-    if (stepIndex === 3) {
-      return canGoToStep3;
+    if (canGoToStep2) {
+      return 2;
     }
-    return canGoToStep4;
-  };
+    return 1;
+  }, [canGoToStep2, canGoToStep3, canGoToStep4]);
 
-  const handleStepTransition = (nextStep: Step) => {
-    if (isStepEnabled(nextStep)) {
-      setOrderState((prev) => ({ ...prev, step: nextStep }));
-    }
-  };
+  const isStepEnabled = useCallback((stepIndex: TOrderFlowStep) => (
+    stepIndex <= maxAvailableStep
+  ), [maxAvailableStep]);
 
-  const resetAfterLocation = useCallback(() => {
-    setOrderState((prev) => ({
-      ...prev,
-      selectedCarId: null,
-      selectedCategory: ORDER_DEFAULTS.CATEGORY,
-      selectedColor: ORDER_DEFAULTS.COLOR,
-      selectedRateId: ORDER_DEFAULTS.RATE_ID,
-      selectedExtraIds: [...ORDER_DEFAULTS.EXTRAS],
-      step: 1 as Step,
-    }));
-  }, []);
+  // handleStepTransition только обновляет URL.
+  // useEffect ниже отследит изменение URL и синхронизирует orderState.step.
+  // Это предотвращает race condition между setOrderState и navigate.
+  const handleStepTransition = useCallback((nextStep: TOrderFlowStep) => {
+    if (!isStepEnabled(nextStep)) {
+      return;
+    }
+    replaceOrderRouteStep(nextStep);
+  }, [isStepEnabled, replaceOrderRouteStep]);
+
+  useEffect(() => {
+    if (orderState.step === 5) {
+      return;
+    }
+
+    // Если stepSlug передан, но не найден в маппинге — невалидный URL,
+    // перенаправляем на первый доступный шаг
+    if (stepSlug && !ROUTE_SEGMENT_TO_STEP[stepSlug]) {
+      replaceOrderRouteStep(maxAvailableStep);
+      return;
+    }
+
+    // Определяем текущий шаг из URL, при отсутствии slug — шаг 1
+    const rawStep = stepSlug ? ROUTE_SEGMENT_TO_STEP[stepSlug] : 1;
+    const guardedStep = rawStep <= maxAvailableStep ? rawStep : maxAvailableStep;
+
+    if (orderState.step !== guardedStep) {
+      setOrderState((prev) => ({ ...prev, step: guardedStep }));
+    }
+
+    // Проверяем, соответствует ли текущий URL ожидаемому slug для данного шага
+    const expectedSegment = STEP_ROUTE_SEGMENTS[guardedStep];
+    if (stepSlug !== expectedSegment) {
+      replaceOrderRouteStep(guardedStep);
+    }
+  }, [maxAvailableStep, orderState.step, replaceOrderRouteStep, stepSlug]);
+
+  const resetAfterLocationChange = useCallback((prev: TOrderState) => ({
+    ...prev,
+    selectedCategory: ORDER_DEFAULTS.CATEGORY,
+    selectedCarId: null,
+    selectedColor: ORDER_DEFAULTS.COLOR,
+    dateFrom: '',
+    dateTo: '',
+    selectedRateId: ORDER_DEFAULTS.RATE_ID,
+    selectedExtraIds: [...ORDER_DEFAULTS.EXTRAS],
+    step: 1 as Step,
+  }), []);
+
+  const resetAfterModelChange = useCallback((prev: TOrderState) => ({
+    ...prev,
+    selectedColor: ORDER_DEFAULTS.COLOR,
+    dateFrom: '',
+    dateTo: '',
+    selectedRateId: ORDER_DEFAULTS.RATE_ID,
+    selectedExtraIds: [...ORDER_DEFAULTS.EXTRAS],
+    step: 2 as Step,
+  }), []);
 
   const handleCityChange = useCallback(
     (value: string) => {
-      setOrderState((prev) => ({
+      setOrderState((prev) => resetAfterLocationChange({
         ...prev,
         cityInput: value,
         pickupInput: '',
         selectedPickupId: null,
       }));
-      resetAfterLocation();
     },
-    [resetAfterLocation],
+    [resetAfterLocationChange],
   );
 
   const handlePickupChange = useCallback(
     (value: string) => {
-      setOrderState((prev) => ({
+      setOrderState((prev) => resetAfterLocationChange({
         ...prev,
         pickupInput: value,
         selectedPickupId: null,
       }));
-      resetAfterLocation();
     },
-    [resetAfterLocation],
+    [resetAfterLocationChange],
   );
 
   const handlePickupSelectFromMap = useCallback(
@@ -234,27 +298,21 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
         }
 
         return {
-          ...prev,
+          ...resetAfterLocationChange(prev),
           selectedPickupId: point.id,
           pickupInput: point.name,
-          step: 1 as Step,
         };
       });
     },
-    [selectedCity],
+    [resetAfterLocationChange, selectedCity],
   );
 
   const handleCarSelect = useCallback((carId: string) => {
-    setOrderState((prev) => ({
+    setOrderState((prev) => resetAfterModelChange({
       ...prev,
       selectedCarId: carId,
-      selectedColor: ORDER_DEFAULTS.COLOR,
-      selectedRateId: ORDER_DEFAULTS.RATE_ID,
-      selectedExtraIds: [...ORDER_DEFAULTS.EXTRAS],
-      dateTo: '',
-      step: 2 as Step,
     }));
-  }, []);
+  }, [resetAfterModelChange]);
 
   const handleExtraToggle = useCallback((extraId: string) => {
     setOrderState((prev) => ({
@@ -266,8 +324,18 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
   }, []);
 
   const handleCategoryChange = useCallback((category: string) => {
-    setOrderState((prev) => ({ ...prev, selectedCategory: category }));
-  }, []);
+    setOrderState((prev) => {
+      if (prev.selectedCategory === category) {
+        return prev;
+      }
+
+      return resetAfterModelChange({
+        ...prev,
+        selectedCategory: category,
+        selectedCarId: null,
+      });
+    });
+  }, [resetAfterModelChange]);
 
   const handleColorChange = useCallback((color: string) => {
     setOrderState((prev) => ({ ...prev, selectedColor: color }));
@@ -307,13 +375,13 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
           <HorizontalContentContainer>
             {orderState.step !== 5 && (
               <Breadcrumbs
-                items={([1, 2, 3, 4] as Step[]).map((stepKey) => ({
+                items={([1, 2, 3, 4] as TOrderFlowStep[]).map((stepKey) => ({
                   key: stepKey,
                   label: STEP_LABELS[stepKey],
                   active: stepKey === orderState.step,
                   enabled: isStepEnabled(stepKey),
                 }))}
-                onStepClick={(nextStep) => handleStepTransition(nextStep as Step)}
+                onStepClick={(nextStep) => handleStepTransition(nextStep as TOrderFlowStep)}
               />
             )}
 
@@ -364,7 +432,7 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
             }
             canGoToStep2={canGoToStep2}
             canGoToStep3={canGoToStep3}
-            onStepChange={handleStepTransition}
+            onStepChange={(step) => handleStepTransition(step as TOrderFlowStep)}
             onOpenConfirm={() => setOrderState((prev) => ({ ...prev, isConfirmOpen: true }))}
           />
         </div>
