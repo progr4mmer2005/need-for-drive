@@ -14,8 +14,13 @@ export type TSelectedCar = {
   id: string;
   brand: string;
   name: string;
+  category?: string;
   image?: string;
   priceMin: number;
+  plate?: string;
+  fuel?: string;
+  backendId?: number;
+  colors?: string[];
 } | null;
 export type TSelectedRate = { id: string; price: number } | null;
 
@@ -35,11 +40,13 @@ export type TCompletedOrder = {
 
 export type TOrderFlowStep = Exclude<Step, 5>;
 
+const ru = String.fromCharCode;
+
 export const STEP_LABELS: Record<Step, string> = {
-  1: 'Местоположение',
-  2: 'Модель',
-  3: 'Дополнительно',
-  4: 'Итого',
+  1: ru(1052, 1077, 1089, 1090, 1086, 1087, 1086, 1083, 1086, 1078, 1077, 1085, 1080, 1077),
+  2: ru(1052, 1086, 1076, 1077, 1083, 1100),
+  3: ru(1044, 1086, 1087, 1086, 1083, 1085, 1080, 1090, 1077, 1083, 1100, 1085, 1086),
+  4: ru(1048, 1090, 1086, 1075, 1086),
   5: ' ',
 };
 

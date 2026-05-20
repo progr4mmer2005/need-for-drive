@@ -1,0 +1,239 @@
+.tableWrap {
+  background: #fff;
+  border: 1px solid #e1e5eb;
+  border-radius: 9px;
+  box-shadow: 0 2px 8px rgba(90, 97, 105, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 316px;
+}
+
+.filters {
+  min-height: 64px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 0 24px;
+  border-bottom: 1px solid #e1e5eb;
+}
+
+.filterSelect {
+  width: 110.5px;
+  height: 29px;
+  border: 1px solid #d7dce3;
+  border-radius: 4px;
+  padding: 0 12px;
+  color: #121212;
+  background: #fff;
+  font: 11px Helvetica, Arial, sans-serif;
+}
+
+.filterPlaceholder {
+  color: #868e96;
+}
+
+.filterSelect option {
+  color: #121212;
+}
+
+.filterSelect option[value=''] {
+  color: #868e96;
+}
+
+.applyBtn {
+  width: 95px;
+  height: 29px;
+  margin-left: auto;
+  border: none;
+  border-radius: 4px;
+  background: #007bff;
+  color: #fff;
+  font: 11px Helvetica, Arial, sans-serif;
+  cursor: pointer;
+}
+
+.scrollArea {
+  min-height: 0;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.orderCard {
+  min-height: 88.5px;
+  display: grid;
+  grid-template-columns: 158px 330px 132px 116px minmax(213.5px, 1fr);
+  gap: 18px;
+  align-items: center;
+  padding: 13px 22px;
+  border-bottom: 1px solid #f0f2f5;
+}
+
+.carImg {
+  width: 138px;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carImg img {
+  width: 138px;
+  height: 62px;
+  object-fit: contain;
+}
+
+.orderTitle {
+  color: #121212;
+  font: 400 12px/18px Helvetica, Arial, sans-serif;
+  white-space: nowrap;
+}
+
+.orderMuted,
+.orderAddress {
+  color: #818ea3;
+}
+
+.orderDates,
+.orderColor {
+  color: #818ea3;
+  font: 400 12px/18px Helvetica, Arial, sans-serif;
+}
+
+.orderColor span {
+  color: #3d5170;
+  font-weight: 400;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #999;
+  font: 11px/16px Helvetica, Arial, sans-serif;
+}
+
+.checkboxChecked {
+  color: #121212;
+}
+
+.orderExtras {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.checkboxBox {
+  width: 13px;
+  height: 13px;
+  border: 1px solid #becad6;
+  border-radius: 1px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #0ec261;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.checkboxChecked .checkboxBox {
+  border-color: #0ec261;
+}
+
+.orderPrice {
+  color: #121212;
+  font: 400 24px/29px Helvetica, Arial, sans-serif;
+  white-space: nowrap;
+}
+
+.orderActions {
+  width: 213.5px;
+  height: 24px;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border: 1px solid #cfd7e3;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.actionBtn {
+  height: 100%;
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0 8px;
+  border: none;
+  border-right: 1px solid #cfd7e3;
+  background: #fff;
+  font: 12px Helvetica, Arial, sans-serif;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.actionBtn:last-child {
+  border-right: none;
+}
+
+.successBtn {
+  color: #28a745;
+}
+
+.dangerBtn {
+  color: #c4183c;
+}
+
+.editBtn {
+  color: #5a6169;
+}
+
+.pagination {
+  height: 48px;
+  border-top: 1px solid #f0f2f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  flex-shrink: 0;
+}
+
+.pageBtn {
+  border: none;
+  background: none;
+  color: #007bff;
+  font: 14px/18px Helvetica, Arial, sans-serif;
+  cursor: pointer;
+  min-width: 14px;
+  height: 18px;
+  padding: 0;
+}
+
+.pageDots {
+  color: #007bff;
+  font: 14px/18px Helvetica, Arial, sans-serif;
+}
+
+.pageBtnActive {
+  background: #007bff;
+  color: #fff;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  font: 14px/18px Helvetica, Arial, sans-serif;
+  text-align: center;
+  cursor: pointer;
+}
+
+.empty {
+  padding: 24px;
+  color: #818ea3;
+  font-size: 12px;
+}

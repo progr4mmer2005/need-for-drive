@@ -6,8 +6,10 @@ import {
 } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import orderData from '@/shared/model/orderData.json';
+import staticOrderData from '@/shared/model/orderData.json';
 import { BaseSection } from '@/widgets/BaseSection';
+import { Loader } from '@/shared/components/Loader';
+import { useApiOrderData } from './model/useApiOrderData';
 import { Breadcrumbs } from '@/shared/components/Breadcrumbs';
 import { HorizontalContentContainer } from '@/shared/components/HorizontalContentContainer';
 import { ORDER_DEFAULTS } from '@/config/orderDefaults';
@@ -50,9 +52,27 @@ type TOrderState = {
   orderId: string;
 };
 
+const ru = String.fromCharCode;
+const TEXT = {
+  notSelected: ru(1053, 1077, 32, 1074, 1099, 1073, 1088, 1072, 1085, 1072),
+  from: ru(1086, 1090),
+  to: ru(1076, 1086),
+  pickupPoint: ru(1055, 1091, 1085, 1082, 1090, 32, 1074, 1099, 1076, 1072, 1095, 1080),
+  model: ru(1052, 1086, 1076, 1077, 1083, 1100),
+  color: ru(1062, 1074, 1077, 1090),
+  duration: ru(1044, 1083, 1080, 1090, 1077, 1083, 1100, 1085, 1086, 1089, 1090, 1100, 32, 1072, 1088, 1077, 1085, 1076, 1099),
+  rate: ru(1058, 1072, 1088, 1080, 1092),
+  fullTank: ru(1055, 1086, 1083, 1085, 1099, 1081, 32, 1073, 1072, 1082),
+  dayRate: ru(1053, 1072, 32, 1089, 1091, 1090, 1082, 1080),
+  minuteRate: ru(1055, 1086, 1084, 1080, 1085, 1091, 1090, 1085, 1086),
+  yes: ru(1044, 1072),
+  no: ru(1053, 1077, 1090),
+  orderNumber: ru(1047, 1072, 1082, 1072, 1079, 32, 1085, 1086, 1084, 1077, 1088),
+};
+
 const formatAvailableAt = (value: string) => {
   if (!value) {
-    return 'Не выбрана';
+    return TEXT.notSelected;
   }
 
   const date = new Date(value);
@@ -91,6 +111,16 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
     navigate(nextPath, { replace: true });
   }, [navigate]);
 
+  const { data: apiData, loading: apiLoading } = useApiOrderData();
+  const orderData = (apiData ?? (staticOrderData as unknown)) as {
+    cities: Array<{ id: string; name: string; mapCenter: { x: number; y: number };
+      pickupPoints: Array<{ id: string; name: string; x: number; y: number }> }>;
+    cars: Array<{ id: string; brand: string; name: string; category: string;
+      image: string; priceMin: number; priceMax: number; plate?: string; fuel?: string;
+      backendId?: number; colors?: string[] }>;
+    rentalRates: Array<{ id: string; label: string; price: number }>;
+    extras: Array<{ id: string; label: string; price: number }>;
+  };
   const { cities } = orderData;
   const cityOptions = cities.map((city) => city.name);
 
@@ -126,12 +156,12 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
   }, [orderState.pickupInput, selectedCity, orderState.selectedPickupId]);
 
   const filteredCars = useMemo(() => {
-    if (orderState.selectedCategory === 'Все модели') {
+    if (orderState.selectedCategory === ORDER_DEFAULTS.CATEGORY) {
       return orderData.cars;
     }
 
     return orderData.cars.filter((car) => car.category === orderState.selectedCategory);
-  }, [orderState.selectedCategory]);
+  }, [orderData.cars, orderState.selectedCategory]);
 
   const selectedCar = orderData.cars.find((car) => car.id === orderState.selectedCarId) || null;
   const selectedRate = orderData.rentalRates.find((rate) => rate.id === orderState.selectedRateId) || null;
@@ -151,7 +181,7 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
 
   const totalPrice = useMemo(() => {
     if (!selectedCar) {
-      return `от ${formatPrice(minPrice)} до ${formatPrice(maxPrice)}`;
+      return `${TEXT.from} ${formatPrice(minPrice)} ${TEXT.to} ${formatPrice(maxPrice)}`;
     }
 
     const extrasPrice = selectedExtras.reduce((acc, extra) => acc + extra.price, 0);
@@ -162,30 +192,29 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
 
   const orderItems = [
     {
-      label: 'Пункт выдачи',
+      label: TEXT.pickupPoint,
       value: selectedPickup
         ? `${(selectedCity as TCity | null)?.name}, ${selectedPickup.name}`
         : null,
     },
-    { label: 'Модель', value: selectedCar ? `${selectedCar.brand}, ${selectedCar.name}` : null },
-    { label: 'Цвет', value: orderState.step >= 3 ? orderState.selectedColor : null },
-    { label: 'Длительность аренды', value: orderState.step >= 3 ? '1д 2ч' : null },
+    { label: TEXT.model, value: selectedCar ? `${selectedCar.brand}, ${selectedCar.name}` : null },
+    { label: TEXT.color, value: orderState.step >= 3 ? orderState.selectedColor : null },
+    { label: TEXT.duration, value: orderState.step >= 3 ? '1d 2h' : null },
     {
-      label: 'Тариф',
+      label: TEXT.rate,
       value:
-        orderState.step >= 3 ? (selectedRate?.id === 'daily' ? 'На сутки' : 'Поминутно') : null,
+        orderState.step >= 3 ? (selectedRate?.id === 'daily' ? TEXT.dayRate : TEXT.minuteRate) : null,
     },
     {
-      label: 'Полный бак',
+      label: TEXT.fullTank,
       value:
         orderState.step >= 3
           ? orderState.selectedExtraIds.includes('fullTank')
-            ? 'Да'
-            : 'Нет'
+            ? TEXT.yes
+            : TEXT.no
           : null,
     },
   ];
-
   const maxAvailableStep = useMemo<TOrderFlowStep>(() => {
     if (canGoToStep4) {
       return 4;
@@ -203,9 +232,6 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
     stepIndex <= maxAvailableStep
   ), [maxAvailableStep]);
 
-  // handleStepTransition только обновляет URL.
-  // useEffect ниже отследит изменение URL и синхронизирует orderState.step.
-  // Это предотвращает race condition между setOrderState и navigate.
   const handleStepTransition = useCallback((nextStep: TOrderFlowStep) => {
     if (!isStepEnabled(nextStep)) {
       return;
@@ -218,14 +244,11 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
       return;
     }
 
-    // Если stepSlug передан, но не найден в маппинге — невалидный URL,
-    // перенаправляем на первый доступный шаг
     if (stepSlug && !ROUTE_SEGMENT_TO_STEP[stepSlug]) {
       replaceOrderRouteStep(maxAvailableStep);
       return;
     }
 
-    // Определяем текущий шаг из URL, при отсутствии slug — шаг 1
     const rawStep = stepSlug ? ROUTE_SEGMENT_TO_STEP[stepSlug] : 1;
     const guardedStep = rawStep <= maxAvailableStep ? rawStep : maxAvailableStep;
 
@@ -233,7 +256,6 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
       setOrderState((prev) => ({ ...prev, step: guardedStep }));
     }
 
-    // Проверяем, соответствует ли текущий URL ожидаемому slug для данного шага
     const expectedSegment = STEP_ROUTE_SEGMENTS[guardedStep];
     if (stepSlug !== expectedSegment) {
       replaceOrderRouteStep(guardedStep);
@@ -368,6 +390,14 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
     setOrderState,
   );
 
+  if (apiLoading && !apiData) {
+    return (
+      <BaseSection isMenuOpen={isMenuOpen} onMenuToggle={onMenuToggle}>
+        <Loader fullHeight />
+      </BaseSection>
+    );
+  }
+
   return (
     <BaseSection isMenuOpen={isMenuOpen} onMenuToggle={onMenuToggle}>
       <div className={styles.orderContent}>
@@ -386,7 +416,7 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
             )}
 
             {orderState.step === 5 && (
-              <div className={styles.orderNumber}>Заказ номер {orderState.orderId}</div>
+              <div className={styles.orderNumber}>{TEXT.orderNumber} {orderState.orderId}</div>
             )}
           </HorizontalContentContainer>
         </div>
@@ -428,7 +458,7 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
             step={orderState.step}
             items={orderItems}
             priceText={
-              selectedCar ? totalPrice : `от ${formatPrice(minPrice)} до ${formatPrice(maxPrice)}`
+              selectedCar ? totalPrice : `${TEXT.from} ${formatPrice(minPrice)} ${TEXT.to} ${formatPrice(maxPrice)}`
             }
             canGoToStep2={canGoToStep2}
             canGoToStep3={canGoToStep3}

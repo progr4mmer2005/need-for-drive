@@ -14,8 +14,16 @@
   flex-direction: column;
 }
 
+.card:hover {
+  box-shadow: inset 0 0 0 1px $dark-gray-color;
+}
+
 .selected {
-  box-shadow: inset 0 0 0 1px $primary-black-color;
+  box-shadow: inset 0 0 0 1px $primary-color;
+}
+
+.selected:hover {
+  box-shadow: inset 0 0 0 1px $primary-color;
 }
 
 .name {

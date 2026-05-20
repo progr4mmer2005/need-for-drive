@@ -8,7 +8,7 @@ import {
   type TSelectedCar,
   type TSelectedRate,
 } from './types';
-import { formatPrice } from './formatPrice';
+import { ordersApi } from '@/shared/api/ordersApi';
 
 type TOrderState = {
   step: Step;
@@ -37,6 +37,18 @@ type TOrderSubmitDeps = {
   totalPrice: string;
 };
 
+// Extract numeric ID from "city-12" / "point-3" / "car-7" prefixed strings
+function extractId(prefixed: string | undefined | null): number | null {
+  if (!prefixed) return null;
+  const m = String(prefixed).match(/(\d+)$/);
+  return m ? Number(m[1]) : null;
+}
+
+function priceToNumber(price: string): number {
+  const n = parseInt(String(price).replace(/[^\d]/g, ''), 10);
+  return Number.isFinite(n) ? n : 0;
+}
+
 export function useOrderSubmit(
   orderState: TOrderState,
   deps: TOrderSubmitDeps,
@@ -53,12 +65,47 @@ export function useOrderSubmit(
     totalPrice,
   } = deps;
 
-  const handleSubmitOrder = useCallback(() => {
+  const handleSubmitOrder = useCallback(async () => {
     if (!selectedCity || !selectedPickup || !selectedCar) {
       return;
     }
 
-    const orderId = `RUS${Date.now()}${Math.floor(Math.random() * 1000)}`;
+    let orderId = `RUS${Date.now()}${Math.floor(Math.random() * 1000)}`;
+
+    // Try to POST to backend; if it fails, fall back to local order id (offline mode)
+    const cityId = extractId((selectedCity as { id?: string }).id);
+    const pointId = extractId((selectedPickup as { id?: string }).id);
+    const carId = extractId((selectedCar as { id?: string }).id);
+    const rateBackendId =
+      (selectedRate as unknown as { backendId?: number })?.backendId ?? null;
+
+    if (cityId && pointId && carId) {
+      try {
+        const dto = {
+          cityId: { id: cityId },
+          pointId: { id: pointId },
+          carId: { id: carId },
+          rateId: rateBackendId ? { id: rateBackendId } : { id: 1 },
+          color: selectedColor || 'Любой',
+          dateFrom: orderState.dateFrom ? new Date(orderState.dateFrom).getTime() : Date.now(),
+          dateTo: orderState.dateTo
+            ? new Date(orderState.dateTo).getTime()
+            : Date.now() + 86400000,
+          price: priceToNumber(totalPrice),
+          isFullTank: selectedExtraIds.includes('fullTank'),
+          isNeedChildChair: selectedExtraIds.includes('childChair'),
+          isRightWheel: selectedExtraIds.includes('rightWheel'),
+        };
+        const res = await ordersApi.create(dto);
+        if (res?.data?.id) {
+          orderId = `RU${res.data.id}`;
+        }
+      } catch (e) {
+        // Silent fallback — keep generated orderId
+        // eslint-disable-next-line no-console
+        console.warn('Order POST failed, using local id', e);
+      }
+    }
 
     setOrderState((prev) => ({ ...prev, orderId }));
 
@@ -94,6 +141,8 @@ export function useOrderSubmit(
     availableAt,
     totalPrice,
     setOrderState,
+    orderState.dateFrom,
+    orderState.dateTo,
   ]);
 
   return { handleSubmitOrder };

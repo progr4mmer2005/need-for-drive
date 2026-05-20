@@ -6,3 +6,14 @@ export const carImages: Record<string, string> = {
   solaris: new URL('../../../../assets/images/cars/solaris.png', import.meta.url).href,
   tucson: new URL('../../../../assets/images/cars/tucson.png', import.meta.url).href,
 };
+
+export function getCarImage(car: { id?: string; name?: string; image?: string } | null | undefined) {
+  const source = `${car?.id || ''} ${car?.name || ''} ${car?.image || ''}`.toLowerCase();
+
+  if (source.includes('elantra')) return carImages.elantra;
+  if (source.includes('creta')) return carImages.creta;
+  if (source.includes('sonata')) return carImages.sonata;
+  if (source.includes('solaris')) return carImages.solaris;
+  if (source.includes('tucson')) return carImages.tucson;
+  return carImages.i30;
+}
