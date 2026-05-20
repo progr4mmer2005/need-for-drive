@@ -1,0 +1,172 @@
+.qp7HSa_header {
+  justify-content: space-between;
+  align-items: flex-start;
+  display: flex;
+}
+
+.qp7HSa_tableWrap {
+  background: #fff;
+  border: 1px solid #e1e5eb;
+  border-radius: 9px;
+  flex-direction: column;
+  height: 409px;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 2px 8px #5a616914;
+}
+
+.qp7HSa_filters {
+  border-bottom: 1px solid #e1e5eb;
+  align-items: center;
+  gap: 16px;
+  min-height: 64px;
+  padding: 0 24px;
+  display: flex;
+}
+
+.qp7HSa_filterSelect {
+  color: #121212;
+  background: #fff;
+  border: 1px solid #d7dce3;
+  border-radius: 4px;
+  width: 110.5px;
+  height: 29px;
+  padding: 0 12px;
+  font: 11px Helvetica, Arial, sans-serif;
+}
+
+.qp7HSa_filterPlaceholder {
+  color: #868e96;
+}
+
+.qp7HSa_filterSelect option {
+  color: #121212;
+}
+
+.qp7HSa_filterSelect option[value=""] {
+  color: #868e96;
+}
+
+.qp7HSa_resetBtn, .qp7HSa_applyBtn {
+  color: #fff;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  width: 95px;
+  height: 29px;
+  font: 11px Helvetica, Arial, sans-serif;
+}
+
+.qp7HSa_resetBtn {
+  background: #c4183c;
+  margin-left: auto;
+}
+
+.qp7HSa_applyBtn {
+  background: #007bff;
+}
+
+.qp7HSa_scrollArea {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.qp7HSa_table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.qp7HSa_table th {
+  text-align: left;
+  color: #3d5170;
+  border-bottom: 1px solid #e1e5eb;
+  padding: 10px 16px;
+  font-size: 12px;
+}
+
+.qp7HSa_table td {
+  color: #5a6169;
+  border-bottom: 1px solid #f0f2f5;
+  padding: 12px 16px;
+  font-size: 12px;
+}
+
+.qp7HSa_table th:first-child, .qp7HSa_table td:first-child {
+  width: 140px;
+}
+
+.qp7HSa_carThumb {
+  object-fit: contain;
+  width: 110px;
+  height: 62px;
+  display: block;
+}
+
+.qp7HSa_editBtn {
+  color: #5a6169;
+  background: #fff;
+  border: 1px solid #d7dce3;
+  border-radius: 4px;
+  align-items: center;
+  height: 28px;
+  padding: 0 10px;
+  font-size: 12px;
+  text-decoration: none;
+  display: inline-flex;
+}
+
+.qp7HSa_pagination {
+  border-top: 1px solid #f0f2f5;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  height: 48px;
+  display: flex;
+}
+
+.qp7HSa_pageBtn {
+  color: #007bff;
+  cursor: pointer;
+  background: none;
+  border: none;
+  min-width: 14px;
+  height: 18px;
+  padding: 0;
+  font: 14px / 18px Helvetica, Arial, sans-serif;
+}
+
+.qp7HSa_pageDots {
+  color: #007bff;
+  font: 14px / 18px Helvetica, Arial, sans-serif;
+}
+
+.qp7HSa_pageBtnActive {
+  color: #fff;
+  text-align: center;
+  cursor: pointer;
+  background: #007bff;
+  border: none;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  font: 14px / 18px Helvetica, Arial, sans-serif;
+}
+
+.qp7HSa_empty {
+  color: #818ea3;
+  padding: 24px;
+  font-size: 12px;
+}
+
+._5q5tcG_title {
+  color: #3d5170;
+  margin: -8px 0 26px;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 29px;
+  font-weight: 400;
+  line-height: 34px;
+}
+/*# sourceMappingURL=CarsPage.1747d33f.css.map */
