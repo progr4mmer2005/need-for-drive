@@ -1,5 +1,10 @@
 @use '@/shared/styles/variables' as *;
 
+$nav-left-width-desktop: 72px;
+$nav-right-width-desktop: 66px;
+$nav-left-width-laptop: 56px;
+$nav-right-width-laptop: 54px;
+
 .slider {
   position: relative;
   height: 100vh;
@@ -14,18 +19,10 @@
 }
 
 .viewport {
-  --nav-left-width: 72px;
-  --nav-right-width: 66px;
-
   position: relative;
   height: 100%;
   min-height: 100vh;
   overflow: hidden;
-
-  @media (max-width: 1280px) {
-    --nav-left-width: 56px;
-    --nav-right-width: 54px;
-  }
 }
 
 .slide {
@@ -53,14 +50,14 @@
 .content {
   position: absolute;
   top: 50%;
-  left: calc(var(--nav-left-width) + clamp(20px, 3vw, 34px));
+  left: calc($nav-left-width-desktop + clamp(20px, 3vw, 34px));
   z-index: 2;
-  max-width: min(420px, calc(100% - var(--nav-left-width) - var(--nav-right-width) - 104px));
+  max-width: min(420px, calc(100% - $nav-left-width-desktop - $nav-right-width-desktop - 104px));
   transform: translateY(-50%);
 
   @media (max-width: 1280px) {
-    left: calc(var(--nav-left-width) + 24px);
-    max-width: min(360px, calc(100% - var(--nav-left-width) - var(--nav-right-width) - 72px));
+    left: calc($nav-left-width-laptop + 24px);
+    max-width: min(360px, calc(100% - $nav-left-width-laptop - $nav-right-width-laptop - 72px));
   }
 
   @media (max-width: 550px) {

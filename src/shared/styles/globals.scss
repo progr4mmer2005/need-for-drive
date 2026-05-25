@@ -1,4 +1,4 @@
-﻿@use './fonts';
+@use './fonts';
 @use './variables' as *;
 
 * {
@@ -19,8 +19,8 @@ body {
 }
 
 body {
-  color: $primary-black-color;
-  background: #fff;
+  color: $text-primary-color;
+  background: $white-color;
 }
 
 button,

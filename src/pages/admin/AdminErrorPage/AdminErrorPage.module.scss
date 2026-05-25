@@ -1,3 +1,5 @@
+@use '../../../shared/styles/variables' as *;
+
 .page {
   min-height: calc(100vh - 181px);
   display: flex;
@@ -9,7 +11,7 @@
 }
 
 .code {
-  color: #cacedb;
+  color: $icon-soft-color;
   font-size: 75px;
   font-weight: 500;
   line-height: 88px;
@@ -17,7 +19,7 @@
 }
 
 .title {
-  color: #3d5170;
+  color: $text-admin-primary-color;
   font-size: 50px;
   font-weight: 400;
   line-height: 59px;
@@ -25,7 +27,7 @@
 }
 
 .subtitle {
-  color: #818ea3;
+  color: $text-muted-color;
   font-size: 20px;
   font-weight: 400;
   line-height: 23px;
@@ -38,8 +40,9 @@
   margin-top: 32px;
   border: none;
   border-radius: 4px;
-  background: #007bff;
-  color: #fff;
+  background: $accent-blue-color;
+  color: $white-color;
   font-size: 11px;
   cursor: pointer;
 }
+
