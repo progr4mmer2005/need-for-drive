@@ -13,7 +13,7 @@ $nav-right-width-laptop: 54px;
   color: #fff;
   z-index: 120;
 
-  @media (max-width: 1024px) {
+  @media (max-width: $breakpoint-desktop-md) {
     display: none;
   }
 }
@@ -55,12 +55,12 @@ $nav-right-width-laptop: 54px;
   max-width: min(420px, calc(100% - $nav-left-width-desktop - $nav-right-width-desktop - 104px));
   transform: translateY(-50%);
 
-  @media (max-width: 1280px) {
+  @media (max-width: $breakpoint-desktop-xl) {
     left: calc($nav-left-width-laptop + 24px);
     max-width: min(360px, calc(100% - $nav-left-width-laptop - $nav-right-width-laptop - 72px));
   }
 
-  @media (max-width: 550px) {
+  @media (max-width: $breakpoint-mobile-sm) {
     left: 24px;
     max-width: calc(100% - 72px);
   }
@@ -70,7 +70,7 @@ $nav-right-width-laptop: 54px;
   font-size: 40px;
   font-weight: 500;
 
-  @media (max-width: 1280px) {
+  @media (max-width: $breakpoint-desktop-xl) {
     font-size: 32px;
   }
 }
@@ -81,7 +81,7 @@ $nav-right-width-laptop: 54px;
   font-size: 24px;
   font-weight: 300;
 
-  @media (max-width: 1280px) {
+  @media (max-width: $breakpoint-desktop-xl) {
     font-size: 22px;
   }
 }
@@ -109,7 +109,7 @@ $nav-right-width-laptop: 54px;
     background-color: rgb(12 196 101 / 24%);
   }
 
-  @media (max-width: 1280px) {
+  @media (max-width: $breakpoint-desktop-xl) {
     width: 56px;
   }
 }
@@ -123,7 +123,7 @@ $nav-right-width-laptop: 54px;
     background-color: rgb(12 196 101 / 24%);
   }
 
-  @media (max-width: 1280px) {
+  @media (max-width: $breakpoint-desktop-xl) {
     width: 54px;
   }
 }

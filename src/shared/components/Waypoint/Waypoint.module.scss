@@ -15,7 +15,7 @@
     filter: brightness(0.8);
   }
 
-  @media (max-width: 550px) {
+  @media (max-width: $breakpoint-mobile-sm) {
     width: 100%;
     justify-content: flex-end;
   }

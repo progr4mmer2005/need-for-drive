@@ -21,7 +21,7 @@
   margin-bottom: 18px;
 }
 
-@media (max-width: 1120px) {
+@media (max-width: $breakpoint-desktop-lg) {
   .successSplit {
     grid-template-columns: 1fr;
   }

@@ -365,7 +365,7 @@
   color: $white-color;
 }
 
-@media (max-width: 920px) {
+@media (max-width: $breakpoint-desktop) {
   .layout {
     grid-template-columns: 1fr;
   }

@@ -69,7 +69,7 @@
 }
 
 .fullWidthOnMobile {
-  @media (max-width: 550px) {
+  @media (max-width: $breakpoint-mobile-sm) {
     width: 100%;
     display: block;
   }
@@ -80,7 +80,7 @@
   border-radius: 0;
 }
 
-@media (min-width: 551px) {
+@media (min-width: $breakpoint-mobile-sm) {
   .squareOnMobile {
     border-radius: 10px;
   }

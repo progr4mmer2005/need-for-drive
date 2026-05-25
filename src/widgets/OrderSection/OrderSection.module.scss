@@ -30,7 +30,7 @@
   max-width: 735px;
 }
 
-@media (max-width: 1120px) {
+@media (max-width: $breakpoint-desktop-lg) {
   .split {
     grid-template-columns: 1fr;
   }

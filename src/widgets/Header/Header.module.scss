@@ -1,10 +1,12 @@
+@use '@/shared/styles/variables' as *;
+
 .header {
   display: flex;
   width: 100%;
   align-items: center;
   justify-content: space-between;
 
-  @media (max-width: 550px) {
+  @media (max-width: $breakpoint-mobile-sm) {
     flex-wrap: wrap;
     row-gap: 8px;
   }

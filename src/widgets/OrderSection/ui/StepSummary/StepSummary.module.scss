@@ -63,13 +63,13 @@
   cursor: pointer;
 }
 
-@media (max-width: 1120px) {
+@media (max-width: $breakpoint-desktop-lg) {
   .top {
     grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $breakpoint-tablet) {
   .imageWrap {
     justify-content: center;
   }

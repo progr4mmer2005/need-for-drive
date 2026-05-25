@@ -1,4 +1,6 @@
-﻿.autocomplete {
+@use '../../styles/variables' as *;
+
+.autocomplete {
   display: grid;
   grid-template-columns: 100px minmax(220px, 1fr);
   align-items: end;
@@ -83,7 +85,7 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: $breakpoint-desktop-sm) {
   .autocomplete {
     grid-template-columns: 95px minmax(160px, 1fr);
   }

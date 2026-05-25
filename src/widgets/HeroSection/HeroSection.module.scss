@@ -11,12 +11,12 @@
   padding: 0 64px;
   margin-top: 60px;
 
-  @media (max-width: 650px) {
+  @media (max-width: $breakpoint-mobile-lg) {
     padding: 0 32px;
   }
 
 
-  @media (max-width: 550px) {
+  @media (max-width: $breakpoint-mobile-sm) {
     margin-top: 32px;
     padding: 0;
     width: 100%;
@@ -35,7 +35,7 @@
   margin-top: auto;
 
 
-  @media (max-width: 550px) {
+  @media (max-width: $breakpoint-mobile-sm) {
     margin-top: 10%;
   }
 }
@@ -63,7 +63,7 @@
   font-weight: 300;
   line-height: 1;
 
-  @media (max-width: 550px) {
+  @media (max-width: $breakpoint-mobile-sm) {
     margin-top: 16px;
   }
 }
@@ -71,7 +71,7 @@
 .footer {
   margin-top: auto;
 
-  @media (max-width: 550px) {
+  @media (max-width: $breakpoint-mobile-sm) {
     background-color: $primary-black-color;
   }
 }
@@ -84,7 +84,7 @@
   padding-top: 24px;
   padding-bottom: 24px;
 
-  @media (max-width: 550px) {
+  @media (max-width: $breakpoint-mobile-sm) {
     width: 100%;
     flex-direction: column;
     align-items: flex-end;
@@ -99,7 +99,7 @@
   color: $dark-gray-color;
   font-size: 13px;
 
-  @media (max-width: 550px) {
+  @media (max-width: $breakpoint-mobile-sm) {
     color: $light-gray-color;
     text-align: right;
   }
@@ -111,7 +111,7 @@
   text-decoration: none;
   transition: color 0.2s ease, filter 0.2s ease;
 
-  @media (min-width: 551px) {
+  @media (min-width: $breakpoint-mobile-sm) {
     &:hover {
       color: $primary-color;
     }
@@ -121,7 +121,7 @@
     filter: brightness(0.8);
   }
 
-  @media (max-width: 550px) {
+  @media (max-width: $breakpoint-mobile-sm) {
     order: -1;
     color: $primary-color;
   }

@@ -1,11 +1,13 @@
+@use '../../styles/variables' as *;
+
 .container {
   padding: 0 64px;
 
-  @media (max-width: 650px) {
+  @media (max-width: $breakpoint-mobile-lg) {
     padding: 0 32px;
   }
 
-  @media (max-width: 550px) {
+  @media (max-width: $breakpoint-mobile-sm) {
     padding: 0 16px;
   }
 }

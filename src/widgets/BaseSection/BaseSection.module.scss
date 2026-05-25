@@ -1,4 +1,6 @@
-﻿.section {
+@use '@/shared/styles/variables' as *;
+
+.section {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -7,7 +9,7 @@
 .headerContainer {
   padding: 24px 0;
 
-  @media (max-width: 550px) {
+  @media (max-width: $breakpoint-mobile-sm) {
     padding: 16px 0 10px;
   }
 }
