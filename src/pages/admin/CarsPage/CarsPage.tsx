@@ -36,13 +36,13 @@ export function CarsPage() {
   useEffect(() => {
     setLoading(true);
     CARS_API.getAll({ limit: PAGE_SIZE, page })
-      .then((d) => { setCars(d.data); setTotal(d.count ?? 0); })
+      .then((carsResponse) => { setCars(carsResponse.data); setTotal(carsResponse.count ?? 0); })
       .catch(console.error)
       .finally(() => setLoading(false));
   }, [page]);
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
-  const paginationPages = Array.from({ length: Math.min(totalPages, 7) }, (_, i) => i + 1);
+  const paginationPages = Array.from({ length: Math.min(totalPages, 7) }, (_, pageIndex) => pageIndex + 1);
   const categories = Array.from(new Set(cars.map((car) => car.categoryId?.name).filter(Boolean)));
   const colors = Array.from(new Set(cars.flatMap((car) => car.colors || [])));
   const filteredCars = cars.filter((car) => {
@@ -68,20 +68,20 @@ export function CarsPage() {
 
       <div className={styles.tableWrap}>
         <div className={styles.filters}>
-          <select className={`${styles.filterSelect} ${!draftFilters.model ? styles.filterPlaceholder : ''}`} value={draftFilters.model} onChange={(e) => setDraftFilters((p) => ({ ...p, model: e.target.value }))}>
+          <select className={`${styles.filterSelect} ${!draftFilters.model ? styles.filterPlaceholder : ''}`} value={draftFilters.model} onChange={(event) => setDraftFilters((prevFilters) => ({ ...prevFilters, model: event.target.value }))}>
             <option value="">Автомобиль</option>
             {cars.map((car) => <option key={car.id} value={car.id}>{car.name}</option>)}
           </select>
-          <select className={`${styles.filterSelect} ${!draftFilters.category ? styles.filterPlaceholder : ''}`} value={draftFilters.category} onChange={(e) => setDraftFilters((p) => ({ ...p, category: e.target.value }))}>
+          <select className={`${styles.filterSelect} ${!draftFilters.category ? styles.filterPlaceholder : ''}`} value={draftFilters.category} onChange={(event) => setDraftFilters((prevFilters) => ({ ...prevFilters, category: event.target.value }))}>
             <option value="">Тип</option>
             {categories.map((category) => <option key={category} value={category}>{category}</option>)}
           </select>
-          <select className={`${styles.filterSelect} ${!draftFilters.price ? styles.filterPlaceholder : ''}`} value={draftFilters.price} onChange={(e) => setDraftFilters((p) => ({ ...p, price: e.target.value }))}>
+          <select className={`${styles.filterSelect} ${!draftFilters.price ? styles.filterPlaceholder : ''}`} value={draftFilters.price} onChange={(event) => setDraftFilters((prevFilters) => ({ ...prevFilters, price: event.target.value }))}>
             <option value="">Цена</option>
             <option value="with-price">С ценой</option>
             <option value="no-price">Без цены</option>
           </select>
-          <select className={`${styles.filterSelect} ${!draftFilters.color ? styles.filterPlaceholder : ''}`} value={draftFilters.color} onChange={(e) => setDraftFilters((p) => ({ ...p, color: e.target.value }))}>
+          <select className={`${styles.filterSelect} ${!draftFilters.color ? styles.filterPlaceholder : ''}`} value={draftFilters.color} onChange={(event) => setDraftFilters((prevFilters) => ({ ...prevFilters, color: event.target.value }))}>
             <option value="">Цвет</option>
             {colors.map((color) => <option key={color} value={color}>{color}</option>)}
           </select>
@@ -112,7 +112,7 @@ export function CarsPage() {
         <div className={styles.pagination}>
           <button type="button" className={styles.pageBtn} onClick={() => setPage(1)}>«</button>
           {totalPages > 1 ? (
-            paginationPages.map((p) => <button key={p} type="button" className={`${styles.pageBtn} ${p === page ? styles.pageBtnActive : ''}`} onClick={() => setPage(p)}>{p}</button>)
+            paginationPages.map((pageNumber) => <button key={pageNumber} type="button" className={`${styles.pageBtn} ${pageNumber === page ? styles.pageBtnActive : ''}`} onClick={() => setPage(pageNumber)}>{pageNumber}</button>)
           ) : (
             <>
               <button type="button" className={styles.pageBtn}>1</button>

@@ -45,7 +45,7 @@ export function OrderPage() {
   }
 
   const car = orderData.cars.find(
-    (c) => `${c.brand}, ${c.name}` === storedOrder.carName,
+    (carModel) => `${carModel.brand}, ${carModel.name}` === storedOrder.carName,
   ) ?? orderData.cars[0];
 
   const orderItems = [

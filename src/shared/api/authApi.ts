@@ -11,7 +11,7 @@ export async function login(username: string, password: string): Promise<AuthRes
   if (!username || !password) {
     throw new Error('Пустой логин или пароль');
   }
-  await new Promise((r) => setTimeout(r, 200));
+  await new Promise((resolve) => setTimeout(resolve, 200));
   const resp: AuthResponse = {
     access_token: makeFakeToken('access', username),
     refresh_token: makeFakeToken('refresh', username),
@@ -24,7 +24,7 @@ export async function login(username: string, password: string): Promise<AuthRes
 }
 
 export async function logout(): Promise<void> {
-  await new Promise((r) => setTimeout(r, 100));
+  await new Promise((resolve) => setTimeout(resolve, 100));
   TOKEN_STORAGE.clear();
   localStorage.removeItem('nfd_mock_user');
 }

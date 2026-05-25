@@ -77,18 +77,18 @@ export function useApiOrderData() {
         const rates = ratesRes.data;
 
         const mapped: ApiOrderData = {
-          cities: cities.map((c: City) => {
-            const cityPoints = points.filter((p: Point) => p.cityId?.id === c.id);
+          cities: cities.map((city: City) => {
+            const cityPoints = points.filter((point: Point) => point.cityId?.id === city.id);
             return {
-              id: `city-${c.id}`,
-              backendId: c.id,
-              name: c.name,
+              id: `city-${city.id}`,
+              backendId: city.id,
+              name: city.name,
               mapCenter: { x: 50, y: 50 },
-              pickupPoints: cityPoints.map((p: Point, idx: number) => ({
-                id: `point-${p.id}`,
-                name: p.name,
-                x: pseudoCoord(p.id, idx * 13),
-                y: pseudoCoord(p.id + 1, idx * 17),
+              pickupPoints: cityPoints.map((point: Point, pointIndex: number) => ({
+                id: `point-${point.id}`,
+                name: point.name,
+                x: pseudoCoord(point.id, pointIndex * 13),
+                y: pseudoCoord(point.id + 1, pointIndex * 17),
               })),
             };
           }),
@@ -113,18 +113,18 @@ export function useApiOrderData() {
               fuel,
             };
           }),
-          rentalRates: rates.map((r: Rate) => ({
-            id: r.rateTypeId?.name?.toLowerCase().includes(RATE_DAILY_MARKER) ? 'daily' : 'minute',
-            label: `${r.rateTypeId?.name || DEFAULT_RATE_LABEL}, ${r.price} ${RUBLE_SIGN}/${r.rateTypeId?.unit || ''}`,
-            price: r.price,
-            backendId: r.id,
+          rentalRates: rates.map((rate: Rate) => ({
+            id: rate.rateTypeId?.name?.toLowerCase().includes(RATE_DAILY_MARKER) ? 'daily' : 'minute',
+            label: `${rate.rateTypeId?.name || DEFAULT_RATE_LABEL}, ${rate.price} ${RUBLE_SIGN}/${rate.rateTypeId?.unit || ''}`,
+            price: rate.price,
+            backendId: rate.id,
           })),
           extras: EXTRAS_STATIC,
         };
         setData(mapped);
       })
-      .catch((e: Error) => {
-        if (!cancelled) setError(e.message || LOAD_ERROR);
+      .catch((error: Error) => {
+        if (!cancelled) setError(error.message || LOAD_ERROR);
       })
       .finally(() => {
         if (!cancelled) setLoading(false);

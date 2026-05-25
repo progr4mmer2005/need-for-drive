@@ -38,13 +38,13 @@ export function CarEditPage() {
   const [toast, setToast] = useState<Toast | null>(null);
   const [previewUrl, setPreviewUrl] = useState('');
 
-  useEffect(() => { CATEGORIES_API.getAll().then((d) => setCategories(d.data)).catch(console.error); }, []);
+  useEffect(() => { CATEGORIES_API.getAll().then((categoriesResponse) => setCategories(categoriesResponse.data)).catch(console.error); }, []);
 
   useEffect(() => {
     if (!isNew && id) {
       setLoading(true);
-      CARS_API.getOne(Number(id)).then((d) => {
-        const car: Car = d.data;
+      CARS_API.getOne(Number(id)).then((carResponse) => {
+        const car: Car = carResponse.data;
         setForm({
           name: car.name || '',
           categoryId: String(car.categoryId?.id || ''),
@@ -68,8 +68,8 @@ export function CarEditPage() {
     setTimeout(() => setToast(null), 3000);
   };
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (!file) return;
     if (!['image/jpeg', 'image/png', 'image/gif', 'image/bmp'].includes(file.type)) {
       showToast('Допустимые форматы: JPEG, PNG, GIF и BMP', 'error');
@@ -77,15 +77,15 @@ export function CarEditPage() {
     }
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
-    setForm((p) => ({ ...p, thumbnailPath: url, thumbnailName: file.name }));
+    setForm((prevForm) => ({ ...prevForm, thumbnailPath: url, thumbnailName: file.name }));
   };
 
   const addColor = () => {
     const color = form.colorInput.trim();
     if (!color || form.colors.includes(color)) return;
-    if (color.length > 150) return setErrors((p) => ({ ...p, colorInput: 'Не более 150 символов' }));
-    setForm((p) => ({ ...p, colors: [...p.colors, color], colorInput: '' }));
-    setErrors((p) => ({ ...p, colorInput: '' }));
+    if (color.length > 150) return setErrors((prevErrors) => ({ ...prevErrors, colorInput: 'Не более 150 символов' }));
+    setForm((prevForm) => ({ ...prevForm, colors: [...prevForm.colors, color], colorInput: '' }));
+    setErrors((prevErrors) => ({ ...prevErrors, colorInput: '' }));
   };
 
   const validate = () => {
@@ -153,25 +153,25 @@ export function CarEditPage() {
               )}
             </div>
             <div className={styles.previewName}>{form.name || 'Модель автомобиля'}</div>
-            <div className={styles.previewCategory}>{categories.find((c) => String(c.id) === form.categoryId)?.name || 'Тип не выбран'}</div>
+            <div className={styles.previewCategory}>{categories.find((category) => String(category.id) === form.categoryId)?.name || 'Тип не выбран'}</div>
             <div className={styles.fileRow}><span className={styles.fileName}>{form.thumbnailName || 'Выберите файл...'}</span><button type="button" className={styles.browseBtn} onClick={() => fileRef.current?.click()}>Обзор</button><input ref={fileRef} type="file" accept=".jpg,.jpeg,.png,.gif,.bmp" className={styles.hiddenFile} onChange={handleFileChange} /></div>
           </div>
           <div className={styles.previewSection}><div className={styles.progressLabel}><span>Заполнено</span><span>{progress}%</span></div><div className={styles.progressBar}><div className={styles.progressFill} style={{ width: `${progress}%` }} /></div></div>
-          <div className={styles.previewSection}><div className={styles.descriptionLabel}>Описание</div><textarea className={styles.textarea} value={form.description} placeholder="Описание автомобиля..." rows={4} maxLength={500} onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))} /></div>
+          <div className={styles.previewSection}><div className={styles.descriptionLabel}>Описание</div><textarea className={styles.textarea} value={form.description} placeholder="Описание автомобиля..." rows={4} maxLength={500} onChange={(event) => setForm((prevForm) => ({ ...prevForm, description: event.target.value }))} /></div>
         </div>
 
         <div className={styles.settings}>
           <h2 className={styles.settingsTitle}>Настройки автомобиля</h2>
           <div className={styles.row}>
-            <div className={styles.fieldGroup}><label className={styles.fieldLabel}>Модель автомобиля</label><input className={`${styles.input} ${errors.name ? styles.inputError : ''}`} value={form.name} maxLength={150} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} placeholder="Hyndai, i30 N" />{errors.name && <span className={styles.errMsg}>{errors.name}</span>}</div>
-            <div className={styles.fieldGroup}><label className={styles.fieldLabel}>Тип автомобиля</label><select className={`${styles.select} ${!form.categoryId ? styles.selectPlaceholder : ''} ${errors.categoryId ? styles.inputError : ''}`} value={form.categoryId} onChange={(e) => setForm((p) => ({ ...p, categoryId: e.target.value }))}><option value="">Выберите тип</option>{categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}</select>{errors.categoryId && <span className={styles.errMsg}>{errors.categoryId}</span>}</div>
+            <div className={styles.fieldGroup}><label className={styles.fieldLabel}>Модель автомобиля</label><input className={`${styles.input} ${errors.name ? styles.inputError : ''}`} value={form.name} maxLength={150} onChange={(event) => setForm((prevForm) => ({ ...prevForm, name: event.target.value }))} placeholder="Hyndai, i30 N" />{errors.name && <span className={styles.errMsg}>{errors.name}</span>}</div>
+            <div className={styles.fieldGroup}><label className={styles.fieldLabel}>Тип автомобиля</label><select className={`${styles.select} ${!form.categoryId ? styles.selectPlaceholder : ''} ${errors.categoryId ? styles.inputError : ''}`} value={form.categoryId} onChange={(event) => setForm((prevForm) => ({ ...prevForm, categoryId: event.target.value }))}><option value="">Выберите тип</option>{categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}</select>{errors.categoryId && <span className={styles.errMsg}>{errors.categoryId}</span>}</div>
           </div>
 
           <div className={styles.fieldGroup}>
             <label className={styles.fieldLabel}>Доступные цвета</label>
-            <div className={styles.colorRow}><input className={`${styles.input} ${errors.colorInput ? styles.inputError : ''}`} value={form.colorInput} maxLength={150} placeholder="Синий" onChange={(e) => setForm((p) => ({ ...p, colorInput: e.target.value }))} onKeyDown={(e) => e.key === 'Enter' && addColor()} /><button type="button" className={styles.addColorBtn} onClick={addColor} disabled={!form.colorInput.trim()}>+</button></div>
+            <div className={styles.colorRow}><input className={`${styles.input} ${errors.colorInput ? styles.inputError : ''}`} value={form.colorInput} maxLength={150} placeholder="Синий" onChange={(event) => setForm((prevForm) => ({ ...prevForm, colorInput: event.target.value }))} onKeyDown={(event) => event.key === 'Enter' && addColor()} /><button type="button" className={styles.addColorBtn} onClick={addColor} disabled={!form.colorInput.trim()}>+</button></div>
             {errors.colorInput && <span className={styles.errMsg}>{errors.colorInput}</span>}
-            <div className={styles.colorList}>{form.colors.map((c) => <label key={c} className={styles.colorItem}><input type="checkbox" defaultChecked readOnly /><span>{c}</span></label>)}</div>
+            <div className={styles.colorList}>{form.colors.map((colorName) => <label key={colorName} className={styles.colorItem}><input type="checkbox" defaultChecked readOnly /><span>{colorName}</span></label>)}</div>
           </div>
 
           <div className={styles.bottomActions}>

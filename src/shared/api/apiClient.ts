@@ -8,8 +8,8 @@ const REFRESH_TOKEN_KEY = 'nfd_refresh_token';
 export const TOKEN_STORAGE = {
   getAccess: () => localStorage.getItem(ACCESS_TOKEN_KEY),
   getRefresh: () => localStorage.getItem(REFRESH_TOKEN_KEY),
-  setAccess: (t: string) => localStorage.setItem(ACCESS_TOKEN_KEY, t),
-  setRefresh: (t: string) => localStorage.setItem(REFRESH_TOKEN_KEY, t),
+  setAccess: (accessToken: string) => localStorage.setItem(ACCESS_TOKEN_KEY, accessToken),
+  setRefresh: (refreshToken: string) => localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken),
   clear: () => {
     localStorage.removeItem(ACCESS_TOKEN_KEY);
     localStorage.removeItem(REFRESH_TOKEN_KEY);
@@ -27,12 +27,12 @@ API_CLIENT.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 });
 
 let isRefreshing = false;
-let failedQueue: Array<{ resolve: (t: string) => void; reject: (e: unknown) => void }> = [];
+let failedQueue: Array<{ resolve: (token: string) => void; reject: (error: unknown) => void }> = [];
 
 function processQueue(error: unknown, token: string | null) {
-  failedQueue.forEach((p) => {
-    if (error) p.reject(error);
-    else p.resolve(token!);
+  failedQueue.forEach((queueItem) => {
+    if (error) queueItem.reject(error);
+    else queueItem.resolve(token!);
   });
   failedQueue = [];
 }
@@ -68,11 +68,11 @@ API_CLIENT.interceptors.response.use(
         processQueue(null, newToken);
         original.headers.Authorization = `Bearer ${newToken}`;
         return API_CLIENT(original);
-      } catch (e) {
-        processQueue(e, null);
+      } catch (error) {
+        processQueue(error, null);
         TOKEN_STORAGE.clear();
         window.location.hash = '#/admin/login';
-        return Promise.reject(e);
+        return Promise.reject(error);
       } finally {
         isRefreshing = false;
       }

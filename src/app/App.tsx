@@ -5,13 +5,13 @@ import { AdminLayout } from '@/layouts/AdminLayout/AdminLayout';
 import { Loader } from '@/shared/components/Loader';
 import { AuthProvider, useAuth } from '@/shared/context/AuthContext';
 
-const HomePage = lazy(() => import('@/pages/HomePage').then((m) => ({ default: m.HomePage })));
-const OrderPage = lazy(() => import('@/pages/OrderPage').then((m) => ({ default: m.OrderPage })));
-const LoginPage = lazy(() => import('@/pages/admin/LoginPage/LoginPage').then((m) => ({ default: m.LoginPage })));
-const OrdersPage = lazy(() => import('@/pages/admin/OrdersPage/OrdersPage').then((m) => ({ default: m.OrdersPage })));
-const CarsPage = lazy(() => import('@/pages/admin/CarsPage/CarsPage').then((m) => ({ default: m.CarsPage })));
-const CarEditPage = lazy(() => import('@/pages/admin/CarEditPage/CarEditPage').then((m) => ({ default: m.CarEditPage })));
-const AdminErrorPage = lazy(() => import('@/pages/admin/AdminErrorPage/AdminErrorPage').then((m) => ({ default: m.AdminErrorPage })));
+const HomePage = lazy(() => import('@/pages/HomePage').then((module) => ({ default: module.HomePage })));
+const OrderPage = lazy(() => import('@/pages/OrderPage').then((module) => ({ default: module.OrderPage })));
+const LoginPage = lazy(() => import('@/pages/admin/LoginPage/LoginPage').then((module) => ({ default: module.LoginPage })));
+const OrdersPage = lazy(() => import('@/pages/admin/OrdersPage/OrdersPage').then((module) => ({ default: module.OrdersPage })));
+const CarsPage = lazy(() => import('@/pages/admin/CarsPage/CarsPage').then((module) => ({ default: module.CarsPage })));
+const CarEditPage = lazy(() => import('@/pages/admin/CarEditPage/CarEditPage').then((module) => ({ default: module.CarEditPage })));
+const AdminErrorPage = lazy(() => import('@/pages/admin/AdminErrorPage/AdminErrorPage').then((module) => ({ default: module.AdminErrorPage })));
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();

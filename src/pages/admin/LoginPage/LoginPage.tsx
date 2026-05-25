@@ -21,8 +21,8 @@ export function LoginPage() {
 
   const validatePassword = (val: string) => (!val ? 'Это поле обязательно к заполнению' : '');
 
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
+  async function handleSubmit(event: FormEvent) {
+    event.preventDefault();
     const emailTrimmed = email.trim();
     const emailErr = validateEmail(emailTrimmed);
     const passErr = validatePassword(password);
@@ -52,13 +52,13 @@ export function LoginPage() {
         <form className={styles.form} onSubmit={handleSubmit} noValidate>
           <div className={styles.fieldGroup}>
             <label className={styles.label} htmlFor="email">Почта</label>
-            <input id="email" type="email" className={`${styles.input} ${errors.email ? styles.inputError : ''}`} placeholder="admin@ss.com" value={email} maxLength={150} onChange={(e) => setEmail(e.target.value)} onBlur={() => setErrors((p) => ({ ...p, email: validateEmail(email.trim()) }))} />
+            <input id="email" type="email" className={`${styles.input} ${errors.email ? styles.inputError : ''}`} placeholder="admin@ss.com" value={email} maxLength={150} onChange={(inputEvent) => setEmail(inputEvent.target.value)} onBlur={() => setErrors((prevErrors) => ({ ...prevErrors, email: validateEmail(email.trim()) }))} />
             {errors.email && <span className={styles.errorMsg}>{errors.email}</span>}
           </div>
           <div className={styles.fieldGroup}>
             <label className={styles.label} htmlFor="password">Пароль</label>
             <div className={styles.passWrap}>
-              <input id="password" type={showPass ? 'text' : 'password'} className={`${styles.input} ${styles.passInput} ${errors.password ? styles.inputError : ''}`} value={password} maxLength={150} onChange={(e) => setPassword(e.target.value)} onBlur={() => setErrors((p) => ({ ...p, password: validatePassword(password) }))} />
+              <input id="password" type={showPass ? 'text' : 'password'} className={`${styles.input} ${styles.passInput} ${errors.password ? styles.inputError : ''}`} value={password} maxLength={150} onChange={(inputEvent) => setPassword(inputEvent.target.value)} onBlur={() => setErrors((prevErrors) => ({ ...prevErrors, password: validatePassword(password) }))} />
             </div>
             {errors.password && <span className={styles.errorMsg}>{errors.password}</span>}
           </div>

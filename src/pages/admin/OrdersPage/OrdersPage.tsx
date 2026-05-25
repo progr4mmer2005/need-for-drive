@@ -36,8 +36,8 @@ function formatDate(ts: number) {
   });
 }
 
-function formatPrice(p: number) {
-  return p ? `${p.toLocaleString('ru-RU')} ₽` : '—';
+function formatPrice(price: number) {
+  return price ? `${price.toLocaleString('ru-RU')} ₽` : '—';
 }
 
 export function OrdersPage() {
@@ -68,8 +68,8 @@ export function OrdersPage() {
       const data = await ORDERS_API.getAll({ limit: PAGE_SIZE, page });
       setOrders(data.data);
       setTotal(data.count ?? 0);
-    } catch (e: unknown) {
-      if ((e as { response?: { status?: number } })?.response?.status === 401) {
+    } catch (error: unknown) {
+      if ((error as { response?: { status?: number } })?.response?.status === 401) {
         navigate('/admin/login');
       }
     } finally {
@@ -81,38 +81,38 @@ export function OrdersPage() {
     fetchOrders();
   }, [fetchOrders]);
 
-  const filtered = orders.filter((o) => {
-    if (appliedFilters.car && o.carId?.id !== Number(appliedFilters.car)) return false;
-    if (appliedFilters.city && o.cityId?.id !== Number(appliedFilters.city)) return false;
-    if (appliedFilters.status && o.orderStatusId?.id !== Number(appliedFilters.status)) return false;
+  const filtered = orders.filter((order) => {
+    if (appliedFilters.car && order.carId?.id !== Number(appliedFilters.car)) return false;
+    if (appliedFilters.city && order.cityId?.id !== Number(appliedFilters.city)) return false;
+    if (appliedFilters.status && order.orderStatusId?.id !== Number(appliedFilters.status)) return false;
     return true;
   });
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
-  const paginationPages = Array.from({ length: Math.min(totalPages, 7) }, (_, i) => i + 1);
+  const paginationPages = Array.from({ length: Math.min(totalPages, 7) }, (_, pageIndex) => pageIndex + 1);
 
   return (
     <div>
       <AdminPageTitle>Заказы</AdminPageTitle>
       <div className={styles.tableWrap}>
         <div className={styles.filters}>
-          <select className={`${styles.filterSelect} ${!draftFilters.period ? styles.filterPlaceholder : ''}`} value={draftFilters.period} onChange={(e) => setDraftFilters((p) => ({ ...p, period: e.target.value }))}>
+          <select className={`${styles.filterSelect} ${!draftFilters.period ? styles.filterPlaceholder : ''}`} value={draftFilters.period} onChange={(event) => setDraftFilters((prevFilters) => ({ ...prevFilters, period: event.target.value }))}>
             <option value="">Время</option>
             <option value="week">За неделю</option>
             <option value="month">За месяц</option>
             <option value="all">За всё время</option>
           </select>
-          <select className={`${styles.filterSelect} ${!draftFilters.car ? styles.filterPlaceholder : ''}`} value={draftFilters.car} onChange={(e) => setDraftFilters((p) => ({ ...p, car: e.target.value }))}>
+          <select className={`${styles.filterSelect} ${!draftFilters.car ? styles.filterPlaceholder : ''}`} value={draftFilters.car} onChange={(event) => setDraftFilters((prevFilters) => ({ ...prevFilters, car: event.target.value }))}>
             <option value="">Автомобиль</option>
-            {cars.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+            {cars.map((car) => <option key={car.id} value={car.id}>{car.name}</option>)}
           </select>
-          <select className={`${styles.filterSelect} ${!draftFilters.city ? styles.filterPlaceholder : ''}`} value={draftFilters.city} onChange={(e) => setDraftFilters((p) => ({ ...p, city: e.target.value }))}>
+          <select className={`${styles.filterSelect} ${!draftFilters.city ? styles.filterPlaceholder : ''}`} value={draftFilters.city} onChange={(event) => setDraftFilters((prevFilters) => ({ ...prevFilters, city: event.target.value }))}>
             <option value="">Город</option>
-            {cities.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+            {cities.map((city) => <option key={city.id} value={city.id}>{city.name}</option>)}
           </select>
-          <select className={`${styles.filterSelect} ${!draftFilters.status ? styles.filterPlaceholder : ''}`} value={draftFilters.status} onChange={(e) => setDraftFilters((p) => ({ ...p, status: e.target.value }))}>
+          <select className={`${styles.filterSelect} ${!draftFilters.status ? styles.filterPlaceholder : ''}`} value={draftFilters.status} onChange={(event) => setDraftFilters((prevFilters) => ({ ...prevFilters, status: event.target.value }))}>
             <option value="">В процессе</option>
-            {statuses.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+            {statuses.map((status) => <option key={status.id} value={status.id}>{status.name}</option>)}
           </select>
           <button className={styles.applyBtn} type="button" onClick={() => setAppliedFilters(draftFilters)}>Применить</button>
         </div>
@@ -159,7 +159,7 @@ export function OrdersPage() {
         <div className={styles.pagination}>
           <button type="button" className={styles.pageBtn} onClick={() => setPage(1)}>«</button>
           {totalPages > 1 ? (
-            paginationPages.map((p) => <button key={p} type="button" className={`${styles.pageBtn} ${p === page ? styles.pageBtnActive : ''}`} onClick={() => setPage(p)}>{p}</button>)
+            paginationPages.map((pageNumber) => <button key={pageNumber} type="button" className={`${styles.pageBtn} ${pageNumber === page ? styles.pageBtnActive : ''}`} onClick={() => setPage(pageNumber)}>{pageNumber}</button>)
           ) : (
             <>
               <button type="button" className={styles.pageBtn}>1</button>

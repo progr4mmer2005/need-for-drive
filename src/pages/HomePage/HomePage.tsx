@@ -5,7 +5,7 @@ import { HeroSection } from '@/widgets/HeroSection';
 import { Loader } from '@/shared/components/Loader';
 import * as styles from './HomePage.module.scss';
 
-const PromoSlider = lazy(() => import('@/widgets/PromoSlider').then((m) => ({ default: m.PromoSlider })));
+const PromoSlider = lazy(() => import('@/widgets/PromoSlider').then((module) => ({ default: module.PromoSlider })));
 
 type TContextType = {
   isMenuOpen: boolean;

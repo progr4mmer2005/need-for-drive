@@ -70,7 +70,7 @@ export function AdminLayout() {
         <header className={styles.header}>
           <div className={styles.searchWrap}>
             <AdminSearchIcon className={styles.searchIcon} />
-            <input className={styles.searchInput} placeholder="Поиск ..." value={search} onChange={(e) => setSearch(e.target.value)} />
+            <input className={styles.searchInput} placeholder="Поиск ..." value={search} onChange={(event) => setSearch(event.target.value)} />
           </div>
 
           <div className={styles.headerRight}>
@@ -79,7 +79,7 @@ export function AdminLayout() {
               <span className={styles.bellBadge}>2</span>
             </button>
             <div className={styles.userMenu}>
-              <button className={styles.userBtn} type="button" onClick={() => setDropdownOpen((v) => !v)}>
+              <button className={styles.userBtn} type="button" onClick={() => setDropdownOpen((prevDropdownOpen) => !prevDropdownOpen)}>
                 <span className={styles.avatar}>A</span>
                 <span className={styles.adminName}>Admin</span>
                 <span className={styles.chevron}>?</span>

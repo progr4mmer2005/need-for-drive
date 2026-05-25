@@ -32,8 +32,8 @@ function freshDb(): DB {
     orderStatuses: [...SEED_ORDER_STATUSES],
     orders: [...SEED_ORDERS],
     nextId: {
-      cars: Math.max(...SEED_CARS.map((c) => c.id)) + 1,
-      orders: Math.max(...SEED_ORDERS.map((o) => o.id), 0) + 1,
+      cars: Math.max(...SEED_CARS.map((car) => car.id)) + 1,
+      orders: Math.max(...SEED_ORDERS.map((order) => order.id), 0) + 1,
     },
   };
 }
@@ -70,7 +70,7 @@ export function resetMockDb() {
 
 // simulate small network delay so loaders are visible
 function delay<T>(value: T, ms = 150): Promise<T> {
-  return new Promise((res) => setTimeout(() => res(value), ms));
+  return new Promise((resolve) => setTimeout(() => resolve(value), ms));
 }
 
 function paginate<T>(items: T[], params?: { limit?: number; page?: number }): ApiResponse<T[]> {
@@ -85,12 +85,12 @@ function paginate<T>(items: T[], params?: { limit?: number; page?: number }): Ap
 export const MOCK_CARS = {
   getAll: (params?: { limit?: number; page?: number }) => delay(paginate(db.cars, params)),
   getOne: (id: number): Promise<ApiResponse<Car>> => {
-    const car = db.cars.find((c) => c.id === id);
+    const car = db.cars.find((existingCar) => existingCar.id === id);
     if (!car) return Promise.reject({ response: { status: 404, data: { message: 'Not found' } } });
     return delay({ data: car });
   },
   create: (dto: Partial<Car> & { categoryId: { id: number } }): Promise<ApiResponse<Car>> => {
-    const cat = db.categories.find((c) => c.id === dto.categoryId.id) || db.categories[0];
+    const category = db.categories.find((existingCategory) => existingCategory.id === dto.categoryId.id) || db.categories[0];
     const car: Car = {
       id: db.nextId.cars++,
       name: dto.name || 'Новый авто',
@@ -101,26 +101,26 @@ export const MOCK_CARS = {
       description: dto.description || '',
       number: dto.number || '',
       tank: dto.tank || '',
-      categoryId: cat,
+      categoryId: category,
     };
     db.cars.push(car);
     saveDb();
     return delay({ data: car });
   },
   update: (id: number, dto: Partial<Car> & { categoryId?: { id: number } }): Promise<ApiResponse<Car>> => {
-    const idx = db.cars.findIndex((c) => c.id === id);
-    if (idx === -1) return Promise.reject({ response: { status: 404 } });
-    const existing = db.cars[idx];
-    const cat = dto.categoryId
-      ? db.categories.find((c) => c.id === dto.categoryId!.id) || existing.categoryId
-      : existing.categoryId;
-    const updated: Car = { ...existing, ...dto, categoryId: cat };
-    db.cars[idx] = updated;
+    const carIndex = db.cars.findIndex((existingCar) => existingCar.id === id);
+    if (carIndex === -1) return Promise.reject({ response: { status: 404 } });
+    const existingCar = db.cars[carIndex];
+    const category = dto.categoryId
+      ? db.categories.find((existingCategory) => existingCategory.id === dto.categoryId!.id) || existingCar.categoryId
+      : existingCar.categoryId;
+    const updated: Car = { ...existingCar, ...dto, categoryId: category };
+    db.cars[carIndex] = updated;
     saveDb();
     return delay({ data: updated });
   },
   delete: (id: number) => {
-    db.cars = db.cars.filter((c) => c.id !== id);
+    db.cars = db.cars.filter((existingCar) => existingCar.id !== id);
     saveDb();
     return delay({ data: undefined } as ApiResponse<unknown>);
   },
@@ -130,9 +130,9 @@ export const MOCK_CARS = {
 export const MOCK_ORDERS = {
   getAll: (params?: { limit?: number; page?: number }) => delay(paginate(db.orders, params)),
   getOne: (id: number): Promise<ApiResponse<Order>> => {
-    const o = db.orders.find((x) => x.id === id);
-    if (!o) return Promise.reject({ response: { status: 404 } });
-    return delay({ data: o });
+    const order = db.orders.find((existingOrder) => existingOrder.id === id);
+    if (!order) return Promise.reject({ response: { status: 404 } });
+    return delay({ data: order });
   },
   create: (dto: {
     cityId: { id: number }; pointId: { id: number }; carId: { id: number };
@@ -142,12 +142,12 @@ export const MOCK_ORDERS = {
   }): Promise<ApiResponse<Order>> => {
     const order: Order = {
       id: db.nextId.orders++,
-      cityId: db.cities.find((c) => c.id === dto.cityId.id) || db.cities[0],
-      pointId: db.points.find((p) => p.id === dto.pointId.id) || db.points[0],
-      carId: db.cars.find((c) => c.id === dto.carId.id) || db.cars[0],
-      rateId: db.rates.find((r) => r.id === dto.rateId.id) || db.rates[0],
+      cityId: db.cities.find((city) => city.id === dto.cityId.id) || db.cities[0],
+      pointId: db.points.find((point) => point.id === dto.pointId.id) || db.points[0],
+      carId: db.cars.find((car) => car.id === dto.carId.id) || db.cars[0],
+      rateId: db.rates.find((rate) => rate.id === dto.rateId.id) || db.rates[0],
       orderStatusId: dto.orderStatusId
-        ? db.orderStatuses.find((s) => s.id === dto.orderStatusId!.id) || db.orderStatuses[0]
+        ? db.orderStatuses.find((orderStatus) => orderStatus.id === dto.orderStatusId!.id) || db.orderStatuses[0]
         : db.orderStatuses[0],
       color: dto.color, dateFrom: dto.dateFrom, dateTo: dto.dateTo, price: dto.price,
       isFullTank: dto.isFullTank, isNeedChildChair: dto.isNeedChildChair, isRightWheel: dto.isRightWheel,
@@ -157,18 +157,18 @@ export const MOCK_ORDERS = {
     return delay({ data: order });
   },
   update: (id: number, dto: { orderStatusId?: { id: number } }): Promise<ApiResponse<Order>> => {
-    const idx = db.orders.findIndex((o) => o.id === id);
-    if (idx === -1) return Promise.reject({ response: { status: 404 } });
-    const o = db.orders[idx];
+    const orderIndex = db.orders.findIndex((order) => order.id === id);
+    if (orderIndex === -1) return Promise.reject({ response: { status: 404 } });
+    const order = db.orders[orderIndex];
     if (dto.orderStatusId) {
-      const s = db.orderStatuses.find((x) => x.id === dto.orderStatusId!.id);
-      if (s) o.orderStatusId = s;
+      const orderStatus = db.orderStatuses.find((existingOrderStatus) => existingOrderStatus.id === dto.orderStatusId!.id);
+      if (orderStatus) order.orderStatusId = orderStatus;
     }
     saveDb();
-    return delay({ data: o });
+    return delay({ data: order });
   },
   delete: (id: number) => {
-    db.orders = db.orders.filter((o) => o.id !== id);
+    db.orders = db.orders.filter((order) => order.id !== id);
     saveDb();
     return delay({ data: undefined } as ApiResponse<unknown>);
   },
@@ -181,8 +181,8 @@ export const MOCK_POINTS = {
     let pts = db.points;
     const cityId = params && (params['cityId'] || params['city_id']);
     if (cityId) {
-      const cid = Number(cityId);
-      pts = pts.filter((p) => p.cityId.id === cid);
+      const cityIdNumber = Number(cityId);
+      pts = pts.filter((point) => point.cityId.id === cityIdNumber);
     }
     return delay({ data: pts, count: pts.length });
   },
