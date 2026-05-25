@@ -1,0 +1,14 @@
+import type { SVGProps } from 'react';
+
+export function AdminCarListIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" {...props}>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M2 3.5V4.85714H7.33333V3.5H2ZM7.33333 7.57142H2V6.21428H7.33333V7.57142ZM2 10.2857H7.33333V8.92857H2V10.2857ZM2 13H7.33333V11.6429H2V13ZM14 3.5H8.66663V13H14V3.5Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}

@@ -1,0 +1,14 @@
+import type { SVGProps } from 'react';
+
+export function AdminOrdersIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" {...props}>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M7 1H3C2.45 1 2.005 1.45 2.005 2L2 10C2 10.55 2.445 11 2.995 11H9C9.55 11 10 10.55 10 10V4L7 1ZM8 8H6.5V9.5H5.5V8H4V7H5.5V5.5H6.5V7H8V8ZM6.5 1.75V4.5H9.25L6.5 1.75Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
