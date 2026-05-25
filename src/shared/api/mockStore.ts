@@ -1,7 +1,7 @@
-/* In-memory + localStorage backed mock store. Mimics the NestJS backend. */
+﻿/* In-memory + localStorage backed mock store. Mimics the NestJS backend. */
 import {
-  seedCars, seedCategories, seedCities, seedOrderStatuses, seedOrders,
-  seedPoints, seedRateTypes, seedRates,
+  SEED_CARS, SEED_CATEGORIES, SEED_CITIES, SEED_ORDER_STATUSES, SEED_ORDERS,
+  SEED_POINTS, SEED_RATE_TYPES, SEED_RATES,
 } from './mockData';
 import type {
   ApiResponse, Car, Category, City, Order, OrderStatus, Point, Rate, RateType,
@@ -23,17 +23,17 @@ interface DB {
 
 function freshDb(): DB {
   return {
-    cars: [...seedCars],
-    categories: [...seedCategories],
-    cities: [...seedCities],
-    points: [...seedPoints],
-    rates: [...seedRates],
-    rateTypes: [...seedRateTypes],
-    orderStatuses: [...seedOrderStatuses],
-    orders: [...seedOrders],
+    cars: [...SEED_CARS],
+    categories: [...SEED_CATEGORIES],
+    cities: [...SEED_CITIES],
+    points: [...SEED_POINTS],
+    rates: [...SEED_RATES],
+    rateTypes: [...SEED_RATE_TYPES],
+    orderStatuses: [...SEED_ORDER_STATUSES],
+    orders: [...SEED_ORDERS],
     nextId: {
-      cars: Math.max(...seedCars.map((c) => c.id)) + 1,
-      orders: Math.max(...seedOrders.map((o) => o.id), 0) + 1,
+      cars: Math.max(...SEED_CARS.map((c) => c.id)) + 1,
+      orders: Math.max(...SEED_ORDERS.map((o) => o.id), 0) + 1,
     },
   };
 }
@@ -82,7 +82,7 @@ function paginate<T>(items: T[], params?: { limit?: number; page?: number }): Ap
 }
 
 // ----- Cars -----
-export const mockCars = {
+export const MOCK_CARS = {
   getAll: (params?: { limit?: number; page?: number }) => delay(paginate(db.cars, params)),
   getOne: (id: number): Promise<ApiResponse<Car>> => {
     const car = db.cars.find((c) => c.id === id);
@@ -127,7 +127,7 @@ export const mockCars = {
 };
 
 // ----- Orders -----
-export const mockOrders = {
+export const MOCK_ORDERS = {
   getAll: (params?: { limit?: number; page?: number }) => delay(paginate(db.orders, params)),
   getOne: (id: number): Promise<ApiResponse<Order>> => {
     const o = db.orders.find((x) => x.id === id);
@@ -175,8 +175,8 @@ export const mockOrders = {
 };
 
 // ----- Read-only collections -----
-export const mockCities = { getAll: () => delay({ data: db.cities, count: db.cities.length }) };
-export const mockPoints = {
+export const MOCK_CITIES = { getAll: () => delay({ data: db.cities, count: db.cities.length }) };
+export const MOCK_POINTS = {
   getAll: (params?: Record<string, unknown>) => {
     let pts = db.points;
     const cityId = params && (params['cityId'] || params['city_id']);
@@ -187,7 +187,9 @@ export const mockPoints = {
     return delay({ data: pts, count: pts.length });
   },
 };
-export const mockRates = { getAll: () => delay({ data: db.rates, count: db.rates.length }) };
-export const mockRateTypes = { getAll: () => delay({ data: db.rateTypes, count: db.rateTypes.length }) };
-export const mockCategories = { getAll: () => delay({ data: db.categories, count: db.categories.length }) };
-export const mockOrderStatus = { getAll: () => delay({ data: db.orderStatuses, count: db.orderStatuses.length }) };
+export const MOCK_RATES = { getAll: () => delay({ data: db.rates, count: db.rates.length }) };
+export const MOCK_RATE_TYPES = { getAll: () => delay({ data: db.rateTypes, count: db.rateTypes.length }) };
+export const MOCK_CATEGORIES = { getAll: () => delay({ data: db.categories, count: db.categories.length }) };
+export const MOCK_ORDER_STATUS = { getAll: () => delay({ data: db.orderStatuses, count: db.orderStatuses.length }) };
+
+

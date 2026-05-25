@@ -1,4 +1,4 @@
-import { mockCars } from './mockStore';
+﻿import { MOCK_CARS } from './mockStore';
 import type { ApiResponse, Car, QueryParams } from './types';
 
 export interface CarDto {
@@ -13,12 +13,13 @@ export interface CarDto {
   categoryId: { id: number };
 }
 
-export const carsApi = {
+export const CARS_API = {
   getAll: (params?: QueryParams): Promise<ApiResponse<Car[]>> =>
-    mockCars.getAll(params as { limit?: number; page?: number }),
-  getOne: (id: number) => mockCars.getOne(id),
-  create: (dto: CarDto) => mockCars.create(dto as Partial<Car> & { categoryId: { id: number } }),
+    MOCK_CARS.getAll(params as { limit?: number; page?: number }),
+  getOne: (id: number) => MOCK_CARS.getOne(id),
+  create: (dto: CarDto) => MOCK_CARS.create(dto as Partial<Car> & { categoryId: { id: number } }),
   update: (id: number, dto: Partial<CarDto>) =>
-    mockCars.update(id, dto as Partial<Car> & { categoryId?: { id: number } }),
-  delete: (id: number) => mockCars.delete(id),
+    MOCK_CARS.update(id, dto as Partial<Car> & { categoryId?: { id: number } }),
+  delete: (id: number) => MOCK_CARS.delete(id),
 };
+

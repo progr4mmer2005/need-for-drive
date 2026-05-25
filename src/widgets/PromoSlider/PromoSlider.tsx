@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+﻿import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { Button } from '@/shared/components/Button';
 import { classNames } from '@/shared/lib/classNames';
-import { sliderSlides } from '@/shared/model/sliderSlides';
+import { SLIDER_SLIDES } from '@/shared/model/sliderSlides';
 import * as styles from './PromoSlider.module.scss';
 
 type TPromoSliderProps = {
@@ -17,8 +17,8 @@ export function PromoSlider({ isDimmed }: TPromoSliderProps) {
   const [isAutoPlayEnabled, setIsAutoPlayEnabled] = useState(true);
   const resumeTimeoutRef = useRef<number | null>(null);
 
-  const totalSlides = sliderSlides.length;
-  const activeSlide = useMemo(() => sliderSlides[activeIndex], [activeIndex]);
+  const totalSlides = SLIDER_SLIDES.length;
+  const activeSlide = useMemo(() => SLIDER_SLIDES[activeIndex], [activeIndex]);
 
   useEffect(() => {
     if (!isAutoPlayEnabled) {
@@ -75,7 +75,7 @@ export function PromoSlider({ isDimmed }: TPromoSliderProps) {
       <div className={classNames(styles.menuOverlay, isDimmed && styles.menuOverlayActive)} />
 
       <div className={styles.viewport}>
-        {sliderSlides.map((slide, index) => (
+        {SLIDER_SLIDES.map((slide, index) => (
           <article
             key={slide.title}
             aria-hidden={index !== activeIndex}
@@ -113,7 +113,7 @@ export function PromoSlider({ isDimmed }: TPromoSliderProps) {
         </button>
 
         <div className={styles.pagination}>
-          {sliderSlides.map((slide, index) => (
+          {SLIDER_SLIDES.map((slide, index) => (
             <button
               key={slide.title}
               aria-label={`Перейти к слайду ${index + 1}`}

@@ -1,4 +1,4 @@
-import { memo } from 'react';
+﻿import { memo } from 'react';
 import { Button } from '@/shared/components/Button';
 import { OrderDetails } from '@/shared/components/OrderDetails';
 import { Step } from '@/widgets/OrderSection/model/types';
@@ -14,14 +14,14 @@ type TOrderSidebarProps = {
   onOpenConfirm: () => void;
 };
 
-const ru = String.fromCharCode;
+const RU = String.fromCharCode;
 const TEXT = {
-  yourOrder: ru(1042, 1072, 1096, 32, 1079, 1072, 1082, 1072, 1079, 58),
-  chooseModel: ru(1042, 1099, 1073, 1088, 1072, 1090, 1100, 32, 1084, 1086, 1076, 1077, 1083, 1100),
-  additionally: ru(1044, 1086, 1087, 1086, 1083, 1085, 1080, 1090, 1077, 1083, 1100, 1085, 1086),
-  total: ru(1048, 1090, 1086, 1075, 1086),
-  order: ru(1047, 1072, 1082, 1072, 1079, 1072, 1090, 1100),
-  cancel: ru(1054, 1090, 1084, 1077, 1085, 1080, 1090, 1100),
+  yourOrder: RU(1042, 1072, 1096, 32, 1079, 1072, 1082, 1072, 1079, 58),
+  chooseModel: RU(1042, 1099, 1073, 1088, 1072, 1090, 1100, 32, 1084, 1086, 1076, 1077, 1083, 1100),
+  additionally: RU(1044, 1086, 1087, 1086, 1083, 1085, 1080, 1090, 1077, 1083, 1100, 1085, 1086),
+  total: RU(1048, 1090, 1086, 1075, 1086),
+  order: RU(1047, 1072, 1082, 1072, 1079, 1072, 1090, 1100),
+  cancel: RU(1054, 1090, 1084, 1077, 1085, 1080, 1090, 1100),
 };
 
 export const OrderSidebar = memo(function OrderSidebar({
@@ -73,3 +73,5 @@ export const OrderSidebar = memo(function OrderSidebar({
     </aside>
   );
 });
+
+

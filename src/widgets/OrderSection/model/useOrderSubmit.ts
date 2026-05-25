@@ -1,4 +1,4 @@
-import { useCallback, Dispatch, SetStateAction } from 'react';
+﻿import { useCallback, Dispatch, SetStateAction } from 'react';
 import {
   ORDER_STORAGE_KEY,
   Step,
@@ -8,7 +8,7 @@ import {
   type TSelectedCar,
   type TSelectedRate,
 } from './types';
-import { ordersApi } from '@/shared/api/ordersApi';
+import { ORDERS_API } from '@/shared/api/ordersApi';
 
 type TOrderState = {
   step: Step;
@@ -86,7 +86,7 @@ export function useOrderSubmit(
           pointId: { id: pointId },
           carId: { id: carId },
           rateId: rateBackendId ? { id: rateBackendId } : { id: 1 },
-          color: selectedColor || 'Любой',
+          color: selectedColor || 'Р›СЋР±РѕР№',
           dateFrom: orderState.dateFrom ? new Date(orderState.dateFrom).getTime() : Date.now(),
           dateTo: orderState.dateTo
             ? new Date(orderState.dateTo).getTime()
@@ -96,12 +96,12 @@ export function useOrderSubmit(
           isNeedChildChair: selectedExtraIds.includes('childChair'),
           isRightWheel: selectedExtraIds.includes('rightWheel'),
         };
-        const res = await ordersApi.create(dto);
+        const res = await ORDERS_API.create(dto);
         if (res?.data?.id) {
           orderId = `RU${res.data.id}`;
         }
       } catch (e) {
-        // Silent fallback — keep generated orderId
+        // Silent fallback вЂ” keep generated orderId
         // eslint-disable-next-line no-console
         console.warn('Order POST failed, using local id', e);
       }
@@ -116,9 +116,9 @@ export function useOrderSubmit(
       carName: `${selectedCar.brand}, ${selectedCar.name}`,
       carImage: selectedCar.image,
       color: selectedColor,
-      duration: '1д 2ч',
-      rate: selectedRate?.id === 'daily' ? 'На сутки' : 'Поминутно',
-      fullTank: selectedExtraIds.includes('fullTank') ? 'Да' : 'Нет',
+      duration: '1Рґ 2С‡',
+      rate: selectedRate?.id === 'daily' ? 'РќР° СЃСѓС‚РєРё' : 'РџРѕРјРёРЅСѓС‚РЅРѕ',
+      fullTank: selectedExtraIds.includes('fullTank') ? 'Р”Р°' : 'РќРµС‚',
       totalPrice,
       availableAt,
     };
@@ -147,3 +147,4 @@ export function useOrderSubmit(
 
   return { handleSubmitOrder };
 }
+

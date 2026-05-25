@@ -1,7 +1,7 @@
 ﻿import { useEffect, useState, useRef, ChangeEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { carsApi } from '@/shared/api/carsApi';
-import { categoriesApi } from '@/shared/api/citiesApi';
+import { CARS_API } from '@/shared/api/carsApi';
+import { CATEGORIES_API } from '@/shared/api/citiesApi';
 import type { Car, Category } from '@/shared/api/types';
 import { AdminPageTitle } from '@/shared/components/AdminPageTitle';
 import { Loader } from '@/shared/components/Loader';
@@ -38,12 +38,12 @@ export function CarEditPage() {
   const [toast, setToast] = useState<Toast | null>(null);
   const [previewUrl, setPreviewUrl] = useState('');
 
-  useEffect(() => { categoriesApi.getAll().then((d) => setCategories(d.data)).catch(console.error); }, []);
+  useEffect(() => { CATEGORIES_API.getAll().then((d) => setCategories(d.data)).catch(console.error); }, []);
 
   useEffect(() => {
     if (!isNew && id) {
       setLoading(true);
-      carsApi.getOne(Number(id)).then((d) => {
+      CARS_API.getOne(Number(id)).then((d) => {
         const car: Car = d.data;
         setForm({
           name: car.name || '',
@@ -109,11 +109,11 @@ export function CarEditPage() {
         categoryId: { id: Number(form.categoryId) },
       };
       if (isNew) {
-        await carsApi.create(dto);
+        await CARS_API.create(dto);
         showToast('Успех! Машина добавлена', 'success');
         setTimeout(() => navigate('/admin/cars'), 1200);
       } else {
-        await carsApi.update(Number(id), dto);
+        await CARS_API.update(Number(id), dto);
         showToast('Успех! Машина сохранена', 'success');
       }
     } catch {
@@ -127,7 +127,7 @@ export function CarEditPage() {
     if (!window.confirm('Удалить автомобиль?')) return;
     setSaving(true);
     try {
-      await carsApi.delete(Number(id));
+      await CARS_API.delete(Number(id));
       showToast('Успех! Машина удалена', 'success');
       setTimeout(() => navigate('/admin/cars'), 1200);
     } catch {
@@ -186,3 +186,4 @@ export function CarEditPage() {
     </div>
   );
 }
+

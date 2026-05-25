@@ -1,11 +1,11 @@
-import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+﻿import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 
 export const API_BASE_URL = 'http://localhost:3000/api';
 
 const ACCESS_TOKEN_KEY = 'nfd_access_token';
 const REFRESH_TOKEN_KEY = 'nfd_refresh_token';
 
-export const tokenStorage = {
+export const TOKEN_STORAGE = {
   getAccess: () => localStorage.getItem(ACCESS_TOKEN_KEY),
   getRefresh: () => localStorage.getItem(REFRESH_TOKEN_KEY),
   setAccess: (t: string) => localStorage.setItem(ACCESS_TOKEN_KEY, t),
@@ -16,10 +16,10 @@ export const tokenStorage = {
   },
 };
 
-const apiClient: AxiosInstance = axios.create({ baseURL: API_BASE_URL });
+const API_CLIENT: AxiosInstance = axios.create({ baseURL: API_BASE_URL });
 
-apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  const token = tokenStorage.getAccess();
+API_CLIENT.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  const token = TOKEN_STORAGE.getAccess();
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -37,7 +37,7 @@ function processQueue(error: unknown, token: string | null) {
   failedQueue = [];
 }
 
-apiClient.interceptors.response.use(
+API_CLIENT.interceptors.response.use(
   (response) => response,
   async (error) => {
     const original = error.config;
@@ -47,14 +47,14 @@ apiClient.interceptors.response.use(
           failedQueue.push({ resolve, reject });
         }).then((token) => {
           original.headers.Authorization = `Bearer ${token}`;
-          return apiClient(original);
+          return API_CLIENT(original);
         });
       }
       original._retry = true;
       isRefreshing = true;
-      const refreshToken = tokenStorage.getRefresh();
+      const refreshToken = TOKEN_STORAGE.getRefresh();
       if (!refreshToken) {
-        tokenStorage.clear();
+        TOKEN_STORAGE.clear();
         window.location.hash = '#/admin/login';
         return Promise.reject(error);
       }
@@ -63,14 +63,14 @@ apiClient.interceptors.response.use(
           refresh_token: refreshToken,
         });
         const newToken = data.access_token;
-        tokenStorage.setAccess(newToken);
-        if (data.refresh_token) tokenStorage.setRefresh(data.refresh_token);
+        TOKEN_STORAGE.setAccess(newToken);
+        if (data.refresh_token) TOKEN_STORAGE.setRefresh(data.refresh_token);
         processQueue(null, newToken);
         original.headers.Authorization = `Bearer ${newToken}`;
-        return apiClient(original);
+        return API_CLIENT(original);
       } catch (e) {
         processQueue(e, null);
-        tokenStorage.clear();
+        TOKEN_STORAGE.clear();
         window.location.hash = '#/admin/login';
         return Promise.reject(e);
       } finally {
@@ -81,4 +81,5 @@ apiClient.interceptors.response.use(
   },
 );
 
-export default apiClient;
+export default API_CLIENT;
+

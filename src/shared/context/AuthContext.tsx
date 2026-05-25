@@ -1,6 +1,6 @@
-import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+﻿import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 import { login as apiLogin, logout as apiLogout } from '@/shared/api/authApi';
-import { tokenStorage } from '@/shared/api/apiClient';
+import { TOKEN_STORAGE } from '@/shared/api/apiClient';
 
 interface AuthContextValue {
   isAuthenticated: boolean;
@@ -12,7 +12,7 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(
-    () => !!tokenStorage.getAccess(),
+    () => !!TOKEN_STORAGE.getAccess(),
   );
 
   const login = useCallback(async (username: string, password: string) => {
@@ -37,3 +37,4 @@ export function useAuth(): AuthContextValue {
   if (!ctx) throw new Error('useAuth must be used within AuthProvider');
   return ctx;
 }
+

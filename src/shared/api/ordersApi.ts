@@ -1,4 +1,4 @@
-import { mockOrders } from './mockStore';
+﻿import { MOCK_ORDERS } from './mockStore';
 import type { ApiResponse, Order, QueryParams } from './types';
 
 export interface OrderDto {
@@ -16,11 +16,12 @@ export interface OrderDto {
   isRightWheel: boolean;
 }
 
-export const ordersApi = {
+export const ORDERS_API = {
   getAll: (params?: QueryParams): Promise<ApiResponse<Order[]>> =>
-    mockOrders.getAll(params as { limit?: number; page?: number }),
-  getOne: (id: number) => mockOrders.getOne(id),
-  create: (dto: OrderDto) => mockOrders.create(dto),
-  update: (id: number, dto: Partial<OrderDto>) => mockOrders.update(id, dto),
-  delete: (id: number) => mockOrders.delete(id),
+    MOCK_ORDERS.getAll(params as { limit?: number; page?: number }),
+  getOne: (id: number) => MOCK_ORDERS.getOne(id),
+  create: (dto: OrderDto) => MOCK_ORDERS.create(dto),
+  update: (id: number, dto: Partial<OrderDto>) => MOCK_ORDERS.update(id, dto),
+  delete: (id: number) => MOCK_ORDERS.delete(id),
 };
+

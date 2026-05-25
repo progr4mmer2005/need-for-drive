@@ -1,11 +1,11 @@
 ﻿import { useEffect, useState } from 'react';
-import { carsApi } from '@/shared/api/carsApi';
+import { CARS_API } from '@/shared/api/carsApi';
 import type { Car } from '@/shared/api/types';
 import { AdminPageTitle } from '@/shared/components/AdminPageTitle';
 import { Loader } from '@/shared/components/Loader';
 import styles from './CarsPage.module.scss';
 
-const carImages = {
+const CAR_IMAGES = {
   elantra: new URL('../../../assets/images/cars/elantra.png', import.meta.url).toString(),
   i30n: new URL('../../../assets/images/cars/i30n.png', import.meta.url).toString(),
   creta: new URL('../../../assets/images/cars/creta.png', import.meta.url).toString(),
@@ -16,12 +16,12 @@ const carImages = {
 
 function getCarImage(name: string | null | undefined) {
   const normalizedName = (name || '').toLowerCase();
-  if (normalizedName.includes('elantra')) return carImages.elantra;
-  if (normalizedName.includes('creta')) return carImages.creta;
-  if (normalizedName.includes('sonata')) return carImages.sonata;
-  if (normalizedName.includes('solaris')) return carImages.solaris;
-  if (normalizedName.includes('tucson')) return carImages.tucson;
-  return carImages.i30n;
+  if (normalizedName.includes('elantra')) return CAR_IMAGES.elantra;
+  if (normalizedName.includes('creta')) return CAR_IMAGES.creta;
+  if (normalizedName.includes('sonata')) return CAR_IMAGES.sonata;
+  if (normalizedName.includes('solaris')) return CAR_IMAGES.solaris;
+  if (normalizedName.includes('tucson')) return CAR_IMAGES.tucson;
+  return CAR_IMAGES.i30n;
 }
 
 export function CarsPage() {
@@ -35,7 +35,7 @@ export function CarsPage() {
 
   useEffect(() => {
     setLoading(true);
-    carsApi.getAll({ limit: PAGE_SIZE, page })
+    CARS_API.getAll({ limit: PAGE_SIZE, page })
       .then((d) => { setCars(d.data); setTotal(d.count ?? 0); })
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -130,3 +130,8 @@ export function CarsPage() {
     </div>
   );
 }
+
+
+
+
+

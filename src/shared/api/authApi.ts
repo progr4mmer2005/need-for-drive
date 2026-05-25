@@ -1,4 +1,4 @@
-import { tokenStorage } from './apiClient';
+﻿import { TOKEN_STORAGE } from './apiClient';
 import type { AuthResponse } from './types';
 
 // Mock auth — принимает любую пару логин/пароль (валидация только на стороне формы)
@@ -17,14 +17,14 @@ export async function login(username: string, password: string): Promise<AuthRes
     refresh_token: makeFakeToken('refresh', username),
     expires_in: 3600000,
   };
-  tokenStorage.setAccess(resp.access_token);
-  tokenStorage.setRefresh(resp.refresh_token);
+  TOKEN_STORAGE.setAccess(resp.access_token);
+  TOKEN_STORAGE.setRefresh(resp.refresh_token);
   localStorage.setItem('nfd_mock_user', username);
   return resp;
 }
 
 export async function logout(): Promise<void> {
   await new Promise((r) => setTimeout(r, 100));
-  tokenStorage.clear();
+  TOKEN_STORAGE.clear();
   localStorage.removeItem('nfd_mock_user');
 }

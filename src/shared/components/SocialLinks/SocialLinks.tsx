@@ -1,6 +1,6 @@
-import * as styles from './SocialLinks.module.scss';
+﻿import * as styles from './SocialLinks.module.scss';
 
-const links = [
+const LINKS = [
   {
     href: 'https://t.me',
     label: 'Telegram',
@@ -45,7 +45,7 @@ const links = [
 export function SocialLinks() {
   return (
     <ul className={styles.list}>
-      {links.map((link) => (
+      {LINKS.map((link) => (
         <li key={link.label}>
           <a className={styles.link} href={link.href} rel="noreferrer" target="_blank">
             <svg aria-hidden="true" className={styles.icon} viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
@@ -58,3 +58,5 @@ export function SocialLinks() {
     </ul>
   );
 }
+
+

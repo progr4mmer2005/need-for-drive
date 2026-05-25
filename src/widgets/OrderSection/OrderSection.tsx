@@ -1,4 +1,4 @@
-import {
+﻿import {
   useCallback,
   useEffect,
   useMemo,
@@ -52,25 +52,25 @@ type TOrderState = {
   orderId: string;
 };
 
-const ru = String.fromCharCode;
+const RU = String.fromCharCode;
 const TEXT = {
-  notSelected: ru(1053, 1077, 32, 1074, 1099, 1073, 1088, 1072, 1085, 1072),
-  from: ru(1086, 1090),
-  to: ru(1076, 1086),
-  pickupPoint: ru(1055, 1091, 1085, 1082, 1090, 32, 1074, 1099, 1076, 1072, 1095, 1080),
-  model: ru(1052, 1086, 1076, 1077, 1083, 1100),
-  color: ru(1062, 1074, 1077, 1090),
-  duration: ru(1044, 1083, 1080, 1090, 1077, 1083, 1100, 1085, 1086, 1089, 1090, 1100, 32, 1072, 1088, 1077, 1085, 1076, 1099),
-  rate: ru(1058, 1072, 1088, 1080, 1092),
-  fullTank: ru(1055, 1086, 1083, 1085, 1099, 1081, 32, 1073, 1072, 1082),
-  dayRate: ru(1053, 1072, 32, 1089, 1091, 1090, 1082, 1080),
-  minuteRate: ru(1055, 1086, 1084, 1080, 1085, 1091, 1090, 1085, 1086),
-  yes: ru(1044, 1072),
-  no: ru(1053, 1077, 1090),
-  orderNumber: ru(1047, 1072, 1082, 1072, 1079, 32, 1085, 1086, 1084, 1077, 1088),
+  notSelected: RU(1053, 1077, 32, 1074, 1099, 1073, 1088, 1072, 1085, 1072),
+  from: RU(1086, 1090),
+  to: RU(1076, 1086),
+  pickupPoint: RU(1055, 1091, 1085, 1082, 1090, 32, 1074, 1099, 1076, 1072, 1095, 1080),
+  model: RU(1052, 1086, 1076, 1077, 1083, 1100),
+  color: RU(1062, 1074, 1077, 1090),
+  duration: RU(1044, 1083, 1080, 1090, 1077, 1083, 1100, 1085, 1086, 1089, 1090, 1100, 32, 1072, 1088, 1077, 1085, 1076, 1099),
+  rate: RU(1058, 1072, 1088, 1080, 1092),
+  fullTank: RU(1055, 1086, 1083, 1085, 1099, 1081, 32, 1073, 1072, 1082),
+  dayRate: RU(1053, 1072, 32, 1089, 1091, 1090, 1082, 1080),
+  minuteRate: RU(1055, 1086, 1084, 1080, 1085, 1091, 1090, 1085, 1086),
+  yes: RU(1044, 1072),
+  no: RU(1053, 1077, 1090),
+  orderNumber: RU(1047, 1072, 1082, 1072, 1079, 32, 1085, 1086, 1084, 1077, 1088),
 };
 
-const formatAvailableAt = (value: string) => {
+function formatAvailableAt(value: string) {
   if (!value) {
     return TEXT.notSelected;
   }
@@ -84,7 +84,7 @@ const formatAvailableAt = (value: string) => {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const year = date.getFullYear();
   return `${day}.${month}.${year} 12:00`;
-};
+}
 
 export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
   const navigate = useNavigate();
@@ -476,3 +476,5 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
     </BaseSection>
   );
 }
+
+

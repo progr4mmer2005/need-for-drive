@@ -25,7 +25,7 @@ const IconError: FC = () => (
   <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M6.75 1C3.576 1 1 3.576 1 6.75C1 9.924 3.576 12.5 6.75 12.5C9.924 12.5 12.5 9.924 12.5 6.75C12.5 3.576 9.924 1 6.75 1ZM7.32505 9.62501H6.17505V8.47501H7.32505V9.62501ZM6.17505 7.325H7.32505V3.875H6.17505V7.325Z" fill="currentColor" /></svg>
 );
 
-const navItems = [
+const NAV_ITEMS = [
   { to: '/admin/cars/new', label: 'Карточка автомобиля', Icon: IconCarCard },
   { to: '/admin/cars', label: 'Список авто', Icon: IconCarList },
   { to: '/admin/orders', label: 'Заказы', Icon: IconOrders },
@@ -57,7 +57,7 @@ export function AdminLayout() {
         </div>
 
         <nav className={styles.nav}>
-          {navItems.map(({ to, label, Icon, disabled }) => (disabled ? (
+          {NAV_ITEMS.map(({ to, label, Icon, disabled }) => (disabled ? (
             <span key={to} className={`${styles.navItem} ${styles.navItemDisabled}`} aria-disabled="true">
               <span className={styles.navIcon}><Icon /></span>
               {label}
@@ -87,7 +87,7 @@ export function AdminLayout() {
               <button className={styles.userBtn} type="button" onClick={() => setDropdownOpen((v) => !v)}>
                 <span className={styles.avatar}>A</span>
                 <span className={styles.adminName}>Admin</span>
-                <span className={styles.chevron}>▾</span>
+                <span className={styles.chevron}>?</span>
               </button>
               {dropdownOpen && (
                 <div className={styles.dropdown}>
@@ -111,3 +111,5 @@ export function AdminLayout() {
     </div>
   );
 }
+
+

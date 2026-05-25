@@ -1,12 +1,13 @@
-import {
-  mockCategories, mockCities, mockOrderStatus, mockPoints, mockRates, mockRateTypes,
+﻿import {
+  MOCK_CATEGORIES, MOCK_CITIES, MOCK_ORDER_STATUS, MOCK_POINTS, MOCK_RATES, MOCK_RATE_TYPES,
 } from './mockStore';
 
-export const citiesApi = { getAll: () => mockCities.getAll() };
-export const pointsApi = {
-  getAll: (params?: Record<string, unknown>) => mockPoints.getAll(params),
+export const CITIES_API = { getAll: () => MOCK_CITIES.getAll() };
+export const POINTS_API = {
+  getAll: (params?: Record<string, unknown>) => MOCK_POINTS.getAll(params),
 };
-export const ratesApi = { getAll: () => mockRates.getAll() };
-export const rateTypesApi = { getAll: () => mockRateTypes.getAll() };
-export const categoriesApi = { getAll: () => mockCategories.getAll() };
-export const orderStatusApi = { getAll: () => mockOrderStatus.getAll() };
+export const RATES_API = { getAll: () => MOCK_RATES.getAll() };
+export const RATE_TYPES_API = { getAll: () => MOCK_RATE_TYPES.getAll() };
+export const CATEGORIES_API = { getAll: () => MOCK_CATEGORIES.getAll() };
+export const ORDER_STATUS_API = { getAll: () => MOCK_ORDER_STATUS.getAll() };
+

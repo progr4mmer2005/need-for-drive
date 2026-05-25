@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, PropsWithChildren } from 'react';
+﻿import type { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 
 import { classNames } from '@/shared/lib/classNames';
 import * as styles from './Button.module.scss';
@@ -16,7 +16,7 @@ type TButtonProps = PropsWithChildren<
   }
 >;
 
-const toneClassName: Record<TButtonTone, string> = {
+const TONE_CLASS_NAME: Record<TButtonTone, string> = {
   primary: styles.tonePrimary,
   darkGreen: styles.toneDarkGreen,
   cyan: styles.toneCyan,
@@ -24,7 +24,7 @@ const toneClassName: Record<TButtonTone, string> = {
   purple: styles.tonePurple,
 };
 
-const sizeClassName: Record<TButtonSize, string> = {
+const SIZE_CLASS_NAME: Record<TButtonSize, string> = {
   hero: styles.sizeHero,
   slider: styles.sizeSlider,
   full: styles.sizeFull,
@@ -45,8 +45,8 @@ export function Button({
     <button
       className={classNames(
         styles.button,
-        toneClassName[tone],
-        sizeClassName[size],
+        TONE_CLASS_NAME[tone],
+        SIZE_CLASS_NAME[size],
         fullWidthOnMobile && styles.fullWidthOnMobile,
         squareOnMobile && styles.squareOnMobile,
         disabled && styles.disabled,
@@ -60,3 +60,5 @@ export function Button({
     </button>
   );
 }
+
+

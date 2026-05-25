@@ -1,8 +1,8 @@
 ﻿import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ordersApi } from '@/shared/api/ordersApi';
-import { carsApi } from '@/shared/api/carsApi';
-import { citiesApi, orderStatusApi } from '@/shared/api/citiesApi';
+import { ORDERS_API } from '@/shared/api/ordersApi';
+import { CARS_API } from '@/shared/api/carsApi';
+import { CITIES_API, ORDER_STATUS_API } from '@/shared/api/citiesApi';
 import type { Order, Car, City, OrderStatus } from '@/shared/api/types';
 import { AdminPageTitle } from '@/shared/components/AdminPageTitle';
 import { Loader } from '@/shared/components/Loader';
@@ -10,7 +10,7 @@ import styles from './OrdersPage.module.scss';
 
 const PAGE_SIZE = 10;
 
-const carImages = {
+const CAR_IMAGES = {
   elantra: new URL('../../../assets/images/cars/elantra.png', import.meta.url).toString(),
   i30n: new URL('../../../assets/images/cars/i30n.png', import.meta.url).toString(),
   creta: new URL('../../../assets/images/cars/creta.png', import.meta.url).toString(),
@@ -21,12 +21,12 @@ const carImages = {
 
 function getCarImage(name: string | null | undefined) {
   const normalizedName = (name || '').toLowerCase();
-  if (normalizedName.includes('elantra')) return carImages.elantra;
-  if (normalizedName.includes('creta')) return carImages.creta;
-  if (normalizedName.includes('sonata')) return carImages.sonata;
-  if (normalizedName.includes('solaris')) return carImages.solaris;
-  if (normalizedName.includes('tucson')) return carImages.tucson;
-  return carImages.i30n;
+  if (normalizedName.includes('elantra')) return CAR_IMAGES.elantra;
+  if (normalizedName.includes('creta')) return CAR_IMAGES.creta;
+  if (normalizedName.includes('sonata')) return CAR_IMAGES.sonata;
+  if (normalizedName.includes('solaris')) return CAR_IMAGES.solaris;
+  if (normalizedName.includes('tucson')) return CAR_IMAGES.tucson;
+  return CAR_IMAGES.i30n;
 }
 
 function formatDate(ts: number) {
@@ -53,7 +53,7 @@ export function OrdersPage() {
   const [appliedFilters, setAppliedFilters] = useState({ period: '', car: '', city: '', status: '' });
 
   useEffect(() => {
-    Promise.all([carsApi.getAll({ limit: 100 }), citiesApi.getAll(), orderStatusApi.getAll()])
+    Promise.all([CARS_API.getAll({ limit: 100 }), CITIES_API.getAll(), ORDER_STATUS_API.getAll()])
       .then(([carsData, citiesData, statusData]) => {
         setCars(carsData.data);
         setCities(citiesData.data);
@@ -65,7 +65,7 @@ export function OrdersPage() {
   const fetchOrders = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await ordersApi.getAll({ limit: PAGE_SIZE, page });
+      const data = await ORDERS_API.getAll({ limit: PAGE_SIZE, page });
       setOrders(data.data);
       setTotal(data.count ?? 0);
     } catch (e: unknown) {
@@ -148,8 +148,8 @@ export function OrdersPage() {
               </div>
               <div className={styles.orderPrice}>{formatPrice(order.price)}</div>
               <div className={styles.orderActions}>
-                <button className={`${styles.actionBtn} ${styles.successBtn}`} type="button" onClick={() => ordersApi.update(order.id, { orderStatusId: { id: 4 } }).then(fetchOrders)}>✓ Готово</button>
-                <button className={`${styles.actionBtn} ${styles.dangerBtn}`} type="button" onClick={() => ordersApi.update(order.id, { orderStatusId: { id: 3 } }).then(fetchOrders)}>✕ Отмена</button>
+                <button className={`${styles.actionBtn} ${styles.successBtn}`} type="button" onClick={() => ORDERS_API.update(order.id, { orderStatusId: { id: 4 } }).then(fetchOrders)}>✓ Готово</button>
+                <button className={`${styles.actionBtn} ${styles.dangerBtn}`} type="button" onClick={() => ORDERS_API.update(order.id, { orderStatusId: { id: 3 } }).then(fetchOrders)}>✕ Отмена</button>
                 <button className={`${styles.actionBtn} ${styles.editBtn}`} type="button" onClick={() => navigate(`/admin/orders/${order.id}`)}>⋮ Изменить</button>
               </div>
             </div>
@@ -177,3 +177,8 @@ export function OrdersPage() {
     </div>
   );
 }
+
+
+
+
+
