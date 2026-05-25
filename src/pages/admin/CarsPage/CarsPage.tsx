@@ -1,9 +1,13 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState, type ChangeEvent } from 'react';
 import { CARS_API } from '@/shared/api/carsApi';
 import type { Car } from '@/shared/api/types';
 import { AdminPageTitle } from '@/shared/components/AdminPageTitle';
 import { Loader } from '@/shared/components/Loader';
 import styles from './CarsPage.module.scss';
+
+const PAGE_SIZE = 10;
+const DEFAULT_FILTERS = { model: '', category: '', price: '', color: '' };
+const FALLBACK_PAGES: Array<number | '...'> = [1, '...', 4, 5, 6, '...', 31];
 
 const CAR_IMAGES = {
   elantra: new URL('../../../assets/images/cars/elantra.png', import.meta.url).toString(),
@@ -29,9 +33,8 @@ export function CarsPage() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [draftFilters, setDraftFilters] = useState({ model: '', category: '', price: '', color: '' });
-  const [appliedFilters, setAppliedFilters] = useState({ model: '', category: '', price: '', color: '' });
-  const PAGE_SIZE = 10;
+  const [draftFilters, setDraftFilters] = useState(DEFAULT_FILTERS);
+  const [appliedFilters, setAppliedFilters] = useState(DEFAULT_FILTERS);
 
   useEffect(() => {
     setLoading(true);
@@ -55,9 +58,24 @@ export function CarsPage() {
   });
 
   const resetFilters = () => {
-    const emptyFilters = { model: '', category: '', price: '', color: '' };
-    setDraftFilters(emptyFilters);
-    setAppliedFilters(emptyFilters);
+    setDraftFilters(DEFAULT_FILTERS);
+    setAppliedFilters(DEFAULT_FILTERS);
+  };
+
+  const handleModelChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setDraftFilters((prevFilters) => ({ ...prevFilters, model: event.target.value }));
+  };
+
+  const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setDraftFilters((prevFilters) => ({ ...prevFilters, category: event.target.value }));
+  };
+
+  const handlePriceChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setDraftFilters((prevFilters) => ({ ...prevFilters, price: event.target.value }));
+  };
+
+  const handleColorChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setDraftFilters((prevFilters) => ({ ...prevFilters, color: event.target.value }));
   };
 
   return (
@@ -68,20 +86,20 @@ export function CarsPage() {
 
       <div className={styles.tableWrap}>
         <div className={styles.filters}>
-          <select className={`${styles.filterSelect} ${!draftFilters.model ? styles.filterPlaceholder : ''}`} value={draftFilters.model} onChange={(event) => setDraftFilters((prevFilters) => ({ ...prevFilters, model: event.target.value }))}>
+          <select className={`${styles.filterSelect} ${!draftFilters.model ? styles.filterPlaceholder : ''}`} value={draftFilters.model} onChange={handleModelChange}>
             <option value="">Автомобиль</option>
             {cars.map((car) => <option key={car.id} value={car.id}>{car.name}</option>)}
           </select>
-          <select className={`${styles.filterSelect} ${!draftFilters.category ? styles.filterPlaceholder : ''}`} value={draftFilters.category} onChange={(event) => setDraftFilters((prevFilters) => ({ ...prevFilters, category: event.target.value }))}>
+          <select className={`${styles.filterSelect} ${!draftFilters.category ? styles.filterPlaceholder : ''}`} value={draftFilters.category} onChange={handleCategoryChange}>
             <option value="">Тип</option>
             {categories.map((category) => <option key={category} value={category}>{category}</option>)}
           </select>
-          <select className={`${styles.filterSelect} ${!draftFilters.price ? styles.filterPlaceholder : ''}`} value={draftFilters.price} onChange={(event) => setDraftFilters((prevFilters) => ({ ...prevFilters, price: event.target.value }))}>
+          <select className={`${styles.filterSelect} ${!draftFilters.price ? styles.filterPlaceholder : ''}`} value={draftFilters.price} onChange={handlePriceChange}>
             <option value="">Цена</option>
             <option value="with-price">С ценой</option>
             <option value="no-price">Без цены</option>
           </select>
-          <select className={`${styles.filterSelect} ${!draftFilters.color ? styles.filterPlaceholder : ''}`} value={draftFilters.color} onChange={(event) => setDraftFilters((prevFilters) => ({ ...prevFilters, color: event.target.value }))}>
+          <select className={`${styles.filterSelect} ${!draftFilters.color ? styles.filterPlaceholder : ''}`} value={draftFilters.color} onChange={handleColorChange}>
             <option value="">Цвет</option>
             {colors.map((color) => <option key={color} value={color}>{color}</option>)}
           </select>
@@ -114,15 +132,18 @@ export function CarsPage() {
           {totalPages > 1 ? (
             paginationPages.map((pageNumber) => <button key={pageNumber} type="button" className={`${styles.pageBtn} ${pageNumber === page ? styles.pageBtnActive : ''}`} onClick={() => setPage(pageNumber)}>{pageNumber}</button>)
           ) : (
-            <>
-              <button type="button" className={styles.pageBtn}>1</button>
-              <span className={styles.pageDots}>...</span>
-              <button type="button" className={styles.pageBtn}>4</button>
-              <button type="button" className={styles.pageBtnActive}>5</button>
-              <button type="button" className={styles.pageBtn}>6</button>
-              <span className={styles.pageDots}>...</span>
-              <button type="button" className={styles.pageBtn}>31</button>
-            </>
+            FALLBACK_PAGES.map((pageItem, pageIndex) => {
+              if (pageItem === '...') {
+                return <span key={`dots-${pageIndex}`} className={styles.pageDots}>...</span>;
+              }
+
+              const isActive = pageItem === 5;
+              return (
+                <button key={pageItem} type="button" className={isActive ? styles.pageBtnActive : styles.pageBtn}>
+                  {pageItem}
+                </button>
+              );
+            })
           )}
           <button type="button" className={styles.pageBtn} onClick={() => setPage(totalPages || 1)}>»</button>
         </div>
@@ -130,8 +151,3 @@ export function CarsPage() {
     </div>
   );
 }
-
-
-
-
-

@@ -1,4 +1,4 @@
-﻿import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, type ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ORDERS_API } from '@/shared/api/ordersApi';
 import { CARS_API } from '@/shared/api/carsApi';
@@ -9,6 +9,9 @@ import { Loader } from '@/shared/components/Loader';
 import styles from './OrdersPage.module.scss';
 
 const PAGE_SIZE = 10;
+const DRAFT_FILTERS_DEFAULT = { period: '', car: '', city: '', status: '' };
+const APPLIED_FILTERS_DEFAULT = { period: '', car: '', city: '', status: '' };
+const FALLBACK_PAGES: Array<number | '...'> = [1, '...', 4, 5, 6, '...', 31];
 
 const CAR_IMAGES = {
   elantra: new URL('../../../assets/images/cars/elantra.png', import.meta.url).toString(),
@@ -49,8 +52,8 @@ export function OrdersPage() {
   const [cars, setCars] = useState<Car[]>([]);
   const [cities, setCities] = useState<City[]>([]);
   const [statuses, setStatuses] = useState<OrderStatus[]>([]);
-  const [draftFilters, setDraftFilters] = useState({ period: '', car: '', city: '', status: '' });
-  const [appliedFilters, setAppliedFilters] = useState({ period: '', car: '', city: '', status: '' });
+  const [draftFilters, setDraftFilters] = useState(DRAFT_FILTERS_DEFAULT);
+  const [appliedFilters, setAppliedFilters] = useState(APPLIED_FILTERS_DEFAULT);
 
   useEffect(() => {
     Promise.all([CARS_API.getAll({ limit: 100 }), CITIES_API.getAll(), ORDER_STATUS_API.getAll()])
@@ -91,26 +94,42 @@ export function OrdersPage() {
   const totalPages = Math.ceil(total / PAGE_SIZE);
   const paginationPages = Array.from({ length: Math.min(totalPages, 7) }, (_, pageIndex) => pageIndex + 1);
 
+  const handlePeriodChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setDraftFilters((prevFilters) => ({ ...prevFilters, period: event.target.value }));
+  };
+
+  const handleCarChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setDraftFilters((prevFilters) => ({ ...prevFilters, car: event.target.value }));
+  };
+
+  const handleCityChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setDraftFilters((prevFilters) => ({ ...prevFilters, city: event.target.value }));
+  };
+
+  const handleStatusChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setDraftFilters((prevFilters) => ({ ...prevFilters, status: event.target.value }));
+  };
+
   return (
     <div>
       <AdminPageTitle>Заказы</AdminPageTitle>
       <div className={styles.tableWrap}>
         <div className={styles.filters}>
-          <select className={`${styles.filterSelect} ${!draftFilters.period ? styles.filterPlaceholder : ''}`} value={draftFilters.period} onChange={(event) => setDraftFilters((prevFilters) => ({ ...prevFilters, period: event.target.value }))}>
+          <select className={`${styles.filterSelect} ${!draftFilters.period ? styles.filterPlaceholder : ''}`} value={draftFilters.period} onChange={handlePeriodChange}>
             <option value="">Время</option>
             <option value="week">За неделю</option>
             <option value="month">За месяц</option>
             <option value="all">За всё время</option>
           </select>
-          <select className={`${styles.filterSelect} ${!draftFilters.car ? styles.filterPlaceholder : ''}`} value={draftFilters.car} onChange={(event) => setDraftFilters((prevFilters) => ({ ...prevFilters, car: event.target.value }))}>
+          <select className={`${styles.filterSelect} ${!draftFilters.car ? styles.filterPlaceholder : ''}`} value={draftFilters.car} onChange={handleCarChange}>
             <option value="">Автомобиль</option>
             {cars.map((car) => <option key={car.id} value={car.id}>{car.name}</option>)}
           </select>
-          <select className={`${styles.filterSelect} ${!draftFilters.city ? styles.filterPlaceholder : ''}`} value={draftFilters.city} onChange={(event) => setDraftFilters((prevFilters) => ({ ...prevFilters, city: event.target.value }))}>
+          <select className={`${styles.filterSelect} ${!draftFilters.city ? styles.filterPlaceholder : ''}`} value={draftFilters.city} onChange={handleCityChange}>
             <option value="">Город</option>
             {cities.map((city) => <option key={city.id} value={city.id}>{city.name}</option>)}
           </select>
-          <select className={`${styles.filterSelect} ${!draftFilters.status ? styles.filterPlaceholder : ''}`} value={draftFilters.status} onChange={(event) => setDraftFilters((prevFilters) => ({ ...prevFilters, status: event.target.value }))}>
+          <select className={`${styles.filterSelect} ${!draftFilters.status ? styles.filterPlaceholder : ''}`} value={draftFilters.status} onChange={handleStatusChange}>
             <option value="">В процессе</option>
             {statuses.map((status) => <option key={status.id} value={status.id}>{status.name}</option>)}
           </select>
@@ -161,15 +180,18 @@ export function OrdersPage() {
           {totalPages > 1 ? (
             paginationPages.map((pageNumber) => <button key={pageNumber} type="button" className={`${styles.pageBtn} ${pageNumber === page ? styles.pageBtnActive : ''}`} onClick={() => setPage(pageNumber)}>{pageNumber}</button>)
           ) : (
-            <>
-              <button type="button" className={styles.pageBtn}>1</button>
-              <span className={styles.pageDots}>...</span>
-              <button type="button" className={styles.pageBtn}>4</button>
-              <button type="button" className={styles.pageBtnActive}>5</button>
-              <button type="button" className={styles.pageBtn}>6</button>
-              <span className={styles.pageDots}>...</span>
-              <button type="button" className={styles.pageBtn}>31</button>
-            </>
+            FALLBACK_PAGES.map((pageItem, pageIndex) => {
+              if (pageItem === '...') {
+                return <span key={`dots-${pageIndex}`} className={styles.pageDots}>...</span>;
+              }
+
+              const isActive = pageItem === 5;
+              return (
+                <button key={pageItem} type="button" className={isActive ? styles.pageBtnActive : styles.pageBtn}>
+                  {pageItem}
+                </button>
+              );
+            })
           )}
           <button type="button" className={styles.pageBtn} onClick={() => setPage(totalPages || 1)}>»</button>
         </div>
@@ -177,8 +199,3 @@ export function OrdersPage() {
     </div>
   );
 }
-
-
-
-
-
