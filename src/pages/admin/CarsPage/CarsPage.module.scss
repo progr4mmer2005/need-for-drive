@@ -1,11 +1,11 @@
 .header { display:flex; align-items:flex-start; justify-content:space-between; }
 .tableWrap { background:#fff; border:1px solid #e1e5eb; border-radius:9px; box-shadow:0 2px 8px rgba(90,97,105,.08); overflow:hidden; display:flex; flex-direction:column; height:409px; }
 .filters { min-height:64px; display:flex; align-items:center; gap:16px; padding:0 24px; border-bottom:1px solid #e1e5eb; }
-.filterSelect { width:110.5px; height:29px; border:1px solid #d7dce3; border-radius:4px; padding:0 12px; color:#121212; background:#fff; font:11px Helvetica, Arial, sans-serif; }
+.filterSelect { width:110.5px; height:29px; border:1px solid #d7dce3; border-radius:4px; padding:0 12px; color:#121212; background:#fff; font-size:11px; }
 .filterPlaceholder { color:#868e96; }
 .filterSelect option { color:#121212; }
 .filterSelect option[value=''] { color:#868e96; }
-.resetBtn,.applyBtn { width:95px; height:29px; border:none; border-radius:4px; color:#fff; font:11px Helvetica, Arial, sans-serif; cursor:pointer; }
+.resetBtn,.applyBtn { width:95px; height:29px; border:none; border-radius:4px; color:#fff; font-size:11px; cursor:pointer; }
 .resetBtn { margin-left:auto; background:#c4183c; }
 .applyBtn { background:#007bff; }
 .scrollArea { min-height:0; flex:1; overflow-y:auto; }
@@ -17,7 +17,7 @@
 .carThumb { display:block; width:110px; height:62px; object-fit:contain; }
 .editBtn { height:28px; border:1px solid #d7dce3; border-radius:4px; background:#fff; color:#5a6169; padding:0 10px; font-size:12px; display:inline-flex; align-items:center; text-decoration:none; }
 .pagination { height:48px; border-top:1px solid #f0f2f5; display:flex; align-items:center; justify-content:center; gap:7px; flex-shrink:0; }
-.pageBtn { min-width:14px; height:18px; padding:0; border:none; background:none; color:#007bff; font:14px/18px Helvetica, Arial, sans-serif; cursor:pointer; }
-.pageDots { color:#007bff; font:14px/18px Helvetica, Arial, sans-serif; }
-.pageBtnActive { width:18px; height:18px; padding:0; border:none; border-radius:50%; background:#007bff; color:#fff; font:14px/18px Helvetica, Arial, sans-serif; text-align:center; cursor:pointer; }
+.pageBtn { min-width:14px; height:18px; padding:0; border:none; background:none; color:#007bff; font-size:14px; line-height:18px; cursor:pointer; }
+.pageDots { color:#007bff; font-size:14px; line-height:18px; }
+.pageBtnActive { width:18px; height:18px; padding:0; border:none; border-radius:50%; background:#007bff; color:#fff; font-size:14px; line-height:18px; text-align:center; cursor:pointer; }
 .empty { padding:24px; color:#818ea3; font-size:12px; }
