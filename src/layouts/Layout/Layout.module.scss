@@ -1,4 +1,6 @@
-﻿.layout {
+@use '../../shared/styles/variables' as *;
+
+.layout {
   min-height: 100vh;
   padding-left: 64px;
   display: flex;
@@ -12,7 +14,7 @@
   min-height: 100vh;
 }
 
-@media (max-width: 550px) {
+@media (max-width: $breakpoint-mobile-sm) {
   .layout {
     padding-left: 0;
   }

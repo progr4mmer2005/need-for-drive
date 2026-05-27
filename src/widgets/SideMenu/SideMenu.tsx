@@ -1,8 +1,8 @@
-import { LanguageToggle } from '@/shared/components/LanguageToggle';
+﻿import { LanguageToggle } from '@/shared/components/LanguageToggle';
 import { SocialLinks } from '@/shared/components/SocialLinks';
 import * as styles from './SideMenu.module.scss';
 
-const menuItems = ['Парковка', 'Страховка', 'Бензин', 'Обслуживание'];
+const MENU_ITEMS = ['Парковка', 'Страховка', 'Бензин', 'Обслуживание'];
 
 type TSideMenuProps = {
   activeItem: string;
@@ -25,7 +25,7 @@ export function SideMenu({
         <div className={styles.main}>
           <nav>
             <ul className={styles.links}>
-              {menuItems.map((item) => (
+              {MENU_ITEMS.map((item) => (
                 <li key={item}>
                   <a className={`${styles.link} ${item === activeItem ? styles.linkActive : ''}`} href="#">
                     {item}

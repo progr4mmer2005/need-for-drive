@@ -1,0 +1,10 @@
+@use '../../styles/variables' as *;
+
+.title {
+  color: $text-admin-primary-color;
+  font-size: 29px;
+  font-weight: 400;
+  line-height: 34px;
+  margin: -8px 0 26px;
+}
+

@@ -41,12 +41,12 @@
   display: none;
   z-index: 50;
 
-  @media (max-width: 550px) {
+  @media (max-width: $breakpoint-mobile-sm) {
     display: flex;
   }
 }
 
-@media (max-width: 550px) {
+@media (max-width: $breakpoint-mobile-sm) {
   .buttonMobileOnly.buttonActive {
     opacity: 0;
     visibility: hidden;

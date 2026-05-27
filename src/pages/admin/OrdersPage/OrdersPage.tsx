@@ -1,0 +1,201 @@
+import { useEffect, useState, useCallback, type ChangeEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ORDERS_API } from '@/shared/api/ordersApi';
+import { CARS_API } from '@/shared/api/carsApi';
+import { CITIES_API, ORDER_STATUS_API } from '@/shared/api/citiesApi';
+import type { Order, Car, City, OrderStatus } from '@/shared/api/types';
+import { AdminPageTitle } from '@/shared/components/AdminPageTitle';
+import { Loader } from '@/shared/components/Loader';
+import styles from './OrdersPage.module.scss';
+
+const PAGE_SIZE = 10;
+const DRAFT_FILTERS_DEFAULT = { period: '', car: '', city: '', status: '' };
+const APPLIED_FILTERS_DEFAULT = { period: '', car: '', city: '', status: '' };
+const FALLBACK_PAGES: Array<number | '...'> = [1, '...', 4, 5, 6, '...', 31];
+
+const CAR_IMAGES = {
+  elantra: new URL('../../../assets/images/cars/elantra.png', import.meta.url).toString(),
+  i30n: new URL('../../../assets/images/cars/i30n.png', import.meta.url).toString(),
+  creta: new URL('../../../assets/images/cars/creta.png', import.meta.url).toString(),
+  sonata: new URL('../../../assets/images/cars/sonata.png', import.meta.url).toString(),
+  solaris: new URL('../../../assets/images/cars/solaris.png', import.meta.url).toString(),
+  tucson: new URL('../../../assets/images/cars/tucson.png', import.meta.url).toString(),
+};
+
+function getCarImage(name: string | null | undefined) {
+  const normalizedName = (name || '').toLowerCase();
+  if (normalizedName.includes('elantra')) return CAR_IMAGES.elantra;
+  if (normalizedName.includes('creta')) return CAR_IMAGES.creta;
+  if (normalizedName.includes('sonata')) return CAR_IMAGES.sonata;
+  if (normalizedName.includes('solaris')) return CAR_IMAGES.solaris;
+  if (normalizedName.includes('tucson')) return CAR_IMAGES.tucson;
+  return CAR_IMAGES.i30n;
+}
+
+function formatDate(ts: number) {
+  if (!ts) return '—';
+  return new Date(ts).toLocaleString('ru-RU', {
+    day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit',
+  });
+}
+
+function formatPrice(price: number) {
+  return price ? `${price.toLocaleString('ru-RU')} ₽` : '—';
+}
+
+export function OrdersPage() {
+  const navigate = useNavigate();
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [cars, setCars] = useState<Car[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
+  const [statuses, setStatuses] = useState<OrderStatus[]>([]);
+  const [draftFilters, setDraftFilters] = useState(DRAFT_FILTERS_DEFAULT);
+  const [appliedFilters, setAppliedFilters] = useState(APPLIED_FILTERS_DEFAULT);
+
+  useEffect(() => {
+    Promise.all([CARS_API.getAll({ limit: 100 }), CITIES_API.getAll(), ORDER_STATUS_API.getAll()])
+      .then(([carsData, citiesData, statusData]) => {
+        setCars(carsData.data);
+        setCities(citiesData.data);
+        setStatuses(statusData.data);
+      })
+      .catch(console.error);
+  }, []);
+
+  const fetchOrders = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await ORDERS_API.getAll({ limit: PAGE_SIZE, page });
+      setOrders(data.data);
+      setTotal(data.count ?? 0);
+    } catch (error: unknown) {
+      if ((error as { response?: { status?: number } })?.response?.status === 401) {
+        navigate('/admin/login');
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [page, navigate]);
+
+  useEffect(() => {
+    fetchOrders();
+  }, [fetchOrders]);
+
+  const filtered = orders.filter((order) => {
+    if (appliedFilters.car && order.carId?.id !== Number(appliedFilters.car)) return false;
+    if (appliedFilters.city && order.cityId?.id !== Number(appliedFilters.city)) return false;
+    if (appliedFilters.status && order.orderStatusId?.id !== Number(appliedFilters.status)) return false;
+    return true;
+  });
+
+  const totalPages = Math.ceil(total / PAGE_SIZE);
+  const paginationPages = Array.from({ length: Math.min(totalPages, 7) }, (_, pageIndex) => pageIndex + 1);
+
+  const handlePeriodChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setDraftFilters((prevFilters) => ({ ...prevFilters, period: event.target.value }));
+  };
+
+  const handleCarChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setDraftFilters((prevFilters) => ({ ...prevFilters, car: event.target.value }));
+  };
+
+  const handleCityChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setDraftFilters((prevFilters) => ({ ...prevFilters, city: event.target.value }));
+  };
+
+  const handleStatusChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setDraftFilters((prevFilters) => ({ ...prevFilters, status: event.target.value }));
+  };
+
+  return (
+    <div>
+      <AdminPageTitle>Заказы</AdminPageTitle>
+      <div className={styles.tableWrap}>
+        <div className={styles.filters}>
+          <select className={`${styles.filterSelect} ${!draftFilters.period ? styles.filterPlaceholder : ''}`} value={draftFilters.period} onChange={handlePeriodChange}>
+            <option value="">Время</option>
+            <option value="week">За неделю</option>
+            <option value="month">За месяц</option>
+            <option value="all">За всё время</option>
+          </select>
+          <select className={`${styles.filterSelect} ${!draftFilters.car ? styles.filterPlaceholder : ''}`} value={draftFilters.car} onChange={handleCarChange}>
+            <option value="">Автомобиль</option>
+            {cars.map((car) => <option key={car.id} value={car.id}>{car.name}</option>)}
+          </select>
+          <select className={`${styles.filterSelect} ${!draftFilters.city ? styles.filterPlaceholder : ''}`} value={draftFilters.city} onChange={handleCityChange}>
+            <option value="">Город</option>
+            {cities.map((city) => <option key={city.id} value={city.id}>{city.name}</option>)}
+          </select>
+          <select className={`${styles.filterSelect} ${!draftFilters.status ? styles.filterPlaceholder : ''}`} value={draftFilters.status} onChange={handleStatusChange}>
+            <option value="">В процессе</option>
+            {statuses.map((status) => <option key={status.id} value={status.id}>{status.name}</option>)}
+          </select>
+          <button className={styles.applyBtn} type="button" onClick={() => setAppliedFilters(draftFilters)}>Применить</button>
+        </div>
+
+        <div className={styles.scrollArea}>
+          {loading ? <Loader /> : filtered.length === 0 ? <p className={styles.empty}>Нет заказов</p> : filtered.map((order) => (
+            <div key={order.id} className={styles.orderCard}>
+              <div className={styles.carImg}><img src={getCarImage(order.carId?.name)} alt="" /></div>
+              <div className={styles.orderInfo}>
+                <div className={styles.orderTitle}>
+                  <span>{order.carId?.name?.toUpperCase()}</span>
+                  <span className={styles.orderMuted}> в </span>
+                  <span>{order.cityId?.name}</span>
+                  <span className={styles.orderMuted}>, </span>
+                  <span className={styles.orderAddress}>{order.pointId?.address}</span>
+                </div>
+                <div className={styles.orderDates}>{formatDate(order.dateFrom)} – {formatDate(order.dateTo)}</div>
+                <div className={styles.orderColor}>Цвет: <span>{order.color || '—'}</span></div>
+              </div>
+              <div className={styles.orderExtras}>
+                <span className={`${styles.checkbox} ${order.isFullTank ? styles.checkboxChecked : ''}`}>
+                  <span className={styles.checkboxBox}>{order.isFullTank ? '✓' : ''}</span>
+                  Полный бак
+                </span>
+                <span className={`${styles.checkbox} ${order.isNeedChildChair ? styles.checkboxChecked : ''}`}>
+                  <span className={styles.checkboxBox}>{order.isNeedChildChair ? '✓' : ''}</span>
+                  Детское кресло
+                </span>
+                <span className={`${styles.checkbox} ${order.isRightWheel ? styles.checkboxChecked : ''}`}>
+                  <span className={styles.checkboxBox}>{order.isRightWheel ? '✓' : ''}</span>
+                  Правый руль
+                </span>
+              </div>
+              <div className={styles.orderPrice}>{formatPrice(order.price)}</div>
+              <div className={styles.orderActions}>
+                <button className={`${styles.actionBtn} ${styles.successBtn}`} type="button" onClick={() => ORDERS_API.update(order.id, { orderStatusId: { id: 4 } }).then(fetchOrders)}>✓ Готово</button>
+                <button className={`${styles.actionBtn} ${styles.dangerBtn}`} type="button" onClick={() => ORDERS_API.update(order.id, { orderStatusId: { id: 3 } }).then(fetchOrders)}>✕ Отмена</button>
+                <button className={`${styles.actionBtn} ${styles.editBtn}`} type="button" onClick={() => navigate(`/admin/orders/${order.id}`)}>⋮ Изменить</button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className={styles.pagination}>
+          <button type="button" className={styles.pageBtn} onClick={() => setPage(1)}>«</button>
+          {totalPages > 1 ? (
+            paginationPages.map((pageNumber) => <button key={pageNumber} type="button" className={`${styles.pageBtn} ${pageNumber === page ? styles.pageBtnActive : ''}`} onClick={() => setPage(pageNumber)}>{pageNumber}</button>)
+          ) : (
+            FALLBACK_PAGES.map((pageItem, pageIndex) => {
+              if (pageItem === '...') {
+                return <span key={`dots-${pageIndex}`} className={styles.pageDots}>...</span>;
+              }
+
+              const isActive = pageItem === 5;
+              return (
+                <button key={pageItem} type="button" className={isActive ? styles.pageBtnActive : styles.pageBtn}>
+                  {pageItem}
+                </button>
+              );
+            })
+          )}
+          <button type="button" className={styles.pageBtn} onClick={() => setPage(totalPages || 1)}>»</button>
+        </div>
+      </div>
+    </div>
+  );
+}

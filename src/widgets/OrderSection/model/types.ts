@@ -1,4 +1,4 @@
-import orderData from '@/shared/model/orderData.json';
+﻿import orderData from '@/shared/model/orderData.json';
 
 export type Step = 1 | 2 | 3 | 4 | 5;
 
@@ -14,8 +14,13 @@ export type TSelectedCar = {
   id: string;
   brand: string;
   name: string;
+  category?: string;
   image?: string;
   priceMin: number;
+  plate?: string;
+  fuel?: string;
+  backendId?: number;
+  colors?: string[];
 } | null;
 export type TSelectedRate = { id: string; price: number } | null;
 
@@ -35,11 +40,13 @@ export type TCompletedOrder = {
 
 export type TOrderFlowStep = Exclude<Step, 5>;
 
+const RU = String.fromCharCode;
+
 export const STEP_LABELS: Record<Step, string> = {
-  1: 'Местоположение',
-  2: 'Модель',
-  3: 'Дополнительно',
-  4: 'Итого',
+  1: RU(1052, 1077, 1089, 1090, 1086, 1087, 1086, 1083, 1086, 1078, 1077, 1085, 1080, 1077),
+  2: RU(1052, 1086, 1076, 1077, 1083, 1100),
+  3: RU(1044, 1086, 1087, 1086, 1083, 1085, 1080, 1090, 1077, 1083, 1100, 1085, 1086),
+  4: RU(1048, 1090, 1086, 1075, 1086),
   5: ' ',
 };
 
@@ -58,3 +65,5 @@ export const ROUTE_SEGMENT_TO_STEP: Record<string, TOrderFlowStep> = {
   additional: 3,
   total: 4,
 };
+
+

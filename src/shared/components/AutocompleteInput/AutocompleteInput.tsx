@@ -44,8 +44,8 @@ export const AutocompleteInput: React.FC<IAutocompleteInputProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const nextValue = e.target.value;
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const nextValue = event.target.value;
     setInputValue(nextValue);
     onChange(nextValue);
     setIsOpen(true);

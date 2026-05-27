@@ -1,3 +1,5 @@
+@use '@/shared/styles/variables' as *;
+
 .sidebar {
   position: fixed;
   top: 0;
@@ -12,7 +14,7 @@
   background: #111518;
   padding: 32px 0;
 
-  @media (max-width: 550px) {
+  @media (max-width: $breakpoint-mobile-sm) {
     visibility: hidden;
   }
 }

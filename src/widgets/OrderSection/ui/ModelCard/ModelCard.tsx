@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { TCar } from '@/widgets/OrderSection/model/types';
 import { formatPrice } from '@/widgets/OrderSection/model/formatPrice';
-import { carImages } from '@/widgets/OrderSection/ui/ModelCard/carImages';
+import { getCarImage } from '@/widgets/OrderSection/ui/ModelCard/carImages';
 import * as styles from './ModelCard.module.scss';
 
 type TModelCardProps = {
@@ -14,7 +14,7 @@ type TModelCardProps = {
 export function ModelCard({ car, selected, onSelect }: TModelCardProps) {
   const [hasImageError, setHasImageError] = useState(false);
 
-  const imageSrc = carImages[car.id];
+  const imageSrc = getCarImage(car);
   const hasImage = Boolean(imageSrc) && !hasImageError;
 
   const handleImageError = () => {

@@ -1,11 +1,10 @@
-﻿@use './fonts';
+@use './fonts';
 @use './variables' as *;
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: Roboto, sans-serif;
 }
 
 html,
@@ -14,9 +13,14 @@ body,
   min-height: 100%;
 }
 
+html,
 body {
-  color: $primary-black-color;
-  background: #fff;
+  font-family: Roboto, sans-serif;
+}
+
+body {
+  color: $text-primary-color;
+  background: $white-color;
 }
 
 button,
