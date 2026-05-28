@@ -1,4 +1,4 @@
-﻿import * as styles from './ConfirmModal.module.scss';
+import * as styles from './ConfirmModal.module.scss';
 
 type TConfirmModalProps = {
   isOpen: boolean;
@@ -6,11 +6,10 @@ type TConfirmModalProps = {
   onCancel: () => void;
 };
 
-const RU = String.fromCharCode;
 const TEXT = {
-  title: RU(1055, 1086, 1076, 1090, 1074, 1077, 1088, 1076, 1080, 1090, 1100, 32, 1079, 1072, 1082, 1072, 1079),
-  confirm: RU(1055, 1086, 1076, 1090, 1074, 1077, 1088, 1076, 1080, 1090, 1100),
-  back: RU(1042, 1077, 1088, 1085, 1091, 1090, 1100, 1089, 1103),
+  title: 'Подтвердить заказ',
+  confirm: 'Подтвердить',
+  back: 'Вернуться',
 };
 
 export function ConfirmModal({ isOpen, onConfirm, onCancel }: TConfirmModalProps) {
@@ -34,5 +33,3 @@ export function ConfirmModal({ isOpen, onConfirm, onCancel }: TConfirmModalProps
     </div>
   );
 }
-
-

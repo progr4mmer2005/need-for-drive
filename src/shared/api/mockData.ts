@@ -2,7 +2,6 @@
   City, Point, Category, Car, RateType, Rate, OrderStatus, Order,
 } from './types';
 
-// Seed data used on first run; afterwards everything lives in localStorage
 export const SEED_CATEGORIES: Category[] = [
   { id: 1, name: 'Эконом' },
   { id: 2, name: 'Премиум' },

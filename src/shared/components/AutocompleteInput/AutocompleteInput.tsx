@@ -1,4 +1,4 @@
-import React, {
+﻿import React, {
   useEffect, useMemo, useRef, useState,
 } from 'react';
 import * as styles from './AutocompleteInput.module.scss';
@@ -83,9 +83,9 @@ export const AutocompleteInput: React.FC<IAutocompleteInputProps> = ({
         )}
         {isOpen && !disabled && filteredOptions.length > 0 && (
           <div className={styles.autocompleteDropdown}>
-            {filteredOptions.map((option) => (
+            {filteredOptions.map((option, index) => (
               <button
-                key={option}
+                key={`${option}-${index}`}
                 className={styles.autocompleteOption}
                 type="button"
                 onClick={() => handleOptionClick(option)}

@@ -1,7 +1,6 @@
 ﻿import { TOKEN_STORAGE } from './apiClient';
 import type { AuthResponse } from './types';
 
-// Mock auth — принимает любую пару логин/пароль (валидация только на стороне формы)
 function makeFakeToken(prefix: string, username: string): string {
   const payload = btoa(JSON.stringify({ user: username, t: Date.now() }));
   return `mock-${prefix}-${payload}`;

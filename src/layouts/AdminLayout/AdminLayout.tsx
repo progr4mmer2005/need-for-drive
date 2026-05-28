@@ -82,7 +82,7 @@ export function AdminLayout() {
               <button className={styles.userBtn} type="button" onClick={() => setDropdownOpen((prevDropdownOpen) => !prevDropdownOpen)}>
                 <span className={styles.avatar}>A</span>
                 <span className={styles.adminName}>Admin</span>
-                <span className={styles.chevron}>?</span>
+                <span className={styles.chevron}>▾</span>
               </button>
               {dropdownOpen && (
                 <div className={styles.dropdown}>

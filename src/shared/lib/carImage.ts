@@ -5,13 +5,6 @@ import sonataImg from '@/assets/images/cars/sonata.png';
 import solarisImg from '@/assets/images/cars/solaris.png';
 import tucsonImg from '@/assets/images/cars/tucson.png';
 
-/**
- * Pick a stock car image from /assets/images/cars by car name (case-insensitive
- * substring match). Falls back to i30n when nothing matches.
- *
- * Usage:
- *   <img src={car.thumbnail?.path || pickCarImage(car.name)} alt={car.name} />
- */
 export function pickCarImage(name: string | null | undefined): string {
   const n = (name || '').toLowerCase();
   if (n.includes('elantra')) return elantraImg;

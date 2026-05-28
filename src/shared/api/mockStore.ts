@@ -1,5 +1,4 @@
-﻿/* In-memory + localStorage backed mock store. Mimics the NestJS backend. */
-import {
+﻿import {
   SEED_CARS, SEED_CATEGORIES, SEED_CITIES, SEED_ORDER_STATUSES, SEED_ORDERS,
   SEED_POINTS, SEED_RATE_TYPES, SEED_RATES,
 } from './mockData';
@@ -46,7 +45,6 @@ function loadDb(): DB {
       if (parsed && parsed.cars) return parsed as DB;
     }
   } catch {
-    // ignore
   }
   const fresh = freshDb();
   localStorage.setItem(STORAGE_KEY, JSON.stringify(fresh));
@@ -59,7 +57,6 @@ function saveDb() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
   } catch {
-    // ignore quota errors
   }
 }
 
@@ -68,7 +65,6 @@ export function resetMockDb() {
   saveDb();
 }
 
-// simulate small network delay so loaders are visible
 function delay<T>(value: T, ms = 150): Promise<T> {
   return new Promise((resolve) => setTimeout(() => resolve(value), ms));
 }
@@ -81,7 +77,6 @@ function paginate<T>(items: T[], params?: { limit?: number; page?: number }): Ap
   return { data: items.slice(start, start + params.limit), count: total };
 }
 
-// ----- Cars -----
 export const MOCK_CARS = {
   getAll: (params?: { limit?: number; page?: number }) => delay(paginate(db.cars, params)),
   getOne: (id: number): Promise<ApiResponse<Car>> => {
@@ -126,7 +121,6 @@ export const MOCK_CARS = {
   },
 };
 
-// ----- Orders -----
 export const MOCK_ORDERS = {
   getAll: (params?: { limit?: number; page?: number }) => delay(paginate(db.orders, params)),
   getOne: (id: number): Promise<ApiResponse<Order>> => {
@@ -174,7 +168,6 @@ export const MOCK_ORDERS = {
   },
 };
 
-// ----- Read-only collections -----
 export const MOCK_CITIES = { getAll: () => delay({ data: db.cities, count: db.cities.length }) };
 export const MOCK_POINTS = {
   getAll: (params?: Record<string, unknown>) => {

@@ -1,4 +1,4 @@
-﻿import { memo, useState } from 'react';
+import { memo, useState } from 'react';
 
 import { TCar } from '@/widgets/OrderSection/model/types';
 import { getCarImage } from '@/widgets/OrderSection/ui/ModelCard/carImages';
@@ -9,11 +9,10 @@ type TStepSummaryProps = {
   dateFrom: string;
 };
 
-const RU = String.fromCharCode;
 const TEXT = {
-  defaultPlate: RU(1050, 32, 55, 54, 49, 32, 1053, 1040, 32, 55, 51),
-  fuel: RU(1058, 1086, 1087, 1083, 1080, 1074, 1086),
-  availableFrom: RU(1044, 1086, 1089, 1090, 1091, 1087, 1085, 1072, 32, 1089),
+  defaultPlate: 'К 761 НА 73',
+  fuel: 'Топливо',
+  availableFrom: 'Доступна с',
 };
 
 export const StepSummary = memo(function StepSummary({ car, dateFrom }: TStepSummaryProps) {
@@ -52,5 +51,3 @@ export const StepSummary = memo(function StepSummary({ car, dateFrom }: TStepSum
     </div>
   );
 });
-
-
