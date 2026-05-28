@@ -4,7 +4,6 @@ import cretaImg from '@/assets/images/cars/creta.png';
 import sonataImg from '@/assets/images/cars/sonata.png';
 import solarisImg from '@/assets/images/cars/solaris.png';
 import tucsonImg from '@/assets/images/cars/tucson.png';
-
 export function pickCarImage(name: string | null | undefined): string {
   const n = (name || '').toLowerCase();
   if (n.includes('elantra')) return elantraImg;

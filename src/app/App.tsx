@@ -1,4 +1,4 @@
-﻿import { Suspense, lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from '@/layouts/Layout';
 import { AdminLayout } from '@/layouts/AdminLayout/AdminLayout';
@@ -14,8 +14,11 @@ const CarEditPage = lazy(() => import('@/pages/admin/CarEditPage/CarEditPage').t
 const AdminErrorPage = lazy(() => import('@/pages/admin/AdminErrorPage/AdminErrorPage').then((module) => ({ default: module.AdminErrorPage })));
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isAuthLoading } = useAuth();
+
+  if (isAuthLoading) return <Loader fullHeight />;
   if (!isAuthenticated) return <Navigate to="/admin/login" replace />;
+
   return <>{children}</>;
 }
 

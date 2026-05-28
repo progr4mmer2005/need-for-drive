@@ -185,4 +185,3 @@ export const MOCK_RATE_TYPES = { getAll: () => delay({ data: db.rateTypes, count
 export const MOCK_CATEGORIES = { getAll: () => delay({ data: db.categories, count: db.categories.length }) };
 export const MOCK_ORDER_STATUS = { getAll: () => delay({ data: db.orderStatuses, count: db.orderStatuses.length }) };
 
-

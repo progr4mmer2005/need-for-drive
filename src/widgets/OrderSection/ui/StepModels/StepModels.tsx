@@ -1,11 +1,11 @@
 import { memo } from 'react';
-import orderData from '@/shared/model/orderData.json';
 import { TCar } from '@/widgets/OrderSection/model/types';
 import { ModelCard } from '@/widgets/OrderSection/ui/ModelCard';
 import { RadioOption } from '@/widgets/OrderSection/ui/RadioOption';
 import * as styles from './StepModels.module.scss';
 
 type TStepModelsProps = {
+  categories: string[];
   selectedCategory: string;
   selectedCarId: string | null;
   cars: TCar[];
@@ -14,6 +14,7 @@ type TStepModelsProps = {
 };
 
 export const StepModels = memo(function StepModels({
+  categories,
   selectedCategory,
   selectedCarId,
   cars,
@@ -23,7 +24,7 @@ export const StepModels = memo(function StepModels({
   return (
     <div className={styles.panel}>
       <div className={styles.filtersRow}>
-        {orderData.carCategories.map((category) => (
+        {categories.map((category) => (
           <RadioOption
             key={category}
             checked={selectedCategory === category}

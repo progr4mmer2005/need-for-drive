@@ -17,6 +17,7 @@ type TOrderStepRendererProps = {
   pickupOptions: string[];
   selectedCity: TCity | null;
   selectedPickup: TSelectedPickup;
+  categories: string[];
   selectedCarId: string | null;
   selectedCategory: string;
   selectedColor: string;
@@ -24,6 +25,8 @@ type TOrderStepRendererProps = {
   dateTo: string;
   selectedRateId: string;
   selectedExtraIds: string[];
+  rentalRates: Array<{ id: string; label: string; price: number }>;
+  extras: Array<{ id: string; label: string; price: number }>;
   filteredCars: TCar[];
   selectedCar: TCar | null;
   availableAt: string;
@@ -47,6 +50,7 @@ export function OrderStepRenderer({
   pickupOptions,
   selectedCity,
   selectedPickup,
+  categories,
   selectedCarId,
   selectedCategory,
   selectedColor,
@@ -54,6 +58,8 @@ export function OrderStepRenderer({
   dateTo,
   selectedRateId,
   selectedExtraIds,
+  rentalRates,
+  extras,
   filteredCars,
   selectedCar,
   availableAt,
@@ -88,6 +94,7 @@ export function OrderStepRenderer({
 
       {step === 2 && (
         <StepModels
+          categories={categories}
           selectedCategory={selectedCategory}
           selectedCarId={selectedCarId}
           cars={filteredCars}
@@ -104,6 +111,8 @@ export function OrderStepRenderer({
           dateTo={dateTo}
           selectedRateId={selectedRateId}
           selectedExtraIds={selectedExtraIds}
+          rentalRates={rentalRates}
+          extras={extras}
           onColorChange={onColorChange}
           onDateFromChange={onDateFromChange}
           onDateToChange={onDateToChange}

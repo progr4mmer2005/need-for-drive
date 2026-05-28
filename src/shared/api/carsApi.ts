@@ -1,4 +1,4 @@
-﻿import { MOCK_CARS } from './mockStore';
+﻿import API_CLIENT from './apiClient';
 import type { ApiResponse, Car, QueryParams } from './types';
 
 export interface CarDto {
@@ -6,7 +6,7 @@ export interface CarDto {
   priceMin: number;
   priceMax: number;
   colors: string[];
-  thumbnail: { path: string; originalname: string; mimetype: string } | null;
+  thumbnail: { path: string; originalname: string; mimetype: string; size?: number } | null;
   description?: string;
   number?: string;
   tank?: string;
@@ -14,12 +14,23 @@ export interface CarDto {
 }
 
 export const CARS_API = {
-  getAll: (params?: QueryParams): Promise<ApiResponse<Car[]>> =>
-    MOCK_CARS.getAll(params as { limit?: number; page?: number }),
-  getOne: (id: number) => MOCK_CARS.getOne(id),
-  create: (dto: CarDto) => MOCK_CARS.create(dto as Partial<Car> & { categoryId: { id: number } }),
-  update: (id: number, dto: Partial<CarDto>) =>
-    MOCK_CARS.update(id, dto as Partial<Car> & { categoryId?: { id: number } }),
-  delete: (id: number) => MOCK_CARS.delete(id),
+  getAll: async (params?: QueryParams): Promise<ApiResponse<Car[]>> => {
+    const { data } = await API_CLIENT.get<ApiResponse<Car[]>>('/db/car', { params });
+    return data;
+  },
+  getOne: async (id: number): Promise<ApiResponse<Car>> => {
+    const { data } = await API_CLIENT.get<ApiResponse<Car>>(`/db/car/${id}`);
+    return data;
+  },
+  create: async (dto: CarDto): Promise<ApiResponse<Car>> => {
+    const { data } = await API_CLIENT.post<ApiResponse<Car>>('/db/car/', dto);
+    return data;
+  },
+  update: async (id: number, dto: Partial<CarDto>): Promise<ApiResponse<Car>> => {
+    const { data } = await API_CLIENT.put<ApiResponse<Car>>(`/db/car/${id}`, dto);
+    return data;
+  },
+  delete: async (id: number): Promise<void> => {
+    await API_CLIENT.delete(`/db/car/${id}`);
+  },
 };
-
