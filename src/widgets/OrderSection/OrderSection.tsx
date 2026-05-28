@@ -2,6 +2,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -126,6 +127,7 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
   const navigate = useNavigate();
   const { stepSlug } = useParams<{ stepSlug?: string }>();
   const defaultRange = getDefaultDateRange();
+  const isInitialCityResolved = useRef(false);
 
   const [orderState, setOrderState] = useState<TOrderState>({
     step: 1 as Step,
@@ -164,6 +166,26 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
     ) || null,
     [cities, orderState.cityInput],
   );
+
+  useEffect(() => {
+    if (apiLoading || isInitialCityResolved.current) return;
+
+    setOrderState((prev) => {
+      const nextCity = cities[0]?.name || '';
+      if (prev.cityInput === nextCity) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        cityInput: nextCity,
+        pickupInput: '',
+        selectedPickupId: null,
+      };
+    });
+
+    isInitialCityResolved.current = true;
+  }, [apiLoading, cities]);
 
   const pickupOptions = selectedCity ? selectedCity.pickupPoints.map((point) => point.name) : [];
 

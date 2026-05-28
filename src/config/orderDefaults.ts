@@ -1,5 +1,5 @@
 export const ORDER_DEFAULTS = {
-  CITY: 'Ульяновск',
+  CITY: '',
   COLOR: 'Голубой',
   RATE_ID: 'daily',
   EXTRAS: ['fullTank'] as readonly string[],
