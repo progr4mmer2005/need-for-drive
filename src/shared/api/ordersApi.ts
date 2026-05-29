@@ -1,4 +1,4 @@
-﻿import { MOCK_ORDERS } from './mockStore';
+﻿import API_CLIENT from './apiClient';
 import type { ApiResponse, Order, QueryParams } from './types';
 
 export interface OrderDto {
@@ -17,11 +17,23 @@ export interface OrderDto {
 }
 
 export const ORDERS_API = {
-  getAll: (params?: QueryParams): Promise<ApiResponse<Order[]>> =>
-    MOCK_ORDERS.getAll(params as { limit?: number; page?: number }),
-  getOne: (id: number) => MOCK_ORDERS.getOne(id),
-  create: (dto: OrderDto) => MOCK_ORDERS.create(dto),
-  update: (id: number, dto: Partial<OrderDto>) => MOCK_ORDERS.update(id, dto),
-  delete: (id: number) => MOCK_ORDERS.delete(id),
+  getAll: async (params?: QueryParams): Promise<ApiResponse<Order[]>> => {
+    const { data } = await API_CLIENT.get<ApiResponse<Order[]>>('/db/order', { params });
+    return data;
+  },
+  getOne: async (id: number): Promise<ApiResponse<Order>> => {
+    const { data } = await API_CLIENT.get<ApiResponse<Order>>(`/db/order/${id}`);
+    return data;
+  },
+  create: async (dto: OrderDto): Promise<ApiResponse<Order>> => {
+    const { data } = await API_CLIENT.post<ApiResponse<Order>>('/db/order/', dto);
+    return data;
+  },
+  update: async (id: number, dto: Partial<OrderDto>): Promise<ApiResponse<Order>> => {
+    const { data } = await API_CLIENT.put<ApiResponse<Order>>(`/db/order/${id}`, dto);
+    return data;
+  },
+  delete: async (id: number): Promise<void> => {
+    await API_CLIENT.delete(`/db/order/${id}`);
+  },
 };
-

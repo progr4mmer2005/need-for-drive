@@ -1,4 +1,4 @@
-import { useEffect, useState, type ChangeEvent } from 'react';
+﻿import { useEffect, useState, type ChangeEvent } from 'react';
 import { CARS_API } from '@/shared/api/carsApi';
 import type { Car } from '@/shared/api/types';
 import { AdminPageTitle } from '@/shared/components/AdminPageTitle';
@@ -7,25 +7,12 @@ import styles from './CarsPage.module.scss';
 
 const PAGE_SIZE = 10;
 const DEFAULT_FILTERS = { model: '', category: '', price: '', color: '' };
-const FALLBACK_PAGES: Array<number | '...'> = [1, '...', 4, 5, 6, '...', 31];
 
-const CAR_IMAGES = {
-  elantra: new URL('../../../assets/images/cars/elantra.png', import.meta.url).toString(),
-  i30n: new URL('../../../assets/images/cars/i30n.png', import.meta.url).toString(),
-  creta: new URL('../../../assets/images/cars/creta.png', import.meta.url).toString(),
-  sonata: new URL('../../../assets/images/cars/sonata.png', import.meta.url).toString(),
-  solaris: new URL('../../../assets/images/cars/solaris.png', import.meta.url).toString(),
-  tucson: new URL('../../../assets/images/cars/tucson.png', import.meta.url).toString(),
-};
-
-function getCarImage(name: string | null | undefined) {
-  const normalizedName = (name || '').toLowerCase();
-  if (normalizedName.includes('elantra')) return CAR_IMAGES.elantra;
-  if (normalizedName.includes('creta')) return CAR_IMAGES.creta;
-  if (normalizedName.includes('sonata')) return CAR_IMAGES.sonata;
-  if (normalizedName.includes('solaris')) return CAR_IMAGES.solaris;
-  if (normalizedName.includes('tucson')) return CAR_IMAGES.tucson;
-  return CAR_IMAGES.i30n;
+function buildPaginationPages(current: number, total: number): Array<number | '...'> {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+  if (current <= 4) return [1, 2, 3, 4, 5, '...', total];
+  if (current >= total - 3) return [1, '...', total - 4, total - 3, total - 2, total - 1, total];
+  return [1, '...', current - 1, current, current + 1, '...', total];
 }
 
 export function CarsPage() {
@@ -38,16 +25,26 @@ export function CarsPage() {
 
   useEffect(() => {
     setLoading(true);
-    CARS_API.getAll({ limit: PAGE_SIZE, page })
-      .then((carsResponse) => { setCars(carsResponse.data); setTotal(carsResponse.count ?? 0); })
+
+    const params: Record<string, unknown> = {
+      limit: PAGE_SIZE,
+      page: page - 1,
+    };
+
+    CARS_API.getAll(params)
+      .then((carsResponse) => {
+        setCars(carsResponse.data);
+        setTotal(carsResponse.count ?? 0);
+      })
       .catch(console.error)
       .finally(() => setLoading(false));
   }, [page]);
 
-  const totalPages = Math.ceil(total / PAGE_SIZE);
-  const paginationPages = Array.from({ length: Math.min(totalPages, 7) }, (_, pageIndex) => pageIndex + 1);
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const paginationPages = buildPaginationPages(page, totalPages);
   const categories = Array.from(new Set(cars.map((car) => car.categoryId?.name).filter(Boolean)));
   const colors = Array.from(new Set(cars.flatMap((car) => car.colors || [])));
+
   const filteredCars = cars.filter((car) => {
     if (appliedFilters.model && car.id !== Number(appliedFilters.model)) return false;
     if (appliedFilters.category && car.categoryId?.name !== appliedFilters.category) return false;
@@ -104,7 +101,16 @@ export function CarsPage() {
             {colors.map((color) => <option key={color} value={color}>{color}</option>)}
           </select>
           <button type="button" className={styles.resetBtn} onClick={resetFilters}>Сбросить</button>
-          <button type="button" className={styles.applyBtn} onClick={() => setAppliedFilters(draftFilters)}>Применить</button>
+          <button
+            type="button"
+            className={styles.applyBtn}
+            onClick={() => {
+              setPage(1);
+              setAppliedFilters(draftFilters);
+            }}
+          >
+            Применить
+          </button>
         </div>
 
         <div className={styles.scrollArea}>
@@ -114,7 +120,9 @@ export function CarsPage() {
               <tbody>
                 {filteredCars.map((car) => (
                   <tr key={car.id}>
-                    <td><img className={styles.carThumb} src={getCarImage(car.name)} alt="" /></td>
+                    <td>
+                      {car.thumbnail?.path ? <img className={styles.carThumb} src={car.thumbnail.path} alt="" /> : null}
+                    </td>
                     <td>{car.name}</td>
                     <td>{car.categoryId?.name || '—'}</td>
                     <td>{car.priceMin ? `${car.priceMin.toLocaleString('ru-RU')}` : '—'} / {car.priceMax ? `${car.priceMax.toLocaleString('ru-RU')} ₽` : '—'}</td>
@@ -128,24 +136,25 @@ export function CarsPage() {
         </div>
 
         <div className={styles.pagination}>
-          <button type="button" className={styles.pageBtn} onClick={() => setPage(1)}>«</button>
-          {totalPages > 1 ? (
-            paginationPages.map((pageNumber) => <button key={pageNumber} type="button" className={`${styles.pageBtn} ${pageNumber === page ? styles.pageBtnActive : ''}`} onClick={() => setPage(pageNumber)}>{pageNumber}</button>)
-          ) : (
-            FALLBACK_PAGES.map((pageItem, pageIndex) => {
-              if (pageItem === '...') {
-                return <span key={`dots-${pageIndex}`} className={styles.pageDots}>...</span>;
-              }
+          <button type="button" className={styles.pageBtn} disabled={page === 1} onClick={() => setPage(1)}>«</button>
+          {paginationPages.map((pageItem, pageIndex) => {
+            if (pageItem === '...') {
+              return <span key={`dots-${pageIndex}`} className={styles.pageDots}>...</span>;
+            }
 
-              const isActive = pageItem === 5;
-              return (
-                <button key={pageItem} type="button" className={isActive ? styles.pageBtnActive : styles.pageBtn}>
-                  {pageItem}
-                </button>
-              );
-            })
-          )}
-          <button type="button" className={styles.pageBtn} onClick={() => setPage(totalPages || 1)}>»</button>
+            const isActive = pageItem === page;
+            return (
+              <button
+                key={pageItem}
+                type="button"
+                className={isActive ? styles.pageBtnActive : styles.pageBtn}
+                onClick={() => setPage(pageItem)}
+              >
+                {pageItem}
+              </button>
+            );
+          })}
+          <button type="button" className={styles.pageBtn} disabled={page === totalPages} onClick={() => setPage(totalPages)}>»</button>
         </div>
       </div>
     </div>

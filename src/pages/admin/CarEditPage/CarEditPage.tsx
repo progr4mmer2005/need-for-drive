@@ -5,19 +5,21 @@ import { CATEGORIES_API } from '@/shared/api/citiesApi';
 import type { Car, Category } from '@/shared/api/types';
 import { AdminPageTitle } from '@/shared/components/AdminPageTitle';
 import { Loader } from '@/shared/components/Loader';
-import { pickCarImage } from '@/shared/lib/carImage';
 import styles from './CarEditPage.module.scss';
 
 interface Toast { message: string; type: 'success' | 'error'; }
 interface FormState {
   name: string; categoryId: string; description: string; priceMin: string; priceMax: string;
-  number: string; tank: string; colorInput: string; colors: string[]; thumbnailPath: string; thumbnailName: string;
+  number: string; tank: string; colorInput: string; colors: string[]; thumbnailPath: string; thumbnailName: string; thumbnailMime: string;
 }
 
 const INITIAL: FormState = {
   name: '', categoryId: '', description: '', priceMin: '', priceMax: '', number: '', tank: '',
-  colorInput: '', colors: [], thumbnailPath: '', thumbnailName: '',
+  colorInput: '', colors: [], thumbnailPath: '', thumbnailName: '', thumbnailMime: '',
 };
+
+const MAX_IMAGE_SIDE = 1024;
+const MAX_IMAGE_BYTES = 85 * 1024;
 
 function calcProgress(form: FormState): number {
   const fields = [form.name, form.categoryId, form.colors.length > 0 ? 'ok' : '', form.priceMin, form.priceMax];
@@ -37,8 +39,21 @@ export function CarEditPage() {
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<Toast | null>(null);
   const [previewUrl, setPreviewUrl] = useState('');
+  const [previewBroken, setPreviewBroken] = useState(false);
 
-  useEffect(() => { CATEGORIES_API.getAll().then((categoriesResponse) => setCategories(categoriesResponse.data)).catch(console.error); }, []);
+  useEffect(() => {
+    CATEGORIES_API.getAll()
+      .then((categoriesResponse) => {
+        setCategories(categoriesResponse.data);
+        if (isNew && categoriesResponse.data.length > 0) {
+          setForm((prevForm) => ({
+            ...prevForm,
+            categoryId: prevForm.categoryId || String(categoriesResponse.data[0].id),
+          }));
+        }
+      })
+      .catch(console.error);
+  }, [isNew]);
 
   useEffect(() => {
     if (!isNew && id) {
@@ -57,8 +72,10 @@ export function CarEditPage() {
           colors: car.colors || [],
           thumbnailPath: car.thumbnail?.path || '',
           thumbnailName: car.thumbnail?.originalname || '',
+          thumbnailMime: car.thumbnail?.mimetype || '',
         });
         if (car.thumbnail?.path) setPreviewUrl(car.thumbnail.path);
+        setPreviewBroken(false);
       }).catch(console.error).finally(() => setLoading(false));
     }
   }, [id, isNew]);
@@ -68,16 +85,28 @@ export function CarEditPage() {
     setTimeout(() => setToast(null), 3000);
   };
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
     if (!['image/jpeg', 'image/png', 'image/gif', 'image/bmp'].includes(file.type)) {
       showToast('Допустимые форматы: JPEG, PNG, GIF и BMP', 'error');
       return;
     }
-    const url = URL.createObjectURL(file);
-    setPreviewUrl(url);
-    setForm((prevForm) => ({ ...prevForm, thumbnailPath: url, thumbnailName: file.name }));
+    try {
+      const sourceDataUrl = await fileToDataUrl(file);
+      const compressed = await compressImageDataUrl(sourceDataUrl, file.type);
+      setPreviewUrl(compressed.dataUrl);
+      setPreviewBroken(false);
+      setForm((prevForm) => ({
+        ...prevForm,
+        thumbnailPath: compressed.dataUrl,
+        thumbnailName: file.name,
+        thumbnailMime: compressed.mime,
+      }));
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Не удалось обработать файл';
+      showToast(message, 'error');
+    }
   };
 
   const addColor = () => {
@@ -102,10 +131,18 @@ export function CarEditPage() {
     if (!validate()) return;
     setSaving(true);
     try {
+      const thumbnail = form.thumbnailPath
+        ? {
+          path: form.thumbnailPath,
+          originalname: form.thumbnailName || 'upload.png',
+          mimetype: form.thumbnailMime || 'image/png',
+          size: 0,
+        }
+        : null;
       const dto = {
         name: form.name.trim(), priceMin: Number(form.priceMin) || 0, priceMax: Number(form.priceMax) || 0,
         colors: form.colors, description: form.description, number: form.number, tank: form.tank,
-        thumbnail: form.thumbnailPath ? { path: form.thumbnailPath, originalname: form.thumbnailName, mimetype: 'image/jpeg' } : null,
+        ...(thumbnail ? { thumbnail } : {}),
         categoryId: { id: Number(form.categoryId) },
       };
       if (isNew) {
@@ -116,8 +153,9 @@ export function CarEditPage() {
         await CARS_API.update(Number(id), dto);
         showToast('Успех! Машина сохранена', 'success');
       }
-    } catch {
-      showToast('Ошибка при сохранении', 'error');
+    } catch (error: unknown) {
+      const serverMessage = (error as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      showToast(serverMessage || 'Ошибка при сохранении', 'error');
     } finally {
       setSaving(false);
     }
@@ -148,8 +186,12 @@ export function CarEditPage() {
         <div className={styles.previewCard}>
           <div className={styles.previewSection}>
             <div className={styles.previewImg}>
-              {(previewUrl || form.name) && (
-                <img src={previewUrl || pickCarImage(form.name)} alt={form.name || ''} />
+              {previewUrl && !previewBroken && (
+                <img
+                  src={previewUrl}
+                  alt=""
+                  onError={() => setPreviewBroken(true)}
+                />
               )}
             </div>
             <div className={styles.previewName}>{form.name || 'Модель автомобиля'}</div>
@@ -187,3 +229,53 @@ export function CarEditPage() {
   );
 }
 
+  const fileToDataUrl = (file: File) => new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ''));
+    reader.onerror = () => reject(new Error('Не удалось прочитать файл'));
+    reader.readAsDataURL(file);
+  });
+
+  const loadImage = (src: string) => new Promise<HTMLImageElement>((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error('Не удалось загрузить изображение'));
+    img.src = src;
+  });
+
+  const base64SizeBytes = (base64: string) => {
+    const payload = base64.split(',')[1] || '';
+    return Math.ceil((payload.length * 3) / 4);
+  };
+
+  const compressImageDataUrl = async (sourceDataUrl: string, sourceType: string): Promise<{ dataUrl: string; mime: string }> => {
+    const image = await loadImage(sourceDataUrl);
+
+    let ratio = Math.min(MAX_IMAGE_SIDE / image.width, MAX_IMAGE_SIDE / image.height, 1);
+    let dataUrl = '';
+
+    const renderPng = (targetRatio: number) => {
+      const width = Math.max(1, Math.round(image.width * targetRatio));
+      const height = Math.max(1, Math.round(image.height * targetRatio));
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('Не удалось подготовить изображение');
+      ctx.drawImage(image, 0, 0, width, height);
+      return canvas.toDataURL('image/png');
+    };
+
+    dataUrl = renderPng(ratio);
+
+    while (base64SizeBytes(dataUrl) > MAX_IMAGE_BYTES && ratio > 0.08) {
+      ratio *= 0.86;
+      dataUrl = renderPng(ratio);
+    }
+
+    if (base64SizeBytes(dataUrl) > MAX_IMAGE_BYTES) {
+      throw new Error('Изображение слишком большое. Возьми файл поменьше.');
+    }
+
+    return { dataUrl, mime: 'image/png' };
+  };

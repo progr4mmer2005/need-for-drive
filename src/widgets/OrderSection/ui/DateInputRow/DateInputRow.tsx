@@ -21,7 +21,12 @@ export function DateInputRow({
     <div className={styles.row}>
       <span className={styles.prefix}>{prefix}</span>
       <div className={styles.inputWrap}>
-        <input type="date" value={value} placeholder={placeholder} onChange={(event) => onChange(event.target.value)} />
+        <input
+          type="datetime-local"
+          value={value}
+          placeholder={placeholder}
+          onChange={(event) => onChange(event.target.value)}
+        />
         {showClear && Boolean(value) && (
           <button className={styles.clearBtn} type="button" onClick={onClear}>
             ×

@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import orderData from '@/shared/model/orderData.json';
 import { TCar } from '@/widgets/OrderSection/model/types';
 import { formatPrice } from '@/widgets/OrderSection/model/formatPrice';
 import { CheckboxOption } from '@/widgets/OrderSection/ui/CheckboxOption';
@@ -8,6 +7,17 @@ import { RadioOption } from '@/widgets/OrderSection/ui/RadioOption';
 import { SectionTitle } from '@/widgets/OrderSection/ui/SectionTitle';
 import * as styles from './StepExtras.module.scss';
 
+type TRate = {
+  id: string;
+  label: string;
+};
+
+type TExtra = {
+  id: string;
+  label: string;
+  price: number;
+};
+
 type TStepExtrasProps = {
   selectedCar: TCar;
   selectedColor: string;
@@ -15,6 +25,8 @@ type TStepExtrasProps = {
   dateTo: string;
   selectedRateId: string;
   selectedExtraIds: string[];
+  rentalRates: TRate[];
+  extras: TExtra[];
   onColorChange: (color: string) => void;
   onDateFromChange: (value: string) => void;
   onDateToChange: (value: string) => void;
@@ -29,6 +41,8 @@ export const StepExtras = memo(function StepExtras({
   dateTo,
   selectedRateId,
   selectedExtraIds,
+  rentalRates,
+  extras,
   onColorChange,
   onDateFromChange,
   onDateToChange,
@@ -68,7 +82,7 @@ export const StepExtras = memo(function StepExtras({
 
       <SectionTitle text="Тариф" />
       <div className={styles.column}>
-        {orderData.rentalRates.map((rate) => (
+        {rentalRates.map((rate) => (
           <RadioOption
             key={rate.id}
             checked={selectedRateId === rate.id}
@@ -81,7 +95,7 @@ export const StepExtras = memo(function StepExtras({
 
       <SectionTitle text="Доп услуги" />
       <div className={styles.column}>
-        {orderData.extras.map((extra) => (
+        {extras.map((extra) => (
           <CheckboxOption
             key={extra.id}
             checked={selectedExtraIds.includes(extra.id)}

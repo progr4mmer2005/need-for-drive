@@ -1,6 +1,6 @@
-import { useEffect, useState, useCallback, type ChangeEvent } from 'react';
+﻿import { useEffect, useState, useCallback, type ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ORDERS_API } from '@/shared/api/ordersApi';
+import { ORDERS_API, type OrderDto } from '@/shared/api/ordersApi';
 import { CARS_API } from '@/shared/api/carsApi';
 import { CITIES_API, ORDER_STATUS_API } from '@/shared/api/citiesApi';
 import type { Order, Car, City, OrderStatus } from '@/shared/api/types';
@@ -11,26 +11,6 @@ import styles from './OrdersPage.module.scss';
 const PAGE_SIZE = 10;
 const DRAFT_FILTERS_DEFAULT = { period: '', car: '', city: '', status: '' };
 const APPLIED_FILTERS_DEFAULT = { period: '', car: '', city: '', status: '' };
-const FALLBACK_PAGES: Array<number | '...'> = [1, '...', 4, 5, 6, '...', 31];
-
-const CAR_IMAGES = {
-  elantra: new URL('../../../assets/images/cars/elantra.png', import.meta.url).toString(),
-  i30n: new URL('../../../assets/images/cars/i30n.png', import.meta.url).toString(),
-  creta: new URL('../../../assets/images/cars/creta.png', import.meta.url).toString(),
-  sonata: new URL('../../../assets/images/cars/sonata.png', import.meta.url).toString(),
-  solaris: new URL('../../../assets/images/cars/solaris.png', import.meta.url).toString(),
-  tucson: new URL('../../../assets/images/cars/tucson.png', import.meta.url).toString(),
-};
-
-function getCarImage(name: string | null | undefined) {
-  const normalizedName = (name || '').toLowerCase();
-  if (normalizedName.includes('elantra')) return CAR_IMAGES.elantra;
-  if (normalizedName.includes('creta')) return CAR_IMAGES.creta;
-  if (normalizedName.includes('sonata')) return CAR_IMAGES.sonata;
-  if (normalizedName.includes('solaris')) return CAR_IMAGES.solaris;
-  if (normalizedName.includes('tucson')) return CAR_IMAGES.tucson;
-  return CAR_IMAGES.i30n;
-}
 
 function formatDate(ts: number) {
   if (!ts) return '—';
@@ -41,6 +21,30 @@ function formatDate(ts: number) {
 
 function formatPrice(price: number) {
   return price ? `${price.toLocaleString('ru-RU')} ₽` : '—';
+}
+
+function buildPaginationPages(current: number, total: number): Array<number | '...'> {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+  if (current <= 4) return [1, 2, 3, 4, 5, '...', total];
+  if (current >= total - 3) return [1, '...', total - 4, total - 3, total - 2, total - 1, total];
+  return [1, '...', current - 1, current, current + 1, '...', total];
+}
+
+function toOrderDto(order: Order, statusId?: number): OrderDto {
+  return {
+    orderStatusId: statusId ? { id: statusId } : order.orderStatusId ? { id: order.orderStatusId.id } : undefined,
+    cityId: { id: order.cityId.id },
+    pointId: { id: order.pointId.id },
+    carId: { id: order.carId.id },
+    rateId: { id: order.rateId.id },
+    color: order.color,
+    dateFrom: order.dateFrom,
+    dateTo: order.dateTo,
+    price: order.price,
+    isFullTank: order.isFullTank,
+    isNeedChildChair: order.isNeedChildChair,
+    isRightWheel: order.isRightWheel,
+  };
 }
 
 export function OrdersPage() {
@@ -56,7 +60,7 @@ export function OrdersPage() {
   const [appliedFilters, setAppliedFilters] = useState(APPLIED_FILTERS_DEFAULT);
 
   useEffect(() => {
-    Promise.all([CARS_API.getAll({ limit: 100 }), CITIES_API.getAll(), ORDER_STATUS_API.getAll()])
+    Promise.all([CARS_API.getAll({ limit: 1000 }), CITIES_API.getAll(), ORDER_STATUS_API.getAll()])
       .then(([carsData, citiesData, statusData]) => {
         setCars(carsData.data);
         setCities(citiesData.data);
@@ -68,7 +72,16 @@ export function OrdersPage() {
   const fetchOrders = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await ORDERS_API.getAll({ limit: PAGE_SIZE, page });
+      const params: Record<string, number> = {
+        limit: PAGE_SIZE,
+        page: page - 1,
+      };
+
+      if (appliedFilters.car) params.carId = Number(appliedFilters.car);
+      if (appliedFilters.city) params.cityId = Number(appliedFilters.city);
+      if (appliedFilters.status) params.orderStatusId = Number(appliedFilters.status);
+
+      const data = await ORDERS_API.getAll(params);
       setOrders(data.data);
       setTotal(data.count ?? 0);
     } catch (error: unknown) {
@@ -78,21 +91,14 @@ export function OrdersPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, navigate]);
+  }, [page, appliedFilters, navigate]);
 
   useEffect(() => {
     fetchOrders();
   }, [fetchOrders]);
 
-  const filtered = orders.filter((order) => {
-    if (appliedFilters.car && order.carId?.id !== Number(appliedFilters.car)) return false;
-    if (appliedFilters.city && order.cityId?.id !== Number(appliedFilters.city)) return false;
-    if (appliedFilters.status && order.orderStatusId?.id !== Number(appliedFilters.status)) return false;
-    return true;
-  });
-
-  const totalPages = Math.ceil(total / PAGE_SIZE);
-  const paginationPages = Array.from({ length: Math.min(totalPages, 7) }, (_, pageIndex) => pageIndex + 1);
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const paginationPages = buildPaginationPages(page, totalPages);
 
   const handlePeriodChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setDraftFilters((prevFilters) => ({ ...prevFilters, period: event.target.value }));
@@ -133,13 +139,24 @@ export function OrdersPage() {
             <option value="">В процессе</option>
             {statuses.map((status) => <option key={status.id} value={status.id}>{status.name}</option>)}
           </select>
-          <button className={styles.applyBtn} type="button" onClick={() => setAppliedFilters(draftFilters)}>Применить</button>
+          <button
+            className={styles.applyBtn}
+            type="button"
+            onClick={() => {
+              setPage(1);
+              setAppliedFilters(draftFilters);
+            }}
+          >
+            Применить
+          </button>
         </div>
 
         <div className={styles.scrollArea}>
-          {loading ? <Loader /> : filtered.length === 0 ? <p className={styles.empty}>Нет заказов</p> : filtered.map((order) => (
+          {loading ? <Loader /> : orders.length === 0 ? <p className={styles.empty}>Нет заказов</p> : orders.map((order) => (
             <div key={order.id} className={styles.orderCard}>
-              <div className={styles.carImg}><img src={getCarImage(order.carId?.name)} alt="" /></div>
+              <div className={styles.carImg}>
+                {order.carId?.thumbnail?.path ? <img src={order.carId.thumbnail.path} alt="" /> : null}
+              </div>
               <div className={styles.orderInfo}>
                 <div className={styles.orderTitle}>
                   <span>{order.carId?.name?.toUpperCase()}</span>
@@ -167,8 +184,8 @@ export function OrdersPage() {
               </div>
               <div className={styles.orderPrice}>{formatPrice(order.price)}</div>
               <div className={styles.orderActions}>
-                <button className={`${styles.actionBtn} ${styles.successBtn}`} type="button" onClick={() => ORDERS_API.update(order.id, { orderStatusId: { id: 4 } }).then(fetchOrders)}>✓ Готово</button>
-                <button className={`${styles.actionBtn} ${styles.dangerBtn}`} type="button" onClick={() => ORDERS_API.update(order.id, { orderStatusId: { id: 3 } }).then(fetchOrders)}>✕ Отмена</button>
+                <button className={`${styles.actionBtn} ${styles.successBtn}`} type="button" onClick={() => ORDERS_API.update(order.id, toOrderDto(order, 4)).then(fetchOrders)}>✓ Готово</button>
+                <button className={`${styles.actionBtn} ${styles.dangerBtn}`} type="button" onClick={() => ORDERS_API.update(order.id, toOrderDto(order, 3)).then(fetchOrders)}>✕ Отмена</button>
                 <button className={`${styles.actionBtn} ${styles.editBtn}`} type="button" onClick={() => navigate(`/admin/orders/${order.id}`)}>⋮ Изменить</button>
               </div>
             </div>
@@ -176,24 +193,25 @@ export function OrdersPage() {
         </div>
 
         <div className={styles.pagination}>
-          <button type="button" className={styles.pageBtn} onClick={() => setPage(1)}>«</button>
-          {totalPages > 1 ? (
-            paginationPages.map((pageNumber) => <button key={pageNumber} type="button" className={`${styles.pageBtn} ${pageNumber === page ? styles.pageBtnActive : ''}`} onClick={() => setPage(pageNumber)}>{pageNumber}</button>)
-          ) : (
-            FALLBACK_PAGES.map((pageItem, pageIndex) => {
-              if (pageItem === '...') {
-                return <span key={`dots-${pageIndex}`} className={styles.pageDots}>...</span>;
-              }
+          <button type="button" className={styles.pageBtn} disabled={page === 1} onClick={() => setPage(1)}>«</button>
+          {paginationPages.map((pageItem, pageIndex) => {
+            if (pageItem === '...') {
+              return <span key={`dots-${pageIndex}`} className={styles.pageDots}>...</span>;
+            }
 
-              const isActive = pageItem === 5;
-              return (
-                <button key={pageItem} type="button" className={isActive ? styles.pageBtnActive : styles.pageBtn}>
-                  {pageItem}
-                </button>
-              );
-            })
-          )}
-          <button type="button" className={styles.pageBtn} onClick={() => setPage(totalPages || 1)}>»</button>
+            const isActive = pageItem === page;
+            return (
+              <button
+                key={pageItem}
+                type="button"
+                className={isActive ? styles.pageBtnActive : styles.pageBtn}
+                onClick={() => setPage(pageItem)}
+              >
+                {pageItem}
+              </button>
+            );
+          })}
+          <button type="button" className={styles.pageBtn} disabled={page === totalPages} onClick={() => setPage(totalPages)}>»</button>
         </div>
       </div>
     </div>

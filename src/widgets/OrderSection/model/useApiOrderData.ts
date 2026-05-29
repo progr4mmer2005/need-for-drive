@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CITIES_API, POINTS_API, RATES_API } from '@/shared/api/citiesApi';
 import { CARS_API } from '@/shared/api/carsApi';
 import type { City, Point, Car as ApiCar, Rate } from '@/shared/api/types';
@@ -62,6 +62,14 @@ function pseudoCoord(seed: number, offset: number) {
   return ((seed * 7919 + offset) % 80) + 10;
 }
 
+function decodeUnicodeEscapes(value: string) {
+  return value.replace(/\\u([0-9a-fA-F]{4})/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
+}
+
+function normalizeText(value: string) {
+  return decodeUnicodeEscapes(String(value || '')).trim();
+}
+
 export function useApiOrderData() {
   const [data, setData] = useState<ApiOrderData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -91,11 +99,11 @@ export function useApiOrderData() {
             return {
               id: `city-${city.id}`,
               backendId: city.id,
-              name: city.name,
+              name: normalizeText(city.name),
               mapCenter: { x: 50, y: 50 },
               pickupPoints: cityPoints.map((point: Point, pointIndex: number) => ({
                 id: `point-${point.id}`,
-                name: point.name,
+                name: normalizeText(point.name),
                 x: pseudoCoord(point.id, pointIndex * 13),
                 y: pseudoCoord(point.id + 1, pointIndex * 17),
               })),
@@ -108,6 +116,12 @@ export function useApiOrderData() {
             const rawFuel = String(car.tank || '').trim();
             const fuel = rawFuel ? (rawFuel.includes('%') ? rawFuel : `${rawFuel}%`) : '100%';
 
+            const mappedColors = (car.colors || []).map((color) => {
+              const normalized = normalizeText(color);
+              const key = normalized.toLowerCase();
+              return COLOR_RU_MAP[key] || normalized;
+            });
+
             return {
               id: `car-${car.id}`,
               backendId: car.id,
@@ -115,25 +129,29 @@ export function useApiOrderData() {
               name: rest,
               category: car.categoryId?.id === 1 ? ECONOMY_CATEGORY : PREMIUM_CATEGORY,
               image: car.thumbnail?.path || '',
-              priceMin: car.priceMin || 0,
-              priceMax: car.priceMax || 0,
-              colors: car.colors || [],
+              priceMin: Number(car.priceMin || 0),
+              priceMax: Number(car.priceMax || 0),
+              colors: mappedColors,
               plate: car.number || DEFAULT_PLATE,
               fuel,
             };
           }),
-          rentalRates: rates.map((rate: Rate) => ({
-            id: rate.rateTypeId?.name?.toLowerCase().includes(RATE_DAILY_MARKER) ? 'daily' : 'minute',
-            label: `${rate.rateTypeId?.name || DEFAULT_RATE_LABEL}, ${rate.price} ${RUBLE_SIGN}/${rate.rateTypeId?.unit || ''}`,
-            price: rate.price,
-            backendId: rate.id,
-          })),
+          rentalRates: rates.map((rate: Rate) => {
+            const rateTypeName = normalizeText(rate.rateTypeId?.name || '');
+            const rateUnit = normalizeText(rate.rateTypeId?.unit || '');
+            return {
+              id: rateTypeName.toLowerCase().includes(RATE_DAILY_MARKER) ? 'daily' : 'minute',
+              label: `${rateTypeName || DEFAULT_RATE_LABEL}, ${rate.price} ${RUBLE_SIGN}/${rateUnit}`,
+              price: Number(rate.price || 0),
+              backendId: rate.id,
+            };
+          }),
           extras: EXTRAS_STATIC,
         };
         setData(mapped);
       })
-      .catch((error: Error) => {
-        if (!cancelled) setError(error.message || LOAD_ERROR);
+      .catch((err: Error) => {
+        if (!cancelled) setError(err.message || LOAD_ERROR);
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -146,6 +164,3 @@ export function useApiOrderData() {
 
   return { data, loading, error };
 }
-
-
-

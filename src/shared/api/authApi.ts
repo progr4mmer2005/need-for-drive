@@ -1,29 +1,47 @@
-﻿import { TOKEN_STORAGE } from './apiClient';
+﻿import axios from 'axios';
+import API_CLIENT, { API_BASE_URL, TOKEN_STORAGE } from './apiClient';
 import type { AuthResponse } from './types';
 
-function makeFakeToken(prefix: string, username: string): string {
-  const payload = btoa(JSON.stringify({ user: username, t: Date.now() }));
-  return `mock-${prefix}-${payload}`;
+export async function login(username: string, password: string): Promise<AuthResponse> {
+  const { data } = await axios.post<AuthResponse>(`${API_BASE_URL}/auth/login`, {
+    username,
+    password,
+  });
+
+  TOKEN_STORAGE.setAccess(data.access_token);
+  TOKEN_STORAGE.setRefresh(data.refresh_token);
+  return data;
 }
 
-export async function login(username: string, password: string): Promise<AuthResponse> {
-  if (!username || !password) {
-    throw new Error('Пустой логин или пароль');
-  }
-  await new Promise((resolve) => setTimeout(resolve, 200));
-  const resp: AuthResponse = {
-    access_token: makeFakeToken('access', username),
-    refresh_token: makeFakeToken('refresh', username),
-    expires_in: 3600000,
-  };
-  TOKEN_STORAGE.setAccess(resp.access_token);
-  TOKEN_STORAGE.setRefresh(resp.refresh_token);
-  localStorage.setItem('nfd_mock_user', username);
-  return resp;
+export async function register(username: string, password: string): Promise<AuthResponse> {
+  const { data } = await axios.post<AuthResponse>(`${API_BASE_URL}/auth/registration`, {
+    username,
+    password,
+  });
+
+  TOKEN_STORAGE.setAccess(data.access_token);
+  TOKEN_STORAGE.setRefresh(data.refresh_token);
+  return data;
+}
+
+export async function refreshToken(): Promise<AuthResponse> {
+  const refresh = TOKEN_STORAGE.getRefresh();
+  if (!refresh) throw new Error('Refresh token is missing');
+
+  const { data } = await axios.post<AuthResponse>(`${API_BASE_URL}/auth/refresh`, {
+    refresh_token: refresh,
+  });
+
+  TOKEN_STORAGE.setAccess(data.access_token);
+  TOKEN_STORAGE.setRefresh(data.refresh_token);
+  return data;
 }
 
 export async function logout(): Promise<void> {
-  await new Promise((resolve) => setTimeout(resolve, 100));
+  try {
+    await API_CLIENT.post('/auth/logout');
+  } catch {
+  }
+
   TOKEN_STORAGE.clear();
-  localStorage.removeItem('nfd_mock_user');
 }

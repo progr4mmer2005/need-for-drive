@@ -1,12 +1,12 @@
-﻿import {
+import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import staticOrderData from '@/shared/model/orderData.json';
 import { BaseSection } from '@/widgets/BaseSection';
 import { Loader } from '@/shared/components/Loader';
 import { useApiOrderData } from './model/useApiOrderData';
@@ -69,25 +69,65 @@ const TEXT = {
   orderNumber: 'Заказ номер',
 };
 
+function toLocalDateTimeValue(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+function getDefaultDateRange() {
+  const from = new Date();
+  from.setSeconds(0, 0);
+  const to = new Date(from);
+  to.setDate(to.getDate() + 1);
+  return {
+    from: toLocalDateTimeValue(from),
+    to: toLocalDateTimeValue(to),
+  };
+}
+
 function formatAvailableAt(value: string) {
   if (!value) {
     return TEXT.notSelected;
   }
-
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) {
     return value;
   }
-
   const day = String(date.getDate()).padStart(2, '0');
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const year = date.getFullYear();
-  return `${day}.${month}.${year} 12:00`;
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${day}.${month}.${year} ${hours}:${minutes}`;
+}
+
+function formatDuration(dateFrom: string, dateTo: string) {
+  if (!dateFrom || !dateTo) {
+    return TEXT.notSelected;
+  }
+
+  const from = new Date(dateFrom).getTime();
+  const to = new Date(dateTo).getTime();
+  if (!Number.isFinite(from) || !Number.isFinite(to) || to <= from) {
+    return TEXT.notSelected;
+  }
+
+  const totalMinutes = Math.floor((to - from) / (1000 * 60));
+  const days = Math.floor(totalMinutes / (60 * 24));
+  const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
+  const minutes = totalMinutes % 60;
+  return `${days}д ${hours}ч ${minutes}м`;
 }
 
 export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
   const navigate = useNavigate();
   const { stepSlug } = useParams<{ stepSlug?: string }>();
+  const defaultRange = getDefaultDateRange();
+  const isInitialCityResolved = useRef(false);
 
   const [orderState, setOrderState] = useState<TOrderState>({
     step: 1 as Step,
@@ -97,8 +137,8 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
     selectedCategory: ORDER_DEFAULTS.CATEGORY,
     selectedCarId: null,
     selectedColor: ORDER_DEFAULTS.COLOR,
-    dateFrom: '',
-    dateTo: '',
+    dateFrom: defaultRange.from,
+    dateTo: defaultRange.to,
     selectedRateId: ORDER_DEFAULTS.RATE_ID,
     selectedExtraIds: [...ORDER_DEFAULTS.EXTRAS],
     isConfirmOpen: false,
@@ -110,17 +150,14 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
     navigate(nextPath, { replace: true });
   }, [navigate]);
 
-  const { data: apiData, loading: apiLoading } = useApiOrderData();
-  const orderData = (apiData ?? (staticOrderData as unknown)) as {
-    cities: Array<{ id: string; name: string; mapCenter: { x: number; y: number };
-      pickupPoints: Array<{ id: string; name: string; x: number; y: number }> }>;
-    cars: Array<{ id: string; brand: string; name: string; category: string;
-      image: string; priceMin: number; priceMax: number; plate?: string; fuel?: string;
-      backendId?: number; colors?: string[] }>;
-    rentalRates: Array<{ id: string; label: string; price: number }>;
-    extras: Array<{ id: string; label: string; price: number }>;
-  };
-  const { cities } = orderData;
+  const { data: orderData, loading: apiLoading, error: apiError } = useApiOrderData();
+
+  const categories = useMemo(
+    () => [ORDER_DEFAULTS.CATEGORY, ...new Set((orderData?.cars || []).map((car) => car.category))],
+    [orderData?.cars],
+  );
+
+  const cities = orderData?.cities || [];
   const cityOptions = cities.map((city) => city.name);
 
   const selectedCity = useMemo(
@@ -130,46 +167,78 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
     [cities, orderState.cityInput],
   );
 
-  const pickupOptions = selectedCity
-    ? (selectedCity as TCity).pickupPoints.map((point) => point.name)
-    : [];
+  useEffect(() => {
+    if (apiLoading || isInitialCityResolved.current) return;
+
+    setOrderState((prev) => {
+      const nextCity = cities[0]?.name || '';
+      if (prev.cityInput === nextCity) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        cityInput: nextCity,
+        pickupInput: '',
+        selectedPickupId: null,
+      };
+    });
+
+    isInitialCityResolved.current = true;
+  }, [apiLoading, cities]);
+
+  const pickupOptions = selectedCity ? selectedCity.pickupPoints.map((point) => point.name) : [];
 
   const selectedPickup = useMemo(() => {
-    if (!selectedCity) {
-      return null;
-    }
-
+    if (!selectedCity) return null;
     if (orderState.selectedPickupId) {
-      return (
-        (selectedCity as TCity).pickupPoints.find(
-          (point) => point.id === orderState.selectedPickupId,
-        ) || null
-      );
+      return selectedCity.pickupPoints.find((point) => point.id === orderState.selectedPickupId) || null;
     }
-
-    return (
-      (selectedCity as TCity).pickupPoints.find(
-        (point) => point.name.toLowerCase() === orderState.pickupInput.trim().toLowerCase(),
-      ) || null
-    );
+    return selectedCity.pickupPoints.find(
+      (point) => point.name.toLowerCase() === orderState.pickupInput.trim().toLowerCase(),
+    ) || null;
   }, [orderState.pickupInput, selectedCity, orderState.selectedPickupId]);
 
   const filteredCars = useMemo(() => {
     if (orderState.selectedCategory === ORDER_DEFAULTS.CATEGORY) {
-      return orderData.cars;
+      return orderData?.cars || [];
     }
+    return (orderData?.cars || []).filter((car) => car.category === orderState.selectedCategory);
+  }, [orderData?.cars, orderState.selectedCategory]);
 
-    return orderData.cars.filter((car) => car.category === orderState.selectedCategory);
-  }, [orderData.cars, orderState.selectedCategory]);
-
-  const selectedCar = orderData.cars.find((car) => car.id === orderState.selectedCarId) || null;
-  const selectedRate = orderData.rentalRates.find((rate) => rate.id === orderState.selectedRateId) || null;
-  const selectedExtras = orderData.extras.filter((extra) => orderState.selectedExtraIds.includes(extra.id));
+  const selectedCar = (orderData?.cars || []).find((car) => car.id === orderState.selectedCarId) || null;
+  const selectedRate = (orderData?.rentalRates || []).find((rate) => rate.id === orderState.selectedRateId) || null;
+  const selectedExtras = (orderData?.extras || []).filter((extra) => orderState.selectedExtraIds.includes(extra.id));
   const availableAt = formatAvailableAt(orderState.dateFrom || orderState.dateTo);
+  const durationLabel = formatDuration(orderState.dateFrom, orderState.dateTo);
+
+  useEffect(() => {
+    if (!orderData?.rentalRates.length) return;
+    const hasCurrentRate = orderData.rentalRates.some((rate) => rate.id === orderState.selectedRateId);
+    if (!hasCurrentRate) {
+      setOrderState((prev) => ({ ...prev, selectedRateId: orderData.rentalRates[0].id }));
+    }
+  }, [orderData?.rentalRates, orderState.selectedRateId]);
+
+  useEffect(() => {
+    if (!selectedCar?.colors?.length) return;
+    if (selectedCar.colors.includes(orderState.selectedColor)) return;
+    setOrderState((prev) => ({ ...prev, selectedColor: selectedCar.colors[0] }));
+  }, [selectedCar, orderState.selectedColor]);
 
   const isLocationStepComplete = Boolean(selectedCity && selectedPickup);
   const isModelStepComplete = Boolean(isLocationStepComplete && selectedCar);
-  const isExtrasStepComplete = Boolean(isModelStepComplete && selectedRate && orderState.selectedColor);
+  const isDateRangeValid = useMemo(() => {
+    const from = new Date(orderState.dateFrom).getTime();
+    const to = new Date(orderState.dateTo).getTime();
+    return Number.isFinite(from) && Number.isFinite(to) && to > from;
+  }, [orderState.dateFrom, orderState.dateTo]);
+  const isExtrasStepComplete = Boolean(
+    isModelStepComplete
+    && selectedRate
+    && orderState.selectedColor
+    && isDateRangeValid,
+  );
 
   const canGoToStep2 = isLocationStepComplete;
   const canGoToStep3 = isModelStepComplete;
@@ -179,70 +248,66 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
   const maxPrice = selectedCar?.priceMax || ORDER_DEFAULTS.MAX_PRICE;
 
   const totalPrice = useMemo(() => {
-    if (!selectedCar) {
+    if (!selectedCar || !selectedRate || !isDateRangeValid) {
       return `${TEXT.from} ${formatPrice(minPrice)} ${TEXT.to} ${formatPrice(maxPrice)}`;
     }
 
     const extrasPrice = selectedExtras.reduce((acc, extra) => acc + extra.price, 0);
-    const basePrice = selectedCar.priceMin;
-    const ratePrice = selectedRate?.id === 'daily' ? selectedRate.price : 0;
-    return formatPrice(basePrice + extrasPrice + ratePrice);
-  }, [maxPrice, minPrice, selectedCar, selectedExtras, selectedRate]);
+    const from = new Date(orderState.dateFrom).getTime();
+    const to = new Date(orderState.dateTo).getTime();
+    const totalMinutes = Math.max(1, Math.ceil((to - from) / (1000 * 60)));
+    const totalDays = Math.max(1, Math.ceil(totalMinutes / (60 * 24)));
+
+    const rentPrice = selectedRate.id === 'daily'
+      ? totalDays * Number(selectedRate.price || 0)
+      : totalMinutes * Number(selectedRate.price || 0);
+
+    return formatPrice(rentPrice + extrasPrice);
+  }, [
+    minPrice,
+    maxPrice,
+    selectedCar,
+    selectedRate,
+    selectedExtras,
+    isDateRangeValid,
+    orderState.dateFrom,
+    orderState.dateTo,
+  ]);
 
   const orderItems = [
     {
       label: TEXT.pickupPoint,
-      value: selectedPickup
-        ? `${(selectedCity as TCity | null)?.name}, ${selectedPickup.name}`
-        : null,
+      value: selectedPickup ? `${selectedCity?.name}, ${selectedPickup.name}` : null,
     },
     { label: TEXT.model, value: selectedCar ? `${selectedCar.brand}, ${selectedCar.name}` : null },
     { label: TEXT.color, value: orderState.step >= 3 ? orderState.selectedColor : null },
-    { label: TEXT.duration, value: orderState.step >= 3 ? '1d 2h' : null },
+    { label: TEXT.duration, value: orderState.step >= 3 ? durationLabel : null },
     {
       label: TEXT.rate,
-      value:
-        orderState.step >= 3 ? (selectedRate?.id === 'daily' ? TEXT.dayRate : TEXT.minuteRate) : null,
+      value: orderState.step >= 3 ? (selectedRate?.id === 'daily' ? TEXT.dayRate : TEXT.minuteRate) : null,
     },
     {
       label: TEXT.fullTank,
-      value:
-        orderState.step >= 3
-          ? orderState.selectedExtraIds.includes('fullTank')
-            ? TEXT.yes
-            : TEXT.no
-          : null,
+      value: orderState.step >= 3 ? (orderState.selectedExtraIds.includes('fullTank') ? TEXT.yes : TEXT.no) : null,
     },
   ];
+
   const maxAvailableStep = useMemo<TOrderFlowStep>(() => {
-    if (canGoToStep4) {
-      return 4;
-    }
-    if (canGoToStep3) {
-      return 3;
-    }
-    if (canGoToStep2) {
-      return 2;
-    }
+    if (canGoToStep4) return 4;
+    if (canGoToStep3) return 3;
+    if (canGoToStep2) return 2;
     return 1;
   }, [canGoToStep2, canGoToStep3, canGoToStep4]);
 
-  const isStepEnabled = useCallback((stepIndex: TOrderFlowStep) => (
-    stepIndex <= maxAvailableStep
-  ), [maxAvailableStep]);
+  const isStepEnabled = useCallback((stepIndex: TOrderFlowStep) => stepIndex <= maxAvailableStep, [maxAvailableStep]);
 
   const handleStepTransition = useCallback((nextStep: TOrderFlowStep) => {
-    if (!isStepEnabled(nextStep)) {
-      return;
-    }
+    if (!isStepEnabled(nextStep)) return;
     replaceOrderRouteStep(nextStep);
   }, [isStepEnabled, replaceOrderRouteStep]);
 
   useEffect(() => {
-    if (orderState.step === 5) {
-      return;
-    }
-
+    if (orderState.step === 5) return;
     if (stepSlug && !ROUTE_SEGMENT_TO_STEP[stepSlug]) {
       replaceOrderRouteStep(maxAvailableStep);
       return;
@@ -266,67 +331,52 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
     selectedCategory: ORDER_DEFAULTS.CATEGORY,
     selectedCarId: null,
     selectedColor: ORDER_DEFAULTS.COLOR,
-    dateFrom: '',
-    dateTo: '',
+    dateFrom: defaultRange.from,
+    dateTo: defaultRange.to,
     selectedRateId: ORDER_DEFAULTS.RATE_ID,
     selectedExtraIds: [...ORDER_DEFAULTS.EXTRAS],
     step: 1 as Step,
-  }), []);
+  }), [defaultRange.from, defaultRange.to]);
 
   const resetAfterModelChange = useCallback((prev: TOrderState) => ({
     ...prev,
     selectedColor: ORDER_DEFAULTS.COLOR,
-    dateFrom: '',
-    dateTo: '',
+    dateFrom: defaultRange.from,
+    dateTo: defaultRange.to,
     selectedRateId: ORDER_DEFAULTS.RATE_ID,
     selectedExtraIds: [...ORDER_DEFAULTS.EXTRAS],
     step: 2 as Step,
-  }), []);
+  }), [defaultRange.from, defaultRange.to]);
 
-  const handleCityChange = useCallback(
-    (value: string) => {
-      setOrderState((prev) => resetAfterLocationChange({
-        ...prev,
-        cityInput: value,
-        pickupInput: '',
-        selectedPickupId: null,
-      }));
-    },
-    [resetAfterLocationChange],
-  );
+  const handleCityChange = useCallback((value: string) => {
+    setOrderState((prev) => resetAfterLocationChange({
+      ...prev,
+      cityInput: value,
+      pickupInput: '',
+      selectedPickupId: null,
+    }));
+  }, [resetAfterLocationChange]);
 
-  const handlePickupChange = useCallback(
-    (value: string) => {
-      setOrderState((prev) => resetAfterLocationChange({
-        ...prev,
-        pickupInput: value,
-        selectedPickupId: null,
-      }));
-    },
-    [resetAfterLocationChange],
-  );
+  const handlePickupChange = useCallback((value: string) => {
+    setOrderState((prev) => resetAfterLocationChange({
+      ...prev,
+      pickupInput: value,
+      selectedPickupId: null,
+    }));
+  }, [resetAfterLocationChange]);
 
-  const handlePickupSelectFromMap = useCallback(
-    (pickupId: string) => {
-      setOrderState((prev) => {
-        if (!selectedCity) {
-          return prev;
-        }
-
-        const point = (selectedCity as TCity).pickupPoints.find((pickup) => pickup.id === pickupId);
-        if (!point) {
-          return prev;
-        }
-
-        return {
-          ...resetAfterLocationChange(prev),
-          selectedPickupId: point.id,
-          pickupInput: point.name,
-        };
-      });
-    },
-    [resetAfterLocationChange, selectedCity],
-  );
+  const handlePickupSelectFromMap = useCallback((pickupId: string) => {
+    setOrderState((prev) => {
+      if (!selectedCity) return prev;
+      const point = selectedCity.pickupPoints.find((pickup) => pickup.id === pickupId);
+      if (!point) return prev;
+      return {
+        ...resetAfterLocationChange(prev),
+        selectedPickupId: point.id,
+        pickupInput: point.name,
+      };
+    });
+  }, [resetAfterLocationChange, selectedCity]);
 
   const handleCarSelect = useCallback((carId: string) => {
     setOrderState((prev) => resetAfterModelChange({
@@ -346,10 +396,7 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
 
   const handleCategoryChange = useCallback((category: string) => {
     setOrderState((prev) => {
-      if (prev.selectedCategory === category) {
-        return prev;
-      }
-
+      if (prev.selectedCategory === category) return prev;
       return resetAfterModelChange({
         ...prev,
         selectedCategory: category,
@@ -385,14 +432,27 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
       selectedExtraIds: orderState.selectedExtraIds,
       availableAt,
       totalPrice,
+      durationLabel,
     },
     setOrderState,
   );
 
-  if (apiLoading && !apiData) {
+  if (apiLoading && !orderData) {
     return (
       <BaseSection isMenuOpen={isMenuOpen} onMenuToggle={onMenuToggle}>
         <Loader fullHeight />
+      </BaseSection>
+    );
+  }
+
+  if (!orderData) {
+    return (
+      <BaseSection isMenuOpen={isMenuOpen} onMenuToggle={onMenuToggle}>
+        <div className={styles.orderContent}>
+          <HorizontalContentContainer>
+            <div>{apiError || 'Бэкенд недоступен. Проверь запуск API.'}</div>
+          </HorizontalContentContainer>
+        </div>
       </BaseSection>
     );
   }
@@ -413,7 +473,6 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
                 onStepClick={(nextStep) => handleStepTransition(nextStep as TOrderFlowStep)}
               />
             )}
-
             {orderState.step === 5 && (
               <div className={styles.orderNumber}>{TEXT.orderNumber} {orderState.orderId}</div>
             )}
@@ -430,6 +489,7 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
               pickupOptions={pickupOptions}
               selectedCity={selectedCity}
               selectedPickup={selectedPickup}
+              categories={categories}
               selectedCarId={orderState.selectedCarId}
               selectedCategory={orderState.selectedCategory}
               selectedColor={orderState.selectedColor}
@@ -437,6 +497,8 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
               dateTo={orderState.dateTo}
               selectedRateId={orderState.selectedRateId}
               selectedExtraIds={orderState.selectedExtraIds}
+              rentalRates={orderData.rentalRates}
+              extras={orderData.extras}
               filteredCars={filteredCars}
               selectedCar={selectedCar}
               availableAt={availableAt}
@@ -456,9 +518,7 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
           <OrderSidebar
             step={orderState.step}
             items={orderItems}
-            priceText={
-              selectedCar ? totalPrice : `${TEXT.from} ${formatPrice(minPrice)} ${TEXT.to} ${formatPrice(maxPrice)}`
-            }
+            priceText={selectedCar ? totalPrice : `${TEXT.from} ${formatPrice(minPrice)} ${TEXT.to} ${formatPrice(maxPrice)}`}
             canGoToStep2={canGoToStep2}
             canGoToStep3={canGoToStep3}
             onStepChange={(step) => handleStepTransition(step as TOrderFlowStep)}
@@ -475,5 +535,3 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
     </BaseSection>
   );
 }
-
-

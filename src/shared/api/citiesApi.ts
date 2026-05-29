@@ -1,13 +1,56 @@
-﻿import {
-  MOCK_CATEGORIES, MOCK_CITIES, MOCK_ORDER_STATUS, MOCK_POINTS, MOCK_RATES, MOCK_RATE_TYPES,
-} from './mockStore';
+﻿import API_CLIENT from './apiClient';
+import type {
+  ApiResponse,
+  Category,
+  City,
+  OrderStatus,
+  Point,
+  Rate,
+  RateType,
+} from './types';
 
-export const CITIES_API = { getAll: () => MOCK_CITIES.getAll() };
-export const POINTS_API = {
-  getAll: (params?: Record<string, unknown>) => MOCK_POINTS.getAll(params),
+export const CITIES_API = {
+  getAll: async (): Promise<ApiResponse<City[]>> => {
+    const { data } = await API_CLIENT.get<ApiResponse<City[]>>('/db/city');
+    return data;
+  },
 };
-export const RATES_API = { getAll: () => MOCK_RATES.getAll() };
-export const RATE_TYPES_API = { getAll: () => MOCK_RATE_TYPES.getAll() };
-export const CATEGORIES_API = { getAll: () => MOCK_CATEGORIES.getAll() };
-export const ORDER_STATUS_API = { getAll: () => MOCK_ORDER_STATUS.getAll() };
 
+export const POINTS_API = {
+  getAll: async (params?: Record<string, unknown>): Promise<ApiResponse<Point[]>> => {
+    const { data } = await API_CLIENT.get<ApiResponse<Point[]>>('/db/point', { params });
+    return data;
+  },
+};
+
+export const RATES_API = {
+  getAll: async (): Promise<ApiResponse<Rate[]>> => {
+    const { data } = await API_CLIENT.get<ApiResponse<Rate[]>>('/db/rate');
+    return data;
+  },
+};
+
+export const RATE_TYPES_API = {
+  getAll: async (): Promise<ApiResponse<RateType[]>> => {
+    const { data } = await API_CLIENT.get<ApiResponse<RateType[]>>('/db/rateType');
+    return data;
+  },
+};
+
+export const CATEGORIES_API = {
+  getAll: async (): Promise<ApiResponse<Category[]>> => {
+    const { data } = await API_CLIENT.get<ApiResponse<Category[]>>('/db/category');
+    return data;
+  },
+  create: async (dto: { name: string; description?: string }): Promise<ApiResponse<Category>> => {
+    const { data } = await API_CLIENT.post<ApiResponse<Category>>('/db/category/', dto);
+    return data;
+  },
+};
+
+export const ORDER_STATUS_API = {
+  getAll: async (): Promise<ApiResponse<OrderStatus[]>> => {
+    const { data } = await API_CLIENT.get<ApiResponse<OrderStatus[]>>('/db/orderStatus');
+    return data;
+  },
+};

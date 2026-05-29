@@ -2,6 +2,7 @@
   City, Point, Category, Car, RateType, Rate, OrderStatus, Order,
 } from './types';
 
+
 export const SEED_CATEGORIES: Category[] = [
   { id: 1, name: 'Эконом' },
   { id: 2, name: 'Премиум' },
