@@ -1,6 +1,6 @@
 {
   "extends": "stylelint-config-standard-scss",
-  "plugins": ["stylelint-scss"],
+  "plugins": ["stylelint-scss", "@stylistic/stylelint-plugin"],
 
   "ignoreFiles": [
     "**/*.{js,html,svg,png,jpg,jpeg,ttf,woff,woff2}"
