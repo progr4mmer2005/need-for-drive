@@ -20,9 +20,9 @@ export async function handleSave(form: IFormState, deps: TDeps): Promise<void> {
   if (Object.keys(errs).length > 0) { deps.setErrors(errs); return; }
   deps.setSaving(true);
   try {
-    await savePoint(deps.isNew, deps.id, buildPointDto(form));
+    const newId = await savePoint(deps.isNew, deps.id, buildPointDto(form));
     deps.showToast(deps.isNew ? 'Пункт выдачи добавлен' : 'Пункт выдачи сохранён', 'success');
-    if (deps.isNew) setTimeout(() => deps.navigate('/admin/points'), 1200);
+    if (deps.isNew && newId) deps.navigate(`/admin/points/${newId}`, { replace: true });
   } catch (err: unknown) {
     const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
     deps.showToast(msg || 'Ошибка при сохранении', 'error');

@@ -17,9 +17,9 @@ export async function handleSave(name: string, deps: TDeps): Promise<void> {
   if (error) { deps.setError(error); return; }
   deps.setSaving(true);
   try {
-    await saveOrderStatus(deps.isNew, deps.id, name.trim());
+    const newId = await saveOrderStatus(deps.isNew, deps.id, name.trim());
     deps.showToast(deps.isNew ? 'Статус добавлен' : 'Статус сохранён', 'success');
-    if (deps.isNew) setTimeout(() => deps.navigate('/admin/order-statuses'), 1200);
+    if (deps.isNew && newId) deps.navigate(`/admin/order-statuses/${newId}`, { replace: true });
   } catch (err: unknown) {
     const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
     deps.showToast(msg || 'Ошибка при сохранении', 'error');

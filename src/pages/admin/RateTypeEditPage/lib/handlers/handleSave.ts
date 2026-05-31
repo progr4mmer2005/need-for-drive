@@ -19,9 +19,9 @@ export async function handleSave(form: IFormState, deps: TDeps): Promise<void> {
   if (Object.keys(errs).length > 0) { deps.setErrors(errs); return; }
   deps.setSaving(true);
   try {
-    await saveRateType(deps.isNew, deps.id, buildRateTypeDto(form));
+    const newId = await saveRateType(deps.isNew, deps.id, buildRateTypeDto(form));
     deps.showToast(deps.isNew ? 'Тип тарифа добавлен' : 'Тип тарифа сохранён', 'success');
-    if (deps.isNew) setTimeout(() => deps.navigate('/admin/rate-types'), 1200);
+    if (deps.isNew && newId) deps.navigate(`/admin/rate-types/${newId}`, { replace: true });
   } catch (err: unknown) {
     const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
     deps.showToast(msg || 'Ошибка при сохранении', 'error');

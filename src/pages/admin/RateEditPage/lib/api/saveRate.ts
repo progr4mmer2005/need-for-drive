@@ -2,10 +2,11 @@ import { RATES_API } from '@/shared/api/citiesApi';
 
 type TRateDto = { price: number; rateTypeId: { id: number } };
 
-export async function saveRate(isNew: boolean, id: number, dto: TRateDto): Promise<void> {
+export async function saveRate(isNew: boolean, id: number, dto: TRateDto): Promise<number | undefined> {
   if (isNew) {
-    await RATES_API.create(dto);
-  } else {
-    await RATES_API.update(id, dto);
+    const res = await RATES_API.create(dto);
+    return res.data.id;
   }
+  await RATES_API.update(id, dto);
+  return undefined;
 }

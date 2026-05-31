@@ -18,9 +18,9 @@ export async function handleSave(name: string, deps: TDeps): Promise<void> {
   if (error) { deps.setError(error); return; }
   deps.setSaving(true);
   try {
-    await saveCity(deps.isNew, deps.id, name.trim());
+    const newId = await saveCity(deps.isNew, deps.id, name.trim());
     deps.showToast(deps.isNew ? 'Город добавлен' : 'Город сохранён', 'success');
-    if (deps.isNew) setTimeout(() => deps.navigate('/admin/cities'), 1200);
+    if (deps.isNew && newId) deps.navigate(`/admin/cities/${newId}`, { replace: true });
   } catch (err: unknown) {
     const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
     deps.showToast(msg || 'Ошибка при сохранении', 'error');

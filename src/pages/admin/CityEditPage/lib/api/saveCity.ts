@@ -1,9 +1,10 @@
 import { CITIES_API } from '@/shared/api/citiesApi';
 
-export async function saveCity(isNew: boolean, id: number, name: string): Promise<void> {
+export async function saveCity(isNew: boolean, id: number, name: string): Promise<number | undefined> {
   if (isNew) {
-    await CITIES_API.create({ name });
-  } else {
-    await CITIES_API.update(id, { name });
+    const res = await CITIES_API.create({ name });
+    return res.data.id;
   }
+  await CITIES_API.update(id, { name });
+  return undefined;
 }

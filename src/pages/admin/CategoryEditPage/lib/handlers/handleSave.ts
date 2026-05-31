@@ -20,9 +20,9 @@ export async function handleSave(form: IFormState, deps: TDeps): Promise<void> {
   deps.setSaving(true);
   try {
     const dto = buildCategoryDto(form);
-    await saveCategory(deps.isNew, deps.id, dto);
+    const newId = await saveCategory(deps.isNew, deps.id, dto);
     deps.showToast(deps.isNew ? 'Категория добавлена' : 'Категория сохранена', 'success');
-    if (deps.isNew) setTimeout(() => deps.navigate('/admin/categories'), 1200);
+    if (deps.isNew && newId) deps.navigate(`/admin/categories/${newId}`, { replace: true });
   } catch (err: unknown) {
     const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
     deps.showToast(msg || 'Ошибка при сохранении', 'error');

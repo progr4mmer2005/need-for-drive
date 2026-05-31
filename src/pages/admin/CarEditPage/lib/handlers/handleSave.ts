@@ -20,9 +20,9 @@ export async function handleSave(form: IFormState, deps: TDeps): Promise<void> {
   deps.setSaving(true);
   try {
     const dto = buildCarDto(form);
-    await saveCar(deps.isNew, deps.id, dto);
+    const newId = await saveCar(deps.isNew, deps.id, dto);
     deps.showToast(deps.isNew ? 'Успех! Машина добавлена' : 'Успех! Машина сохранена', 'success');
-    if (deps.isNew) setTimeout(() => deps.navigate('/admin/cars'), 1200);
+    if (deps.isNew && newId) deps.navigate(`/admin/cars/${newId}`, { replace: true });
   } catch (error: unknown) {
     const msg = (error as { response?: { data?: { message?: string } } })?.response?.data?.message;
     deps.showToast(msg || 'Ошибка при сохранении', 'error');
