@@ -64,14 +64,40 @@
   border: none;
   cursor: pointer;
   padding: 0;
-  font-size: 13px;
-  line-height: 1;
-  color: $icon-muted-color;
-  transform: translateY(-1px);
 
   &:hover {
-    color: $text-primary-color;
+    .clearIcon::before,
+    .clearIcon::after {
+      background: $text-primary-color;
+    }
   }
+}
+
+.clearIcon {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  display: block;
+}
+
+.clearIcon::before,
+.clearIcon::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 1.5px;
+  border-radius: 1px;
+  background: $icon-muted-color;
+}
+
+.clearIcon::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.clearIcon::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 .spinner {

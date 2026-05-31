@@ -77,8 +77,8 @@ export const AutocompleteInput: React.FC<IAutocompleteInputProps> = ({
           disabled={disabled}
         />
         {inputValue && !disabled && (
-          <button className={styles.autocompleteClear} type="button" onClick={handleClear}>
-            ×
+          <button className={styles.autocompleteClear} type="button" onClick={handleClear} aria-label="Очистить поле">
+            <span className={styles.autocompleteClearIcon} />
           </button>
         )}
         {isOpen && !disabled && filteredOptions.length > 0 && (

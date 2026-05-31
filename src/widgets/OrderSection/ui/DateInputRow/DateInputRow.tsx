@@ -28,8 +28,8 @@ export function DateInputRow({
           onChange={(event) => onChange(event.target.value)}
         />
         {showClear && Boolean(value) && (
-          <button className={styles.clearBtn} type="button" onClick={onClear}>
-            ×
+          <button className={styles.clearBtn} type="button" onClick={onClear} aria-label="Очистить дату">
+            <span className={styles.clearIcon} />
           </button>
         )}
       </div>

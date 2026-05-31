@@ -184,8 +184,8 @@ export function NominatimAutocomplete({
         />
         {loading && <span className={styles.spinner} />}
         {inputValue && !disabled && !loading && (
-          <button type="button" className={styles.clear} onClick={handleClear}>
-            &#xd7;
+          <button type="button" className={styles.clear} onClick={handleClear} aria-label="Очистить поле">
+            <span className={styles.clearIcon} />
           </button>
         )}
       </div>
