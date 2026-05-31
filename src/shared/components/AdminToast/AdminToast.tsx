@@ -1,16 +1,20 @@
 import styles from './AdminToast.module.scss';
+import type { TAdminToast } from '@/shared/lib/useAdminToast';
 
 type TAdminToastProps = {
-  message: string;
-  type: 'success' | 'error';
+  toast: TAdminToast | null;
   onClose: () => void;
 };
 
-export function AdminToast({ message, type, onClose }: TAdminToastProps) {
+export function AdminToast({ toast, onClose }: TAdminToastProps) {
+  if (!toast) return null;
+
   return (
-    <div className={`${styles.toast} ${type === 'success' ? styles.toastSuccess : styles.toastError}`}>
-      <span>{message}</span>
-      <button type="button" className={styles.toastClose} onClick={onClose}>×</button>
+    <div className={`${styles.toast} ${toast.type === 'success' ? styles.toastSuccess : styles.toastError}`}>
+      <span>{toast.message}</span>
+      <button type="button" className={styles.toastClose} onClick={onClose} aria-label="Закрыть уведомление">
+        <span className={styles.toastCloseIcon} />
+      </button>
     </div>
   );
 }

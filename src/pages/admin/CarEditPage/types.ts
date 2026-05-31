@@ -12,5 +12,3 @@ export interface IFormState {
   thumbnailName: string;
   thumbnailMime: string;
 }
-
-export type TToast = { message: string; type: 'success' | 'error' };

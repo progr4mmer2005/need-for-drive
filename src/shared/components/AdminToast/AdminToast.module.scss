@@ -20,8 +20,38 @@
 .toastClose {
   border: none;
   background: none;
-  color: $white-color;
-  font-size: 22px;
-  line-height: 1;
   cursor: pointer;
+  padding: 0;
+  min-width: 28px;
+  align-self: stretch;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toastCloseIcon {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+.toastCloseIcon::before,
+.toastCloseIcon::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 2px;
+  border-radius: 1px;
+  background: $white-color;
+}
+
+.toastCloseIcon::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.toastCloseIcon::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
 }

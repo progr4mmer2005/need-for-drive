@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AdminPageTitle } from '@/shared/components/AdminPageTitle';
-import { AdminToast } from '@/shared/components/AdminToast';
+import { AdminToast, useAdminToast } from '@/shared/components/AdminToast';
 import { AdminField, AdminInput, AdminRow } from '@/shared/components/AdminField';
 import { Loader } from '@/shared/components/Loader';
-import type { TToast, IFormState } from './types';
+import type { IFormState } from './types';
 import { INITIAL } from './constants';
 import { initRateType } from './lib/handlers/initRateType';
 import { handleSave } from './lib/handlers/handleSave';
@@ -20,12 +20,7 @@ export function RateTypeEditPage() {
   const [errors, setErrors] = useState<Partial<Record<keyof IFormState, string>>>({});
   const [loading, setLoading] = useState(!isNew);
   const [saving, setSaving] = useState(false);
-  const [toast, setToast] = useState<TToast | null>(null);
-
-  const showToast = (message: string, type: TToast['type']) => {
-    setToast({ message, type });
-    setTimeout(() => setToast(null), 3000);
-  };
+  const { toast, showToast, closeToast } = useAdminToast();
 
   useEffect(() => {
     void initRateType(id, isNew, { setForm, setLoading });
@@ -35,7 +30,7 @@ export function RateTypeEditPage() {
 
   return (
     <div>
-      {toast && <AdminToast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+      <AdminToast toast={toast} onClose={closeToast} />
 
       <AdminPageTitle>{isNew ? 'Новый тип тарифа' : 'Редактирование типа тарифа'}</AdminPageTitle>
 

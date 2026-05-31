@@ -2,10 +2,10 @@ import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import type { Category } from '@/shared/api/types';
 import { AdminPageTitle } from '@/shared/components/AdminPageTitle';
-import { AdminToast } from '@/shared/components/AdminToast';
+import { AdminToast, useAdminToast } from '@/shared/components/AdminToast';
 import { AdminField, AdminInput, AdminSelect, AdminRow } from '@/shared/components/AdminField';
 import { Loader } from '@/shared/components/Loader';
-import type { IFormState, TToast } from './types';
+import type { IFormState } from './types';
 import { INITIAL } from './constants';
 import { calcProgress } from './lib/form/calcProgress';
 import { initCategories } from './lib/handlers/initCategories';
@@ -27,14 +27,9 @@ export function CarEditPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(!isNew);
   const [saving, setSaving] = useState(false);
-  const [toast, setToast] = useState<TToast | null>(null);
+  const { toast, showToast, closeToast } = useAdminToast();
   const [previewUrl, setPreviewUrl] = useState('');
   const [previewBroken, setPreviewBroken] = useState(false);
-
-  const showToast = (message: string, type: TToast['type']) => {
-    setToast({ message, type });
-    setTimeout(() => setToast(null), 3000);
-  };
 
   useEffect(() => {
     void initCategories(isNew, { setCategories, setForm });
@@ -50,7 +45,7 @@ export function CarEditPage() {
 
   return (
     <div>
-      {toast && <AdminToast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+      <AdminToast toast={toast} onClose={closeToast} />
       <AdminPageTitle>Карточка автомобиля</AdminPageTitle>
 
       <div className={styles.layout}>

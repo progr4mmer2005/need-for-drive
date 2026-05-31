@@ -2,11 +2,11 @@ import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import type { City } from '@/shared/api/types';
 import { AdminPageTitle } from '@/shared/components/AdminPageTitle';
-import { AdminToast } from '@/shared/components/AdminToast';
+import { AdminToast, useAdminToast } from '@/shared/components/AdminToast';
 import { AdminField, AdminInput, AdminSelect, AdminRow } from '@/shared/components/AdminField';
 import { Loader } from '@/shared/components/Loader';
 import { NominatimAutocomplete } from '@/shared/components/NominatimAutocomplete';
-import type { IFormState, IToast } from './types';
+import type { IFormState } from './types';
 import { INITIAL } from './constants';
 import { initCities } from './lib/handlers/initCities';
 import { initPoint } from './lib/handlers/initPoint';
@@ -24,14 +24,9 @@ export function PointEditPage() {
   const [cities, setCities] = useState<City[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [toast, setToast] = useState<IToast | null>(null);
+  const { toast, showToast, closeToast } = useAdminToast();
   const prevCityIdRef = useRef<string>('');
   const [isAddressConfirmed, setIsAddressConfirmed] = useState(!isNew);
-
-  const showToast = (message: string, type: IToast['type']) => {
-    setToast({ message, type });
-    setTimeout(() => setToast(null), 3000);
-  };
 
   useEffect(() => {
     void initCities({ isNew, setCities, setForm }).catch(console.error);
@@ -47,7 +42,7 @@ export function PointEditPage() {
 
   return (
     <div>
-      {toast && <AdminToast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+      <AdminToast toast={toast} onClose={closeToast} />
 
       <AdminPageTitle>{isNew ? 'Новый пункт выдачи' : 'Редактирование пункта выдачи'}</AdminPageTitle>
 

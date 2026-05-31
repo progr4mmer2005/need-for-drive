@@ -1,5 +1,3 @@
-export type TToast = { message: string; type: 'success' | 'error' };
-
 export interface IFormState {
   statusId: string;
   cityId: string;

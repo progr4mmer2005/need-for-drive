@@ -2,11 +2,11 @@ import { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import type { Order, Car, City, Point, Rate, OrderStatus } from '@/shared/api/types';
 import { AdminPageTitle } from '@/shared/components/AdminPageTitle';
-import { AdminToast } from '@/shared/components/AdminToast';
+import { AdminToast, useAdminToast } from '@/shared/components/AdminToast';
 import { AdminField, AdminInput, AdminSelect, AdminRow } from '@/shared/components/AdminField';
 import { Loader } from '@/shared/components/Loader';
 import { formatDate, formatPrice } from '@/shared/lib/adminFormatters';
-import type { TToast, IFormState } from './types';
+import type { IFormState } from './types';
 import { initOptions } from './lib/handlers/initOptions';
 import { initOrder } from './lib/handlers/initOrder';
 import { handleSave } from './lib/handlers/handleSave';
@@ -22,17 +22,12 @@ export function OrderEditPage() {
   const [form, setForm] = useState<IFormState | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [toast, setToast] = useState<TToast | null>(null);
+  const { toast, showToast, closeToast } = useAdminToast();
   const [statuses, setStatuses] = useState<OrderStatus[]>([]);
   const [cities, setCities] = useState<City[]>([]);
   const [points, setPoints] = useState<Point[]>([]);
   const [cars, setCars] = useState<Car[]>([]);
   const [rates, setRates] = useState<Rate[]>([]);
-
-  const showToast = (message: string, type: TToast['type']) => {
-    setToast({ message, type });
-    setTimeout(() => setToast(null), 3000);
-  };
 
   useEffect(() => {
     void initOptions({ setStatuses, setCities, setCars, setRates }).catch(console.error);
@@ -63,7 +58,7 @@ export function OrderEditPage() {
 
   return (
     <div>
-      {toast && <AdminToast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+      <AdminToast toast={toast} onClose={closeToast} />
 
       <AdminPageTitle>Заказ #{id}</AdminPageTitle>
 
