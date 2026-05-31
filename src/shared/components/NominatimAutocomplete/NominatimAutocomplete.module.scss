@@ -1,0 +1,156 @@
+@use '../../styles/variables' as *;
+
+.wrap {
+  position: relative;
+  width: 100%;
+}
+
+.inputRow {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 29px;
+  border: 1px solid $icon-muted-color;
+  border-radius: 4px;
+  background: $white-color;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+
+  &:focus-within {
+    border-color: $accent-blue-color;
+  }
+}
+
+.inputRowError {
+  border-color: $danger-color !important;
+}
+
+.inputRowDisabled {
+  background: $bg-surface-muted-color;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  background: transparent;
+  color: $text-primary-color;
+  font-family: 'Roboto', sans-serif;
+  font-size: 11px;
+  letter-spacing: -0.18px;
+  outline: none;
+  padding: 0 0 0 11px;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: $text-placeholder-color;
+  }
+
+  &:disabled {
+    color: $text-placeholder-color;
+    cursor: not-allowed;
+  }
+}
+
+.clear {
+  flex-shrink: 0;
+  width: 22px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1;
+  color: $icon-muted-color;
+  transform: translateY(-1px);
+
+  &:hover {
+    color: $text-primary-color;
+  }
+}
+
+.spinner {
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  margin-right: 6px;
+  border: 2px solid $icon-muted-color;
+  border-top-color: $success-color;
+  border-radius: 50%;
+  animation: nomSpin 0.7s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes nomSpin {
+  to { transform: rotate(360deg); }
+}
+
+.errMsg {
+  display: block;
+  margin-top: 2px;
+  font-size: 10px;
+  line-height: 12px;
+  color: $danger-color;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 3px);
+  left: 0;
+  right: 0;
+  background: $white-color;
+  border: 1px solid $icon-muted-color;
+  border-radius: 4px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  z-index: 200;
+  overflow: hidden;
+}
+
+.option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding: 6px 11px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid $border-light-color;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.1s;
+  font-family: 'Roboto', sans-serif;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: $bg-surface-hover-color;
+  }
+}
+
+.optionMain {
+  font-size: 11px;
+  letter-spacing: -0.18px;
+  color: $text-primary-color;
+  font-weight: 500;
+}
+
+.optionSub {
+  font-size: 10px;
+  color: $text-muted-color;
+  margin-top: 2px;
+}
+
+.dropdownHint {
+  padding: 8px 11px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 10px;
+  color: $text-muted-color;
+  font-style: italic;
+}

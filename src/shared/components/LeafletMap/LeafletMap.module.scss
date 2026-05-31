@@ -1,0 +1,48 @@
+@use '../../styles/variables' as *;
+
+.wrap {
+  margin-top: 22px;
+}
+
+.title {
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #121212;
+}
+
+.mapContainer {
+  width: 100%;
+  max-width: 570px;
+  height: 352px;
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #edf0f1;
+}
+
+@media (max-width: $breakpoint-desktop-lg) {
+  .mapContainer {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(237, 240, 241, 0.8);
+  font-size: 13px;
+  color: $text-muted-color;
+  z-index: 10;
+  pointer-events: none;
+}
