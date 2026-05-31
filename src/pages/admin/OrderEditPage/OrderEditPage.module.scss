@@ -1,0 +1,289 @@
+@use '../../../shared/styles/variables' as *;
+
+.toast {
+  position: fixed;
+  top: 68.5px;
+  left: 285px;
+  right: 0;
+  z-index: 20;
+  height: 43px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  font-size: 13px;
+}
+
+.toastSuccess { background: $success-color; color: $white-color; }
+.toastError   { background: $danger-color;  color: $white-color; }
+
+.toastClose {
+  border: none;
+  background: none;
+  color: $white-color;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+  margin-bottom: 24px;
+}
+
+.previewCard {
+  background: $white-color;
+  border: 1px solid $border-primary-color;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.previewTop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 20px 20px;
+  gap: 10px;
+}
+
+.previewImg {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+}
+
+.previewImgPlaceholder {
+  width: 100%;
+  height: 100%;
+  background: $bg-surface-muted-color;
+  border-radius: 4px;
+}
+
+.previewCarName {
+  color: $text-admin-primary-color;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.statusText {
+  font-size: 12px;
+  font-family: 'Roboto', sans-serif;
+  color: $text-muted-color;
+}
+
+.previewDivider {
+  height: 1px;
+  background: $border-primary-color;
+  margin: 0;
+}
+
+.previewDetails {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.previewRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.previewLabel {
+  font-size: 11px;
+  color: $text-muted-color;
+  font-family: 'Roboto', sans-serif;
+  white-space: nowrap;
+}
+
+.previewValue {
+  font-size: 11px;
+  color: $text-admin-primary-color;
+  font-family: 'Roboto', sans-serif;
+  text-align: right;
+}
+
+.previewOptions {
+  padding: 12px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.previewOption {
+  font-size: 11px;
+  font-family: 'Roboto', sans-serif;
+  color: $icon-muted-color;
+  padding-left: 16px;
+  position: relative;
+
+  &::before {
+    content: '✕';
+    position: absolute;
+    left: 0;
+    font-size: 9px;
+    color: $icon-muted-color;
+  }
+}
+
+.previewOptionOn {
+  color: $text-admin-primary-color;
+
+  &::before {
+    content: '✓';
+    color: $success-color;
+  }
+}
+
+.settings {
+  background: $white-color;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgb(90 97 105 / 8%);
+  padding: 24px 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.settingsTitle {
+  color: $text-admin-primary-color;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 20px;
+  margin: 0 0 28px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fieldLabel {
+  color: $text-primary-color;
+  font-size: 11px;
+  line-height: 13px;
+}
+
+.input,
+.select {
+  width: 100%;
+  height: 29px;
+  border: 1px solid $icon-muted-color;
+  border-radius: 4px;
+  background: $white-color;
+  color: $text-primary-color;
+  font-family: 'Roboto', sans-serif;
+  font-size: 11px;
+  letter-spacing: -0.18px;
+  outline: none;
+  padding: 0 11px;
+  box-sizing: border-box;
+
+  &:focus {
+    border-color: $accent-blue-color;
+  }
+
+  &:disabled {
+    background: $bg-surface-muted-color;
+    color: $text-placeholder-color;
+    cursor: not-allowed;
+  }
+}
+
+.selectPlaceholder { color: $text-placeholder-color; }
+.select option { color: $text-primary-color; }
+.select option[value=''] { color: $text-placeholder-color; }
+
+.checkboxGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 11px;
+  color: $text-primary-color;
+  font-family: 'Roboto', sans-serif;
+
+  input[type='checkbox'] {
+    width: 14px;
+    height: 14px;
+    accent-color: $accent-blue-color;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+}
+
+.bottomActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid $border-light-color;
+}
+
+.leftActions {
+  display: flex;
+  gap: 12px;
+}
+
+.saveBtn,
+.cancelBtn,
+.deleteBtn {
+  width: 110px;
+  height: 29px;
+  border: none;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.saveBtn   { background: $accent-blue-color;    color: $white-color; }
+.cancelBtn { background: $bg-surface-muted-color; color: $text-admin-primary-color; }
+.deleteBtn { background: $danger-color;          color: $white-color; }
+
+@media (max-width: $breakpoint-desktop) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+  }
+}

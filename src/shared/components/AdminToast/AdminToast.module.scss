@@ -1,0 +1,27 @@
+@use '../../styles/variables' as *;
+
+.toast {
+  position: fixed;
+  top: 68.5px;
+  left: 285px;
+  right: 0;
+  z-index: 20;
+  height: 43px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  font-size: 13px;
+}
+
+.toastSuccess { background: $success-color; color: $white-color; }
+.toastError   { background: $danger-color;  color: $white-color; }
+
+.toastClose {
+  border: none;
+  background: none;
+  color: $white-color;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}

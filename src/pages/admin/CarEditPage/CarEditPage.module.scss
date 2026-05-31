@@ -267,6 +267,15 @@
   border-color: $accent-blue-color;
 }
 
+.input[type='number']::-webkit-inner-spin-button,
+.input[type='number']::-webkit-outer-spin-button {
+  appearance: none;
+}
+
+.input[type='number'] {
+  appearance: textfield;
+}
+
 .inputError {
   border-color: $danger-color !important;
 }
@@ -285,8 +294,8 @@
   gap: 8px;
 }
 
-.colorRow .input {
-  width: auto;
+.colorRowInput {
+  width: auto !important;
   min-width: 0;
   flex: 1 1 auto;
   height: 30px;

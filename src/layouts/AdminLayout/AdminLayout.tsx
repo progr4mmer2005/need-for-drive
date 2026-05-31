@@ -26,10 +26,13 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/admin/cars/new', label: 'Карточка автомобиля', Icon: AdminCarCardIcon },
   { to: '/admin/cars', label: 'Список авто', Icon: AdminCarListIcon },
   { to: '/admin/orders', label: 'Заказы', Icon: AdminOrdersIcon },
-  { to: '/admin/menu4', label: 'Menu 4', Icon: AdminGridIcon, disabled: true },
-  { to: '/admin/menu5', label: 'Menu 5', Icon: AdminFormsIcon, disabled: true },
-  { to: '/admin/menu6', label: 'Menu 6', Icon: AdminPersonIcon, disabled: true },
-  { to: '/admin/menu7', label: 'Menu 7', Icon: AdminErrorIcon, disabled: true },
+  { to: '/admin/cities', label: 'Города', Icon: AdminGridIcon },
+  { to: '/admin/categories', label: 'Категории', Icon: AdminFormsIcon },
+  { to: '/admin/users', label: 'Пользователи', Icon: AdminPersonIcon },
+  { to: '/admin/points', label: 'Пункты выдачи', Icon: AdminGridIcon },
+  { to: '/admin/rates', label: 'Тарифы', Icon: AdminErrorIcon },
+  { to: '/admin/rate-types', label: 'Типы тарифов', Icon: AdminCarListIcon },
+  { to: '/admin/order-statuses', label: 'Статусы заказов', Icon: AdminOrdersIcon },
 ];
 
 export function AdminLayout() {
@@ -46,10 +49,10 @@ export function AdminLayout() {
   return (
     <div className={styles.wrapper}>
       <aside className={styles.sidebar}>
-        <div className={styles.logo}>
+        <NavLink to="/admin" className={styles.logo}>
           <NeedForDriveLogoIcon className={styles.logoIcon} />
           <span className={styles.logoText}>Need for car</span>
-        </div>
+        </NavLink>
 
         <nav className={styles.nav}>
           {NAV_ITEMS.map(({ to, label, Icon, disabled }) => (disabled ? (

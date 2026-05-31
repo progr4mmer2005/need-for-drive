@@ -64,12 +64,17 @@ export interface Order {
   carId: Car;
   rateId: Rate;
   color: string;
-  dateFrom: number;
-  dateTo: number;
-  price: number;
+  dateFrom: number | string;
+  dateTo: number | string;
+  price: number | string;
   isFullTank: boolean;
   isNeedChildChair: boolean;
   isRightWheel: boolean;
+}
+
+export interface User {
+  id: number;
+  username: string;
 }
 
 export interface AuthResponse {
