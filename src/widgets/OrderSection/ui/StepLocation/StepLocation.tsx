@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { AutocompleteInput } from '@/shared/components/AutocompleteInput';
-import { MapSelection } from '@/shared/components/MapSelection';
+import { LeafletMap } from '@/shared/components/LeafletMap';
 import { TCity } from '@/widgets/OrderSection/model/types';
 import * as styles from './StepLocation.module.scss';
 
@@ -46,16 +46,17 @@ export const StepLocation = memo(function StepLocation({
         onChange={onPickupChange}
       />
 
-      <MapSelection
+      <LeafletMap
+        cityName={selectedCity?.name ?? ''}
         points={(selectedCity?.pickupPoints || []).map((point) => ({
           id: point.id,
-          x: point.x,
-          y: point.y,
-          address: point.name,
+          name: point.name,
+          address: point.address,
         }))}
         selectedId={selectedPickupId}
-        onPointSelect={(point) => onPickupSelectFromMap(point.id)}
+        onPointSelect={onPickupSelectFromMap}
       />
+
     </div>
   );
 });

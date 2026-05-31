@@ -73,9 +73,7 @@
   .top {
     grid-template-columns: 1fr;
   }
-}
 
-@media (max-width: $breakpoint-tablet) {
   .imageWrap {
     justify-content: center;
   }

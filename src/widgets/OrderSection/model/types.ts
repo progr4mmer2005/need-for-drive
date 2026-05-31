@@ -3,6 +3,7 @@ export type Step = 1 | 2 | 3 | 4 | 5;
 export type TPickupPoint = {
   id: string;
   name: string;
+  address: string;
   x: number;
   y: number;
 };
@@ -34,6 +35,7 @@ export type TRentalRate = {
   label: string;
   price: number;
   backendId: number;
+  unit: string;
 };
 
 export type TExtra = {

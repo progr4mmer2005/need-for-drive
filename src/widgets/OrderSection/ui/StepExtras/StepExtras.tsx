@@ -1,6 +1,5 @@
 import { memo } from 'react';
 import { TCar } from '@/widgets/OrderSection/model/types';
-import { formatPrice } from '@/widgets/OrderSection/model/formatPrice';
 import { CheckboxOption } from '@/widgets/OrderSection/ui/CheckboxOption';
 import { DateInputRow } from '@/widgets/OrderSection/ui/DateInputRow';
 import { RadioOption } from '@/widgets/OrderSection/ui/RadioOption';
@@ -99,7 +98,7 @@ export const StepExtras = memo(function StepExtras({
           <CheckboxOption
             key={extra.id}
             checked={selectedExtraIds.includes(extra.id)}
-            label={`${extra.label}, ${formatPrice(extra.price)}`}
+            label={extra.label}
             onChange={() => onExtraToggle(extra.id)}
           />
         ))}

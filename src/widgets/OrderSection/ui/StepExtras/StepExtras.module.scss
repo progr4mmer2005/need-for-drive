@@ -1,11 +1,13 @@
-﻿.panel {
+.panel {
   max-width: 710px;
+  padding-bottom: 32px;
 }
 
 .row {
   display: flex;
   align-items: center;
   gap: 18px;
+  flex-wrap: wrap;
 }
 
 .column {

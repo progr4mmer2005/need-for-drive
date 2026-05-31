@@ -28,12 +28,8 @@
 
 .dots {
   min-width: 40px;
-  height: 4px;
-  background-image: radial-gradient(circle, #999 0.8px, transparent 0.8px);
-  background-size: 3.5px 3.5px;
-  background-repeat: repeat-x;
-  background-position: 0 100%;
-  margin-bottom: 4px;
+  border-bottom: 2px dotted #999;
+  margin-bottom: 5px;
 }
 
 .value {

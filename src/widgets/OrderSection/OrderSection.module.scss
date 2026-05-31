@@ -1,4 +1,4 @@
-﻿@use '@/shared/styles/variables' as *;
+@use '@/shared/styles/variables' as *;
 
 .orderContent {
   height: 100%;
@@ -22,7 +22,7 @@
 }
 
 .leftPane {
-  padding: 24px 0 0;
+  padding: 24px 64px 0;
   min-height: 0;
 }
 
@@ -33,5 +33,14 @@
 @media (max-width: $breakpoint-desktop-lg) {
   .split {
     grid-template-columns: 1fr;
+    min-height: 0;
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+  }
+
+  .leftPane {
+    padding: 24px 0 40px;
   }
 }

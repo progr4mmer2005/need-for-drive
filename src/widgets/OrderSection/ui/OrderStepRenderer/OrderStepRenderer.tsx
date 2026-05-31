@@ -1,7 +1,7 @@
 import {
   TCar, TCity, Step, TSelectedPickup,
 } from '@/widgets/OrderSection/model/types';
-import { HorizontalContentContainer } from '@/shared/components/HorizontalContentContainer';
+import { OrderContainer } from '@/widgets/OrderSection/ui/OrderContainer';
 import { StepLocation } from '@/widgets/OrderSection/ui/StepLocation';
 import { StepModels } from '@/widgets/OrderSection/ui/StepModels';
 import { StepExtras } from '@/widgets/OrderSection/ui/StepExtras';
@@ -75,7 +75,7 @@ export function OrderStepRenderer({
   onExtraToggle,
 }: TOrderStepRendererProps) {
   return (
-    <HorizontalContentContainer>
+    <OrderContainer>
       {step === 1 && (
         <div className={styles.stepPanel}>
           <StepLocation
@@ -124,6 +124,6 @@ export function OrderStepRenderer({
       {step === 4 && selectedCar && <StepSummary car={selectedCar} dateFrom={availableAt} />}
 
       {step === 5 && selectedCar && <StepOrderConfirmed car={selectedCar} dateFrom={availableAt} />}
-    </HorizontalContentContainer>
+    </OrderContainer>
   );
 }

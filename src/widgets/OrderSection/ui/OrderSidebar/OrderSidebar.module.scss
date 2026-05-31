@@ -1,5 +1,4 @@
-﻿@use '@/shared/styles/variables' as *;
-
+@use '@/shared/styles/variables' as *;
 
 .buttonContainer {
   width: 100%;
@@ -16,8 +15,6 @@
   background: #fff;
 }
 
-
-
 .title {
   text-align: right;
   font-size: 18px;
@@ -25,16 +22,20 @@
   margin-bottom: 14px;
 }
 
-
 @media (max-width: $breakpoint-desktop-lg) {
   .sidebar {
     position: static;
     height: auto;
     border-left: none;
     border-top: 1px solid $light-gray-color;
+    padding: 28px 0;
   }
 
   .box {
-    max-width: 300px;
+    width: 100%;
+  }
+
+  .title {
+    text-align: left;
   }
 }

@@ -7,7 +7,7 @@ import {
   type TSelectedPickup,
   type TSelectedCar,
   type TSelectedRate,
-} from './types';
+} from '../types';
 import { ORDERS_API } from '@/shared/api/ordersApi';
 
 type TOrderState = {
@@ -24,6 +24,7 @@ type TOrderState = {
   selectedExtraIds: string[];
   isConfirmOpen: boolean;
   orderId: string;
+  backendOrderId: number | null;
 };
 
 type TOrderSubmitDeps = {
@@ -79,6 +80,8 @@ export function useOrderSubmit(
     const rateBackendId =
       (selectedRate as unknown as { backendId?: number })?.backendId ?? null;
 
+    let backendOrderId: number | null = null;
+
     if (cityId && pointId && carId) {
       try {
         const dto = {
@@ -99,13 +102,14 @@ export function useOrderSubmit(
         const res = await ORDERS_API.create(dto);
         if (res?.data?.id) {
           orderId = `RU${res.data.id}`;
+          backendOrderId = res.data.id;
         }
       } catch (e) {
         console.warn('Order POST failed, using local id', e);
       }
     }
 
-    setOrderState((prev) => ({ ...prev, orderId }));
+    setOrderState((prev) => ({ ...prev, orderId, backendOrderId }));
 
     const completedOrder: TCompletedOrder = {
       orderId,
@@ -115,7 +119,7 @@ export function useOrderSubmit(
       carImage: selectedCar.image,
       color: selectedColor,
       duration: durationLabel,
-      rate: selectedRate?.id === 'daily' ? 'На сутки' : 'Поминутно',
+      rate: (selectedRate as unknown as { label?: string })?.label ?? 'Тариф',
       fullTank: selectedExtraIds.includes('fullTank') ? 'Да' : 'Нет',
       totalPrice,
       availableAt,

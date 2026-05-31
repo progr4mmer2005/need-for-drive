@@ -27,7 +27,7 @@ export interface ApiOrderData {
     id: string;
     name: string;
     mapCenter: { x: number; y: number };
-    pickupPoints: Array<{ id: string; name: string; x: number; y: number }>;
+    pickupPoints: Array<{ id: string; name: string; address: string; x: number; y: number }>;
     backendId: number;
   }>;
   cars: Array<{
@@ -48,6 +48,7 @@ export interface ApiOrderData {
     label: string;
     price: number;
     backendId: number;
+    unit: string;
   }>;
   extras: Array<{ id: string; label: string; price: number }>;
 }
@@ -104,15 +105,17 @@ export function useApiOrderData() {
               pickupPoints: cityPoints.map((point: Point, pointIndex: number) => ({
                 id: `point-${point.id}`,
                 name: normalizeText(point.name),
+                address: normalizeText(point.address),
                 x: pseudoCoord(point.id, pointIndex * 13),
                 y: pseudoCoord(point.id + 1, pointIndex * 17),
               })),
             };
           }),
           cars: cars.map((car: ApiCar) => {
-            const parts = (car.name || '').split(' ');
-            const brand = parts[0] || car.name || DEFAULT_BRAND;
-            const rest = parts.slice(1).join(' ') || car.name;
+            const rawName = car.name || '';
+            const parts = rawName.includes(',') ? rawName.split(',').map((s) => s.trim()) : rawName.split(' ');
+            const brand = parts[0] || rawName || DEFAULT_BRAND;
+            const rest = parts.slice(1).join(' ') || rawName;
             const rawFuel = String(car.tank || '').trim();
             const fuel = rawFuel ? (rawFuel.includes('%') ? rawFuel : `${rawFuel}%`) : '100%';
 
@@ -140,10 +143,11 @@ export function useApiOrderData() {
             const rateTypeName = normalizeText(rate.rateTypeId?.name || '');
             const rateUnit = normalizeText(rate.rateTypeId?.unit || '');
             return {
-              id: rateTypeName.toLowerCase().includes(RATE_DAILY_MARKER) ? 'daily' : 'minute',
+              id: String(rate.id),
               label: `${rateTypeName || DEFAULT_RATE_LABEL}, ${rate.price} ${RUBLE_SIGN}/${rateUnit}`,
               price: Number(rate.price || 0),
               backendId: rate.id,
+              unit: rateUnit,
             };
           }),
           extras: EXTRAS_STATIC,

@@ -1,4 +1,4 @@
-﻿.row {
+.row {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -16,6 +16,7 @@
 .inputWrap {
   position: relative;
   width: 260px;
+  max-width: 100%;
 }
 
 .inputWrap input {

@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { Button } from '@/shared/components/Button';
 import { OrderDetails } from '@/shared/components/OrderDetails';
+import { OrderContainer } from '@/widgets/OrderSection/ui/OrderContainer';
 import { Step } from '@/widgets/OrderSection/model/types';
 import * as styles from './OrderSidebar.module.scss';
 
@@ -10,8 +11,10 @@ type TOrderSidebarProps = {
   priceText: string;
   canGoToStep2: boolean;
   canGoToStep3: boolean;
+  canGoToStep4: boolean;
   onStepChange: (step: Step) => void;
   onOpenConfirm: () => void;
+  onOpenCancelConfirm: () => void;
 };
 
 const TEXT = {
@@ -29,11 +32,14 @@ export const OrderSidebar = memo(function OrderSidebar({
   priceText,
   canGoToStep2,
   canGoToStep3,
+  canGoToStep4,
   onStepChange,
   onOpenConfirm,
+  onOpenCancelConfirm,
 }: TOrderSidebarProps) {
   return (
     <aside className={styles.sidebar}>
+      <OrderContainer>
       <div className={styles.box}>
         <h3 className={styles.title}>{TEXT.yourOrder}</h3>
         <OrderDetails items={items} priceText={priceText} />
@@ -51,7 +57,7 @@ export const OrderSidebar = memo(function OrderSidebar({
           )}
 
           {step === 3 && (
-            <Button size="full" onClick={() => onStepChange(4)}>
+            <Button size="full" disabled={!canGoToStep4} onClick={() => onStepChange(4)}>
               {TEXT.total}
             </Button>
           )}
@@ -63,12 +69,13 @@ export const OrderSidebar = memo(function OrderSidebar({
           )}
 
           {step === 5 && (
-            <Button size="full" tone="darkRed">
+            <Button size="full" tone="darkRed" onClick={onOpenCancelConfirm}>
               {TEXT.cancel}
             </Button>
           )}
         </div>
       </div>
+      </OrderContainer>
     </aside>
   );
 });

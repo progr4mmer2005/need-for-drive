@@ -1,0 +1,22 @@
+@use '@/shared/styles/variables' as *;
+
+.container {
+}
+
+@media (max-width: $breakpoint-desktop-lg) {
+  .container {
+    padding: 0 64px;
+  }
+}
+
+@media (max-width: $breakpoint-mobile-lg) {
+  .container {
+    padding: 0 32px;
+  }
+}
+
+@media (max-width: $breakpoint-mobile-sm) {
+  .container {
+    padding: 0 16px;
+  }
+}

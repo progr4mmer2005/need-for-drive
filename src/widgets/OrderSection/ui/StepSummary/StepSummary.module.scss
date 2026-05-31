@@ -1,4 +1,4 @@
-﻿@use '../../../../shared/styles/variables' as *;
+@use '../../../../shared/styles/variables' as *;
 
 .panel {
   max-width: 735px;
@@ -67,9 +67,7 @@
   .top {
     grid-template-columns: 1fr;
   }
-}
 
-@media (max-width: $breakpoint-tablet) {
   .imageWrap {
     justify-content: center;
   }
