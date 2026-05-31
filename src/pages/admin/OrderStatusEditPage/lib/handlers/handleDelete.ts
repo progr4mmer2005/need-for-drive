@@ -15,7 +15,7 @@ export async function handleDelete(deps: TDeps): Promise<void> {
   try {
     await deleteOrderStatus(deps.id);
     deps.showToast('Статус удалён', 'success');
-    setTimeout(() => deps.navigate('/admin/order-statuses'), 1200);
+    setTimeout(() => deps.navigate('/admin/order-statuses'), 2500);
   } catch {
     deps.showToast('Ошибка при удалении', 'error');
   } finally {

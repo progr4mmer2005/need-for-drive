@@ -15,7 +15,7 @@ export async function handleDelete(deps: TDeps): Promise<void> {
   try {
     await deleteUser(deps.id);
     deps.showToast('Пользователь удалён', 'success');
-    setTimeout(() => deps.navigate('/admin/users'), 1200);
+    setTimeout(() => deps.navigate('/admin/users'), 2500);
   } catch {
     deps.showToast('Ошибка при удалении', 'error');
   } finally {

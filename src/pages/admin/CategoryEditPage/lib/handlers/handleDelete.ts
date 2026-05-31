@@ -15,7 +15,7 @@ export async function handleDelete(deps: TDeps): Promise<void> {
   try {
     await deleteCategory(deps.id);
     deps.showToast('Категория удалена', 'success');
-    setTimeout(() => deps.navigate('/admin/categories'), 1200);
+    setTimeout(() => deps.navigate('/admin/categories'), 2500);
   } catch {
     deps.showToast('Ошибка при удалении', 'error');
   } finally {

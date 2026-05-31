@@ -15,7 +15,7 @@ export async function handleDelete(deps: TDeps): Promise<void> {
   try {
     await deleteCar(deps.id);
     deps.showToast('Успех! Машина удалена', 'success');
-    setTimeout(() => deps.navigate('/admin/cars'), 1200);
+    setTimeout(() => deps.navigate('/admin/cars'), 2500);
   } catch {
     deps.showToast('Ошибка при удалении', 'error');
   } finally {

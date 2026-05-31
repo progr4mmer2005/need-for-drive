@@ -15,7 +15,7 @@ export async function handleDelete(deps: TDeps): Promise<void> {
   try {
     await deleteRate(deps.id);
     deps.showToast('Тариф удалён', 'success');
-    setTimeout(() => deps.navigate('/admin/rates'), 1200);
+    setTimeout(() => deps.navigate('/admin/rates'), 2500);
   } catch {
     deps.showToast('Ошибка при удалении', 'error');
   } finally {

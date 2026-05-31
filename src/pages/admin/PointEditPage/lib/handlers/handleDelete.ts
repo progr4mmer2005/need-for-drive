@@ -15,7 +15,7 @@ export async function handleDelete(deps: TDeps): Promise<void> {
   try {
     await deletePoint(deps.id);
     deps.showToast('Пункт выдачи удалён', 'success');
-    setTimeout(() => deps.navigate('/admin/points'), 1200);
+    setTimeout(() => deps.navigate('/admin/points'), 2500);
   } catch {
     deps.showToast('Ошибка при удалении', 'error');
   } finally {

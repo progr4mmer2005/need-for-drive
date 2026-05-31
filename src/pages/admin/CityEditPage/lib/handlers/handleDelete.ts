@@ -15,7 +15,7 @@ export async function handleDelete(deps: TDeps): Promise<void> {
   try {
     await deleteCity(deps.id);
     deps.showToast('Город удалён', 'success');
-    setTimeout(() => deps.navigate('/admin/cities'), 1200);
+    setTimeout(() => deps.navigate('/admin/cities'), 2500);
   } catch {
     deps.showToast('Ошибка при удалении', 'error');
   } finally {
