@@ -1,2 +1,2 @@
 export { LeafletMap } from './LeafletMap';
-export type { ILeafletMapPoint } from './LeafletMap';
+export type { ILeafletMapPoint } from './types';
