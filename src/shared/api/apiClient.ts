@@ -4,16 +4,20 @@ export const API_BASE_URL = 'http://localhost:3000/api';
 
 const ACCESS_TOKEN_KEY = 'nfd_access_token';
 const REFRESH_TOKEN_KEY = 'nfd_refresh_token';
+const USERNAME_KEY = 'nfd_username';
 
 export const TOKEN_STORAGE = {
   getAccess: () => localStorage.getItem(ACCESS_TOKEN_KEY),
   getRefresh: () => localStorage.getItem(REFRESH_TOKEN_KEY),
+  getUsername: () => localStorage.getItem(USERNAME_KEY) ?? '',
   setAccess: (accessToken: string) => localStorage.setItem(ACCESS_TOKEN_KEY, accessToken),
   setRefresh: (refreshTokenValue: string) =>
     localStorage.setItem(REFRESH_TOKEN_KEY, refreshTokenValue),
+  setUsername: (name: string) => localStorage.setItem(USERNAME_KEY, name),
   clear: () => {
     localStorage.removeItem(ACCESS_TOKEN_KEY);
     localStorage.removeItem(REFRESH_TOKEN_KEY);
+    localStorage.removeItem(USERNAME_KEY);
   },
 };
 

@@ -10,6 +10,7 @@ import { TOKEN_STORAGE } from '@/shared/api/apiClient';
 interface AuthContextValue {
   isAuthenticated: boolean;
   isAuthLoading: boolean;
+  username: string;
   login: (username: string, password: string) => Promise<void>;
   register: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -20,6 +21,7 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
     let mounted = true;
@@ -39,6 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (access) {
         if (mounted) {
           setIsAuthenticated(true);
+          setUsername(TOKEN_STORAGE.getUsername());
           setIsAuthLoading(false);
         }
         return;
@@ -46,7 +49,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       try {
         await apiRefreshToken();
-        if (mounted) setIsAuthenticated(true);
+        if (mounted) {
+          setIsAuthenticated(true);
+          setUsername(TOKEN_STORAGE.getUsername());
+        }
       } catch {
         TOKEN_STORAGE.clear();
         if (mounted) setIsAuthenticated(false);
@@ -62,19 +68,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  const login = useCallback(async (username: string, password: string) => {
-    await apiLogin(username, password);
+  const login = useCallback(async (usernameArg: string, password: string) => {
+    await apiLogin(usernameArg, password);
     setIsAuthenticated(true);
+    setUsername(TOKEN_STORAGE.getUsername());
   }, []);
 
   const logout = useCallback(async () => {
     await apiLogout();
     setIsAuthenticated(false);
+    setUsername('');
   }, []);
 
-  const register = useCallback(async (username: string, password: string) => {
-    await apiRegister(username, password);
+  const register = useCallback(async (usernameArg: string, password: string) => {
+    await apiRegister(usernameArg, password);
     setIsAuthenticated(true);
+    setUsername(TOKEN_STORAGE.getUsername());
   }, []);
 
   return (
@@ -82,6 +91,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{
         isAuthenticated,
         isAuthLoading,
+        username,
         login,
         register,
         logout,

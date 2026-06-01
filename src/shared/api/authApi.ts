@@ -10,6 +10,7 @@ export async function login(username: string, password: string): Promise<AuthRes
 
   TOKEN_STORAGE.setAccess(data.access_token);
   TOKEN_STORAGE.setRefresh(data.refresh_token);
+  TOKEN_STORAGE.setUsername(username);
   return data;
 }
 
@@ -21,6 +22,7 @@ export async function register(username: string, password: string): Promise<Auth
 
   TOKEN_STORAGE.setAccess(data.access_token);
   TOKEN_STORAGE.setRefresh(data.refresh_token);
+  TOKEN_STORAGE.setUsername(username);
   return data;
 }
 
@@ -41,7 +43,7 @@ export async function logout(): Promise<void> {
   try {
     await API_CLIENT.post('/auth/logout');
   } catch {
-    // logout best-effort — ignore server errors
+    //
   }
 
   TOKEN_STORAGE.clear();

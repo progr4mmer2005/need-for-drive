@@ -36,7 +36,7 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 export function AdminLayout() {
-  const { logout } = useAuth();
+  const { logout, username } = useAuth();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [search, setSearch] = useState('');
@@ -109,8 +109,8 @@ export function AdminLayout() {
                 type="button"
                 onClick={() => setDropdownOpen((prevDropdownOpen) => !prevDropdownOpen)}
               >
-                <span className={styles.avatar}>A</span>
-                <span className={styles.adminName}>Admin</span>
+                <span className={styles.avatar}>{username ? username[0].toUpperCase() : 'A'}</span>
+                <span className={styles.adminName}>{username || 'Admin'}</span>
                 <span className={styles.chevron}>▾</span>
               </button>
               {dropdownOpen && (
