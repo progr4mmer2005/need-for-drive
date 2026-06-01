@@ -2,13 +2,13 @@
 import { FacebookIcon, InstagramIcon, TelegramIcon } from '@/shared/icons';
 import * as styles from './SocialLinks.module.scss';
 
-type SocialLink = {
+type TSocialLink = {
   href: string;
   label: string;
   Icon: ComponentType<SVGProps<SVGSVGElement>>;
 };
 
-const LINKS: SocialLink[] = [
+const LINKS: TSocialLink[] = [
   { href: 'https://t.me', label: 'Telegram', Icon: TelegramIcon },
   { href: 'https://facebook.com', label: 'Facebook', Icon: FacebookIcon },
   { href: 'https://instagram.com', label: 'Instagram', Icon: InstagramIcon },
