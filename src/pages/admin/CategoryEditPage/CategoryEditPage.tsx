@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { AdminPageTitle } from '@/shared/components/AdminPageTitle';
-import { AdminToast, useAdminToast } from '@/shared/components/AdminToast';
+import { AdminEditLayout } from '@/shared/components/AdminEditLayout';
 import { AdminField, AdminInput } from '@/shared/components/AdminField';
-import { Loader } from '@/shared/components/Loader';
+import { useAdminToast } from '@/shared/lib/useAdminToast';
 import type { IFormState } from './types';
 import { INITIAL } from './constants';
 import { initCategory } from './lib/handlers/initCategory';
@@ -26,67 +25,42 @@ export function CategoryEditPage() {
     void initCategory(id, isNew, { setForm, setLoading });
   }, [id, isNew]);
 
-  if (loading) return <Loader />;
-
   return (
-    <div>
-      <AdminToast toast={toast} onClose={closeToast} />
+    <AdminEditLayout
+      title={isNew ? 'Новая категория' : 'Редактирование категории'}
+      cardTitle="Настройки категории"
+      isNew={isNew}
+      loading={loading}
+      saving={saving}
+      cancelPath="/admin/categories"
+      onSave={() => handleSave(form, { isNew, id: Number(id), setErrors, setSaving, showToast, navigate })}
+      onDelete={() => handleDelete({ id: Number(id), setSaving, showToast, navigate })}
+      toast={toast}
+      onCloseToast={closeToast}
+    >
+      <AdminField label="Название категории" error={errors.name}>
+        <AdminInput
+          value={form.name}
+          maxLength={150}
+          placeholder="Эконом, Комфорт, Внедорожник..."
+          hasError={!!errors.name}
+          onChange={(e) => {
+            setForm((p) => ({ ...p, name: e.target.value }));
+            setErrors((p) => ({ ...p, name: '' }));
+          }}
+        />
+      </AdminField>
 
-      <AdminPageTitle>{isNew ? 'Новая категория' : 'Редактирование категории'}</AdminPageTitle>
-
-      <div className={styles.card}>
-        <h2 className={styles.cardTitle}>Настройки категории</h2>
-
-        <AdminField label="Название категории" error={errors.name}>
-          <AdminInput
-            value={form.name}
-            maxLength={150}
-            placeholder="Эконом, Комфорт, Внедорожник..."
-            hasError={!!errors.name}
-            onChange={(event) => {
-              setForm((prev) => ({ ...prev, name: event.target.value }));
-              setErrors((prev) => ({ ...prev, name: '' }));
-            }}
-          />
-        </AdminField>
-
-        <AdminField label="Описание">
-          <textarea
-            className={styles.textarea}
-            value={form.description}
-            maxLength={500}
-            placeholder="Описание категории..."
-            rows={4}
-            onChange={(event) => setForm((prev) => ({ ...prev, description: event.target.value }))}
-          />
-        </AdminField>
-
-        <div className={styles.bottomActions}>
-          <div className={styles.leftActions}>
-            <button
-              type="button"
-              className={styles.saveBtn}
-              disabled={saving}
-              onClick={() => handleSave(form, { isNew, id: Number(id), setErrors, setSaving, showToast, navigate })}
-            >
-              Сохранить
-            </button>
-            <button type="button" className={styles.cancelBtn} onClick={() => navigate('/admin/categories')}>
-              Отменить
-            </button>
-          </div>
-          {!isNew && (
-            <button
-              type="button"
-              className={styles.deleteBtn}
-              disabled={saving}
-              onClick={() => handleDelete({ id: Number(id), setSaving, showToast, navigate })}
-            >
-              Удалить
-            </button>
-          )}
-        </div>
-      </div>
-    </div>
+      <AdminField label="Описание">
+        <textarea
+          className={styles.textarea}
+          value={form.description}
+          maxLength={500}
+          placeholder="Описание категории..."
+          rows={4}
+          onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))}
+        />
+      </AdminField>
+    </AdminEditLayout>
   );
 }

@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { AdminPageTitle } from '@/shared/components/AdminPageTitle';
-import { AdminToast, useAdminToast } from '@/shared/components/AdminToast';
+import { AdminEditLayout } from '@/shared/components/AdminEditLayout';
 import { AdminField, AdminInput } from '@/shared/components/AdminField';
-import { Loader } from '@/shared/components/Loader';
+import { useAdminToast } from '@/shared/lib/useAdminToast';
 import { initOrderStatus } from './lib/handlers/initOrderStatus';
 import { handleSave } from './lib/handlers/handleSave';
 import { handleDelete } from './lib/handlers/handleDelete';
-import styles from './OrderStatusEditPage.module.scss';
 
 export function OrderStatusEditPage() {
   const { id } = useParams<{ id: string }>();
@@ -24,53 +22,28 @@ export function OrderStatusEditPage() {
     void initOrderStatus(id, isNew, { setName, setLoading });
   }, [id, isNew]);
 
-  if (loading) return <Loader />;
-
   return (
-    <div>
-      <AdminToast toast={toast} onClose={closeToast} />
-
-      <AdminPageTitle>{isNew ? 'Новый статус заказа' : 'Редактирование статуса'}</AdminPageTitle>
-
-      <div className={styles.card}>
-        <h2 className={styles.cardTitle}>Настройки статуса</h2>
-
-        <AdminField label="Название статуса" error={error}>
-          <AdminInput
-            value={name}
-            maxLength={150}
-            placeholder="Новый"
-            hasError={!!error}
-            onChange={(e) => { setName(e.target.value); setError(''); }}
-          />
-        </AdminField>
-
-        <div className={styles.bottomActions}>
-          <div className={styles.leftActions}>
-            <button
-              type="button"
-              className={styles.saveBtn}
-              disabled={saving}
-              onClick={() => handleSave(name, { isNew, id: Number(id), setError, setSaving, showToast, navigate })}
-            >
-              Сохранить
-            </button>
-            <button type="button" className={styles.cancelBtn} onClick={() => navigate('/admin/order-statuses')}>
-              Отменить
-            </button>
-          </div>
-          {!isNew && (
-            <button
-              type="button"
-              className={styles.deleteBtn}
-              disabled={saving}
-              onClick={() => handleDelete({ id: Number(id), setSaving, showToast, navigate })}
-            >
-              Удалить
-            </button>
-          )}
-        </div>
-      </div>
-    </div>
+    <AdminEditLayout
+      title={isNew ? 'Новый статус заказа' : 'Редактирование статуса'}
+      cardTitle="Настройки статуса"
+      isNew={isNew}
+      loading={loading}
+      saving={saving}
+      cancelPath="/admin/order-statuses"
+      onSave={() => handleSave(name, { isNew, id: Number(id), setError, setSaving, showToast, navigate })}
+      onDelete={() => handleDelete({ id: Number(id), setSaving, showToast, navigate })}
+      toast={toast}
+      onCloseToast={closeToast}
+    >
+      <AdminField label="Название статуса" error={error}>
+        <AdminInput
+          value={name}
+          maxLength={150}
+          placeholder="Новый"
+          hasError={!!error}
+          onChange={(e) => { setName(e.target.value); setError(''); }}
+        />
+      </AdminField>
+    </AdminEditLayout>
   );
 }
