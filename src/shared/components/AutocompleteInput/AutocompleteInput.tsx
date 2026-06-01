@@ -1,16 +1,12 @@
 ﻿import React, {
   useEffect, useMemo, useRef, useState,
 } from 'react';
+import { IAutocompleteInputProps } from './types';
+import { filterOptions } from './lib/utils/filterOptions';
+import { handleInputChange } from './lib/handlers/handleInputChange';
+import { handleOptionClick } from './lib/handlers/handleOptionClick';
+import { handleClear } from './lib/handlers/handleClear';
 import * as styles from './AutocompleteInput.module.scss';
-
-interface IAutocompleteInputProps {
-  label: string;
-  value: string;
-  placeholder?: string;
-  options: string[];
-  disabled?: boolean;
-  onChange: (value: string) => void;
-}
 
 export const AutocompleteInput: React.FC<IAutocompleteInputProps> = ({
   label,
@@ -29,39 +25,25 @@ export const AutocompleteInput: React.FC<IAutocompleteInputProps> = ({
   }, [value]);
 
   const filteredOptions = useMemo(
-    () => options.filter((option) => option.toLowerCase().includes(inputValue.toLowerCase())),
+    () => filterOptions(options, inputValue),
     [inputValue, options],
   );
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const onMouseDown = (event: MouseEvent) => {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('mousedown', onMouseDown);
+    return () => document.removeEventListener('mousedown', onMouseDown);
   }, []);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const nextValue = event.target.value;
-    setInputValue(nextValue);
-    onChange(nextValue);
-    setIsOpen(true);
-  };
-
-  const handleOptionClick = (option: string) => {
-    setInputValue(option);
-    onChange(option);
-    setIsOpen(false);
-  };
-
-  const handleClear = () => {
-    setInputValue('');
-    onChange('');
-    setIsOpen(true);
-  };
+  const deps = { setInputValue, onChange, setIsOpen };
+  const onInputChange = handleInputChange(deps);
+  const onOptionClick = handleOptionClick(deps);
+  const onClear = handleClear(deps);
 
   return (
     <div className={styles.autocomplete} ref={wrapperRef}>
@@ -71,13 +53,13 @@ export const AutocompleteInput: React.FC<IAutocompleteInputProps> = ({
           type="text"
           className={styles.autocompleteInput}
           value={inputValue}
-          onChange={handleInputChange}
+          onChange={onInputChange}
           onFocus={() => setIsOpen(true)}
           placeholder={placeholder}
           disabled={disabled}
         />
         {inputValue && !disabled && (
-          <button className={styles.autocompleteClear} type="button" onClick={handleClear} aria-label="Очистить поле">
+          <button className={styles.autocompleteClear} type="button" onClick={onClear} aria-label="Очистить поле">
             <span className={styles.autocompleteClearIcon} />
           </button>
         )}
@@ -88,7 +70,7 @@ export const AutocompleteInput: React.FC<IAutocompleteInputProps> = ({
                 key={`${option}-${index}`}
                 className={styles.autocompleteOption}
                 type="button"
-                onClick={() => handleOptionClick(option)}
+                onClick={() => onOptionClick(option)}
               >
                 {option}
               </button>
