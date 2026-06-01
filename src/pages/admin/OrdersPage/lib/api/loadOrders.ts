@@ -1,7 +1,7 @@
 import { ORDERS_API } from '@/shared/api/ordersApi';
 import type { Order } from '@/shared/api/types';
 import type { TFilters } from '../../types';
-import { PAGE_SIZE } from '../../constants';
+import { PAGE_SIZE } from '@/shared/lib/pagination';
 
 export async function loadOrders(page: number, filters: TFilters): Promise<{ data: Order[]; count: number }> {
   const params: Record<string, number> = { limit: PAGE_SIZE, page: page - 1 };

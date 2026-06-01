@@ -1,5 +1,5 @@
 ﻿import { useState, type ComponentType, type SVGProps } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/shared/context/AuthContext';
 import {
   AdminCarCardIcon,
@@ -100,8 +100,8 @@ export function AdminLayout() {
 
         <footer className={styles.footer}>
           <div className={styles.footerLinks}>
-            <a href="/" className={styles.footerLink}>Главная страница</a>
-            <a href="/#/order" className={styles.footerLink}>Ссылка</a>
+            <Link to="/" className={styles.footerLink}>Главная страница</Link>
+            <Link to="/order" className={styles.footerLink}>Ссылка</Link>
           </div>
           <span className={styles.copyright}>Copyright © 2020 Simbirsoft</span>
         </footer>

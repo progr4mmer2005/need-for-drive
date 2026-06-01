@@ -120,48 +120,6 @@
   text-decoration: none;
 }
 
-.pagination {
-  display: flex;
-  height: 48px;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  border-top: 1px solid $border-light-color;
-}
-
-.pageBtn {
-  min-width: 14px;
-  height: 18px;
-  border: none;
-  background: none;
-  color: $accent-blue-color;
-  padding: 0;
-  font-size: 14px;
-  line-height: 18px;
-  cursor: pointer;
-}
-
-.pageDots {
-  color: $accent-blue-color;
-  font-size: 14px;
-  line-height: 18px;
-}
-
-.pageBtnActive {
-  width: 18px;
-  height: 18px;
-  border: none;
-  border-radius: 50%;
-  background: $accent-blue-color;
-  color: $white-color;
-  padding: 0;
-  font-size: 14px;
-  line-height: 18px;
-  text-align: center;
-  cursor: pointer;
-}
-
 .empty {
   padding: 24px;
   color: $text-muted-color;

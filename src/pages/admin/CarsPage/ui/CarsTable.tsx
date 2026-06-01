@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import type { Car } from '@/shared/api/types';
 import styles from '../CarsPage.module.scss';
 
@@ -39,7 +40,7 @@ export function CarsTable({ cars }: TCarsTableProps) {
             </td>
             <td>{(car.colors || []).slice(0, 3).join(', ')}</td>
             <td>
-              <a className={styles.editBtn} href={`#/admin/cars/${car.id}`}>Изменить</a>
+              <Link className={styles.editBtn} to={`/admin/cars/${car.id}`}>Изменить</Link>
             </td>
           </tr>
         ))}

@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import type { City } from '@/shared/api/types';
-import { AdminPageTitle } from '@/shared/components/AdminPageTitle';
-import { Loader } from '@/shared/components/Loader';
-import { buildPaginationPages } from '@/shared/lib/pagination';
-import { calcTotalPages } from './lib/form/calcTotalPages';
+import { AdminListLayout } from '@/shared/components/AdminListLayout';
+import { calcTotalPages } from '@/shared/lib/pagination';
 import { getPageCities } from './lib/form/getPageCities';
 import { initCities } from './lib/handlers/initCities';
-import styles from './CitiesPage.module.scss';
 
 export function CitiesPage() {
   const [cities, setCities] = useState<City[]>([]);
@@ -18,65 +16,26 @@ export function CitiesPage() {
   }, []);
 
   const totalPages = calcTotalPages(cities.length);
-  const paginationPages = buildPaginationPages(page, totalPages);
-  const pageCities = getPageCities(cities, page);
+  const pageItems = getPageCities(cities, page);
 
   return (
-    <div>
-      <div className={styles.header}>
-        <AdminPageTitle>Города</AdminPageTitle>
-        <a className={styles.addBtn} href="#/admin/cities/new">+ Добавить</a>
-      </div>
-
-      <div className={styles.tableWrap}>
-        <div className={styles.scrollArea}>
-          {loading ? <Loader /> : pageCities.length === 0 ? (
-            <p className={styles.empty}>Нет городов</p>
-          ) : (
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Название</th>
-                  <th>Действия</th>
-                </tr>
-              </thead>
-              <tbody>
-                {pageCities.map((city) => (
-                  <tr key={city.id}>
-                    <td>{city.id}</td>
-                    <td>{city.name}</td>
-                    <td>
-                      <a className={styles.editBtn} href={`#/admin/cities/${city.id}`}>Изменить</a>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
-
-        <div className={styles.pagination}>
-          <button type="button" className={styles.pageBtn} disabled={page === 1} onClick={() => setPage(1)}>«</button>
-          {paginationPages.map((pageItem, pageIndex) => {
-            if (pageItem === '...') {
-              return <span key={`dots-${pageIndex}`} className={styles.pageDots}>...</span>;
-            }
-            const isActive = pageItem === page;
-            return (
-              <button
-                key={pageItem}
-                type="button"
-                className={isActive ? styles.pageBtnActive : styles.pageBtn}
-                onClick={() => setPage(pageItem)}
-              >
-                {pageItem}
-              </button>
-            );
-          })}
-          <button type="button" className={styles.pageBtn} disabled={page === totalPages} onClick={() => setPage(totalPages)}>»</button>
-        </div>
-      </div>
-    </div>
+    <AdminListLayout
+      title="Города"
+      addLink="/admin/cities/new"
+      loading={loading}
+      items={pageItems}
+      emptyText="Нет городов"
+      columns={['ID', 'Название', 'Действия']}
+      renderRow={(city, cx) => (
+        <tr key={city.id}>
+          <td>{city.id}</td>
+          <td>{city.name}</td>
+          <td><Link to={`/admin/cities/${city.id}`} className={cx.editLink}>Изменить</Link></td>
+        </tr>
+      )}
+      page={page}
+      totalPages={totalPages}
+      onPageChange={setPage}
+    />
   );
 }

@@ -7,7 +7,7 @@ import { CarFilters } from './ui/CarFilters';
 import { CarsTable } from './ui/CarsTable';
 import type { TFilters } from './types';
 import { DEFAULT_FILTERS } from './constants';
-import { calcTotalPages } from './lib/form/calcTotalPages';
+import { calcTotalPages } from '@/shared/lib/pagination';
 import { filterCars } from './lib/form/filterCars';
 import { getCategories } from './lib/form/getCategories';
 import { getColors } from './lib/form/getColors';

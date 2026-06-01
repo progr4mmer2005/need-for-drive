@@ -9,7 +9,7 @@ import { OrderCard } from './ui/OrderCard';
 import { OrderFilters } from './ui/OrderFilters';
 import type { TFilters } from './types';
 import { DEFAULT_FILTERS } from './constants';
-import { calcTotalPages } from './lib/form/calcTotalPages';
+import { calcTotalPages } from '@/shared/lib/pagination';
 import { initFilterOptions } from './lib/handlers/initFilterOptions';
 import { fetchOrders } from './lib/handlers/fetchOrders';
 import { handleFilterChange } from './lib/handlers/handleFilterChange';
