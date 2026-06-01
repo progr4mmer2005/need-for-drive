@@ -15,7 +15,7 @@ function isDateRangeValidFn(dateFrom: string, dateTo: string): boolean {
 function syncRateIfMissing(
   rentalRates: ApiOrderData['rentalRates'],
   selectedRateId: string,
-  setOrderState: Dispatch<SetStateAction<TOrderState>>,
+  setOrderState: Dispatch<SetStateAction<TOrderState>>
 ) {
   if (!rentalRates.length) return;
   const hasCurrentRate = rentalRates.some((rate) => rate.id === selectedRateId);
@@ -27,7 +27,7 @@ function syncRateIfMissing(
 function syncColorIfMissing(
   selectedCarColors: string[] | undefined,
   selectedColor: string,
-  setOrderState: Dispatch<SetStateAction<TOrderState>>,
+  setOrderState: Dispatch<SetStateAction<TOrderState>>
 ) {
   if (!selectedCarColors?.length) return;
   if (selectedCarColors.includes(selectedColor)) return;
@@ -37,7 +37,7 @@ function syncColorIfMissing(
 export function useOrderSelections(
   orderState: TOrderState,
   orderData: ApiOrderData | null,
-  setOrderState: Dispatch<SetStateAction<TOrderState>>,
+  setOrderState: Dispatch<SetStateAction<TOrderState>>
 ) {
   const cities = orderData?.cities || [];
   const cityOptions = cities.map((city) => city.name);
@@ -45,14 +45,15 @@ export function useOrderSelections(
 
   const categories = useMemo(
     () => [ORDER_DEFAULTS.CATEGORY, ...new Set((orderData?.cars || []).map((car) => car.category))],
-    [orderData?.cars],
+    [orderData?.cars]
   );
 
   const selectedCity = useMemo(
-    () => cities.find(
-      (city) => city.name.toLowerCase() === orderState.cityInput.trim().toLowerCase(),
-    ) ?? null,
-    [cities, orderState.cityInput],
+    () =>
+      cities.find(
+        (city) => city.name.toLowerCase() === orderState.cityInput.trim().toLowerCase()
+      ) ?? null,
+    [cities, orderState.cityInput]
   );
 
   const pickupOptions = selectedCity ? selectedCity.pickupPoints.map((p) => p.name) : [];
@@ -62,9 +63,11 @@ export function useOrderSelections(
     if (orderState.selectedPickupId) {
       return selectedCity.pickupPoints.find((p) => p.id === orderState.selectedPickupId) ?? null;
     }
-    return selectedCity.pickupPoints.find(
-      (p) => p.name.toLowerCase() === orderState.pickupInput.trim().toLowerCase(),
-    ) ?? null;
+    return (
+      selectedCity.pickupPoints.find(
+        (p) => p.name.toLowerCase() === orderState.pickupInput.trim().toLowerCase()
+      ) ?? null
+    );
   }, [orderState.pickupInput, selectedCity, orderState.selectedPickupId]);
 
   const filteredCars = useMemo(() => {
@@ -72,12 +75,23 @@ export function useOrderSelections(
     return (orderData?.cars || []).filter((car) => car.category === orderState.selectedCategory);
   }, [orderData?.cars, orderState.selectedCategory]);
 
-  const selectedCar = (orderData?.cars || []).find((car) => car.id === orderState.selectedCarId) ?? null;
-  const selectedRate = (orderData?.rentalRates || []).find((rate) => rate.id === orderState.selectedRateId) ?? null;
-  const selectedExtras = (orderData?.extras || []).filter((extra) => orderState.selectedExtraIds.includes(extra.id));
+  const selectedCar =
+    (orderData?.cars || []).find((car) => car.id === orderState.selectedCarId) ?? null;
+  const selectedRate =
+    (orderData?.rentalRates || []).find((rate) => rate.id === orderState.selectedRateId) ?? null;
+  const selectedExtras = (orderData?.extras || []).filter((extra) =>
+    orderState.selectedExtraIds.includes(extra.id)
+  );
 
-  const availableAt = formatAvailableAt(orderState.dateFrom || orderState.dateTo, ORDER_TEXT.notSelected);
-  const durationLabel = formatDuration(orderState.dateFrom, orderState.dateTo, ORDER_TEXT.notSelected);
+  const availableAt = formatAvailableAt(
+    orderState.dateFrom || orderState.dateTo,
+    ORDER_TEXT.notSelected
+  );
+  const durationLabel = formatDuration(
+    orderState.dateFrom,
+    orderState.dateTo,
+    ORDER_TEXT.notSelected
+  );
 
   useEffect(() => {
     syncRateIfMissing(orderData?.rentalRates ?? [], orderState.selectedRateId, setOrderState);
@@ -90,7 +104,9 @@ export function useOrderSelections(
   const isLocationStepComplete = Boolean(selectedCity && selectedPickup);
   const isModelStepComplete = Boolean(isLocationStepComplete && selectedCar);
   const isDateRangeValid = isDateRangeValidFn(orderState.dateFrom, orderState.dateTo);
-  const isExtrasStepComplete = Boolean(isModelStepComplete && selectedRate && orderState.selectedColor && isDateRangeValid);
+  const isExtrasStepComplete = Boolean(
+    isModelStepComplete && selectedRate && orderState.selectedColor && isDateRangeValid
+  );
 
   const globalMinPrice = useMemo(() => {
     const mins = (orderData?.cars || []).map((c) => c.priceMin).filter(Boolean);

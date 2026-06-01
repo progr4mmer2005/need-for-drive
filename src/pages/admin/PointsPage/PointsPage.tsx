@@ -12,7 +12,7 @@ export function PointsPage() {
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    void initPoints(page, { setPoints, setTotal, setLoading });
+    initPoints(page, { setPoints, setTotal, setLoading });
   }, [page]);
 
   const totalPages = calcTotalPages(total);
@@ -31,7 +31,11 @@ export function PointsPage() {
           <td>{point.name}</td>
           <td>{point.address}</td>
           <td>{point.cityId?.name || '—'}</td>
-          <td><Link to={`/admin/points/${point.id}`} className={cx.editLink}>Изменить</Link></td>
+          <td>
+            <Link to={`/admin/points/${point.id}`} className={cx.editLink}>
+              Изменить
+            </Link>
+          </td>
         </tr>
       )}
       page={page}

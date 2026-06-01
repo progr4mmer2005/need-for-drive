@@ -1,4 +1,4 @@
-﻿import type { ComponentType, SVGProps } from 'react';
+import type { ComponentType, SVGProps } from 'react';
 import { FacebookIcon, InstagramIcon, TelegramIcon } from '@/shared/icons';
 import * as styles from './SocialLinks.module.scss';
 
@@ -28,4 +28,3 @@ export function SocialLinks() {
     </ul>
   );
 }
-

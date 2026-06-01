@@ -1,4 +1,4 @@
-﻿const SLIDE_1 = new URL('../../assets/images/slider/1.webp', import.meta.url).toString();
+const SLIDE_1 = new URL('../../assets/images/slider/1.webp', import.meta.url).toString();
 const SLIDE_2 = new URL('../../assets/images/slider/2.webp', import.meta.url).toString();
 const SLIDE_3 = new URL('../../assets/images/slider/3.webp', import.meta.url).toString();
 const SLIDE_4 = new URL('../../assets/images/slider/4.webp', import.meta.url).toString();

@@ -12,7 +12,7 @@ export function RateTypesPage() {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    void initRateTypes({ setRateTypes, setLoading });
+    initRateTypes({ setRateTypes, setLoading });
   }, []);
 
   const totalPages = calcTotalPages(rateTypes.length);
@@ -31,7 +31,11 @@ export function RateTypesPage() {
           <td>{rateType.id}</td>
           <td>{rateType.name}</td>
           <td>{rateType.unit}</td>
-          <td><Link to={`/admin/rate-types/${rateType.id}`} className={cx.editLink}>Изменить</Link></td>
+          <td>
+            <Link to={`/admin/rate-types/${rateType.id}`} className={cx.editLink}>
+              Изменить
+            </Link>
+          </td>
         </tr>
       )}
       page={page}

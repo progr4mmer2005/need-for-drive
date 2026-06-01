@@ -1,4 +1,4 @@
-﻿import { LanguageToggle } from '@/shared/components/LanguageToggle';
+import { LanguageToggle } from '@/shared/components/LanguageToggle';
 import { SocialLinks } from '@/shared/components/SocialLinks';
 import * as styles from './SideMenu.module.scss';
 
@@ -13,12 +13,21 @@ type TSideMenuProps = {
 };
 
 export function SideMenu({
-  activeItem, isOpen, language, onClose, onLanguageToggle,
+  activeItem,
+  isOpen,
+  language,
+  onClose,
+  onLanguageToggle,
 }: TSideMenuProps) {
   return (
     <div className={`${styles.menu} ${isOpen ? styles.menuOpen : ''}`}>
       <div className={styles.content}>
-        <button aria-label="Закрыть меню" className={styles.closeButton} type="button" onClick={onClose}>
+        <button
+          aria-label="Закрыть меню"
+          className={styles.closeButton}
+          type="button"
+          onClick={onClose}
+        >
           ×
         </button>
 
@@ -27,7 +36,10 @@ export function SideMenu({
             <ul className={styles.links}>
               {MENU_ITEMS.map((item) => (
                 <li key={item}>
-                  <a className={`${styles.link} ${item === activeItem ? styles.linkActive : ''}`} href="#">
+                  <a
+                    className={`${styles.link} ${item === activeItem ? styles.linkActive : ''}`}
+                    href="#"
+                  >
                     {item}
                   </a>
                 </li>

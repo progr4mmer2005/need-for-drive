@@ -30,11 +30,16 @@ export function OrderEditPage() {
   const [rates, setRates] = useState<Rate[]>([]);
 
   useEffect(() => {
-    void initOptions({ setStatuses, setCities, setCars, setRates }).catch(console.error);
+    initOptions({
+      setStatuses,
+      setCities,
+      setCars,
+      setRates,
+    }).catch(console.error);
   }, []);
 
   useEffect(() => {
-    void initOrder(id, { setOrder, setForm, setLoading });
+    initOrder(id, { setOrder, setForm, setLoading });
   }, [id]);
 
   const fetchPoints = useCallback(async (cityId: string) => {
@@ -43,17 +48,18 @@ export function OrderEditPage() {
   }, []);
 
   useEffect(() => {
-    if (form?.cityId) void fetchPoints(form.cityId);
+    if (form?.cityId) fetchPoints(form.cityId);
   }, [form?.cityId, fetchPoints]);
 
   const setField = <K extends keyof IFormState>(key: K, value: IFormState[K]) => {
-    setForm((prev) => prev ? { ...prev, [key]: value } : prev);
+    setForm((prev) => (prev ? { ...prev, [key]: value } : prev));
   };
 
   if (loading || !form) return <Loader />;
 
   const selectedCar = cars.find((c) => String(c.id) === form.carId) ?? order?.carId ?? null;
-  const selectedStatus = statuses.find((s) => String(s.id) === form.statusId) ?? order?.orderStatusId ?? null;
+  const selectedStatus =
+    statuses.find((s) => String(s.id) === form.statusId) ?? order?.orderStatusId ?? null;
   const carColors = selectedCar && 'colors' in selectedCar ? (selectedCar as Car).colors : [];
 
   return (
@@ -66,9 +72,11 @@ export function OrderEditPage() {
         <div className={styles.previewCard}>
           <div className={styles.previewTop}>
             <div className={styles.previewImg}>
-              {selectedCar && 'thumbnail' in selectedCar && (selectedCar as Car).thumbnail?.path
-                ? <img src={(selectedCar as Car).thumbnail!.path} alt="" />
-                : <div className={styles.previewImgPlaceholder} />}
+              {selectedCar && 'thumbnail' in selectedCar && (selectedCar as Car).thumbnail?.path ? (
+                <img src={(selectedCar as Car).thumbnail!.path} alt="" />
+              ) : (
+                <div className={styles.previewImgPlaceholder} />
+              )}
             </div>
             <div className={styles.previewCarName}>{selectedCar?.name ?? '—'}</div>
             {selectedStatus && <span className={styles.statusText}>{selectedStatus.name}</span>}
@@ -102,9 +110,21 @@ export function OrderEditPage() {
           <div className={styles.previewDivider} />
 
           <div className={styles.previewOptions}>
-            <span className={`${styles.previewOption} ${form.isFullTank ? styles.previewOptionOn : ''}`}>Полный бак</span>
-            <span className={`${styles.previewOption} ${form.isNeedChildChair ? styles.previewOptionOn : ''}`}>Детское кресло</span>
-            <span className={`${styles.previewOption} ${form.isRightWheel ? styles.previewOptionOn : ''}`}>Правый руль</span>
+            <span
+              className={`${styles.previewOption} ${form.isFullTank ? styles.previewOptionOn : ''}`}
+            >
+              Полный бак
+            </span>
+            <span
+              className={`${styles.previewOption} ${form.isNeedChildChair ? styles.previewOptionOn : ''}`}
+            >
+              Детское кресло
+            </span>
+            <span
+              className={`${styles.previewOption} ${form.isRightWheel ? styles.previewOptionOn : ''}`}
+            >
+              Правый руль
+            </span>
           </div>
         </div>
 
@@ -113,30 +133,65 @@ export function OrderEditPage() {
 
           <AdminRow>
             <AdminField label="Статус">
-              <AdminSelect value={form.statusId} onChange={(e) => setField('statusId', e.target.value)}>
+              <AdminSelect
+                value={form.statusId}
+                onChange={(e) => setField('statusId', e.target.value)}
+              >
                 <option value="">Не выбран</option>
-                {statuses.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+                {statuses.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name}
+                  </option>
+                ))}
               </AdminSelect>
             </AdminField>
             <AdminField label="Автомобиль">
-              <AdminSelect value={form.carId} onChange={(e) => { setField('carId', e.target.value); setField('color', ''); }}>
+              <AdminSelect
+                value={form.carId}
+                onChange={(e) => {
+                  setField('carId', e.target.value);
+                  setField('color', '');
+                }}
+              >
                 <option value="">Не выбран</option>
-                {cars.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+                {cars.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
               </AdminSelect>
             </AdminField>
           </AdminRow>
 
           <AdminRow>
             <AdminField label="Город">
-              <AdminSelect value={form.cityId} onChange={(e) => { setField('cityId', e.target.value); setField('pointId', ''); }}>
+              <AdminSelect
+                value={form.cityId}
+                onChange={(e) => {
+                  setField('cityId', e.target.value);
+                  setField('pointId', '');
+                }}
+              >
                 <option value="">Не выбран</option>
-                {cities.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+                {cities.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
               </AdminSelect>
             </AdminField>
             <AdminField label="Пункт выдачи">
-              <AdminSelect value={form.pointId} disabled={!form.cityId} onChange={(e) => setField('pointId', e.target.value)}>
+              <AdminSelect
+                value={form.pointId}
+                disabled={!form.cityId}
+                onChange={(e) => setField('pointId', e.target.value)}
+              >
                 <option value="">Не выбран</option>
-                {points.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+                {points.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name}
+                  </option>
+                ))}
               </AdminSelect>
             </AdminField>
           </AdminRow>
@@ -146,44 +201,79 @@ export function OrderEditPage() {
               <AdminSelect value={form.rateId} onChange={(e) => setField('rateId', e.target.value)}>
                 <option value="">Не выбран</option>
                 {rates.map((r) => (
-                  <option key={r.id} value={r.id}>{r.rateTypeId?.name} — {r.price} ₽/{r.rateTypeId?.unit}</option>
+                  <option key={r.id} value={r.id}>
+                    {r.rateTypeId?.name} — {r.price} ₽/{r.rateTypeId?.unit}
+                  </option>
                 ))}
               </AdminSelect>
             </AdminField>
             <AdminField label="Цвет">
-              <AdminSelect value={form.color} disabled={carColors.length === 0} onChange={(e) => setField('color', e.target.value)}>
+              <AdminSelect
+                value={form.color}
+                disabled={carColors.length === 0}
+                onChange={(e) => setField('color', e.target.value)}
+              >
                 <option value="">Не выбран</option>
-                {carColors.map((col) => <option key={col} value={col}>{col}</option>)}
+                {carColors.map((col) => (
+                  <option key={col} value={col}>
+                    {col}
+                  </option>
+                ))}
               </AdminSelect>
             </AdminField>
           </AdminRow>
 
           <AdminRow>
             <AdminField label="Начало аренды">
-              <AdminInput type="datetime-local" value={form.dateFrom} onChange={(e) => setField('dateFrom', e.target.value)} />
+              <AdminInput
+                type="datetime-local"
+                value={form.dateFrom}
+                onChange={(e) => setField('dateFrom', e.target.value)}
+              />
             </AdminField>
             <AdminField label="Конец аренды">
-              <AdminInput type="datetime-local" value={form.dateTo} onChange={(e) => setField('dateTo', e.target.value)} />
+              <AdminInput
+                type="datetime-local"
+                value={form.dateTo}
+                onChange={(e) => setField('dateTo', e.target.value)}
+              />
             </AdminField>
           </AdminRow>
 
           <AdminRow>
             <AdminField label="Стоимость, ₽">
-              <AdminInput type="number" value={form.price} min={0} onChange={(e) => setField('price', e.target.value)} />
+              <AdminInput
+                type="number"
+                value={form.price}
+                min={0}
+                onChange={(e) => setField('price', e.target.value)}
+              />
             </AdminField>
           </AdminRow>
 
           <div className={styles.checkboxGroup}>
             <label className={styles.checkboxRow}>
-              <input type="checkbox" checked={form.isFullTank} onChange={(e) => setField('isFullTank', e.target.checked)} />
+              <input
+                type="checkbox"
+                checked={form.isFullTank}
+                onChange={(e) => setField('isFullTank', e.target.checked)}
+              />
               <span>Полный бак</span>
             </label>
             <label className={styles.checkboxRow}>
-              <input type="checkbox" checked={form.isNeedChildChair} onChange={(e) => setField('isNeedChildChair', e.target.checked)} />
+              <input
+                type="checkbox"
+                checked={form.isNeedChildChair}
+                onChange={(e) => setField('isNeedChildChair', e.target.checked)}
+              />
               <span>Детское кресло</span>
             </label>
             <label className={styles.checkboxRow}>
-              <input type="checkbox" checked={form.isRightWheel} onChange={(e) => setField('isRightWheel', e.target.checked)} />
+              <input
+                type="checkbox"
+                checked={form.isRightWheel}
+                onChange={(e) => setField('isRightWheel', e.target.checked)}
+              />
               <span>Правый руль</span>
             </label>
           </div>
@@ -194,11 +284,22 @@ export function OrderEditPage() {
                 type="button"
                 className={styles.saveBtn}
                 disabled={saving}
-                onClick={() => handleSave(form, { id, order, setSaving, showToast })}
+                onClick={() =>
+                  handleSave(form, {
+                    id,
+                    order,
+                    setSaving,
+                    showToast,
+                  })
+                }
               >
                 Сохранить
               </button>
-              <button type="button" className={styles.cancelBtn} onClick={() => navigate('/admin/orders')}>
+              <button
+                type="button"
+                className={styles.cancelBtn}
+                onClick={() => navigate('/admin/orders')}
+              >
                 Отменить
               </button>
             </div>
@@ -206,7 +307,14 @@ export function OrderEditPage() {
               type="button"
               className={styles.deleteBtn}
               disabled={saving}
-              onClick={() => handleDelete({ id, setSaving, showToast, navigate })}
+              onClick={() =>
+                handleDelete({
+                  id,
+                  setSaving,
+                  showToast,
+                  navigate,
+                })
+              }
             >
               Удалить
             </button>

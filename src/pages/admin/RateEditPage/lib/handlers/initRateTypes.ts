@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from 'react';
-import type { RateType, } from '@/shared/api/types';
+import type { RateType } from '@/shared/api/types';
 import type { IFormState } from '../../types';
 import { loadRateTypes } from '../api/loadRateTypes';
 

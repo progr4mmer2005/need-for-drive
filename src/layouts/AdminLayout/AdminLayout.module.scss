@@ -207,11 +207,7 @@
   width: 37px;
   height: 37px;
   border-radius: 50%;
-  background: linear-gradient(
-    135deg,
-    $avatar-gradient-start-color,
-    $avatar-gradient-end-color
-  );
+  background: linear-gradient(135deg, $avatar-gradient-start-color, $avatar-gradient-end-color);
   color: $avatar-text-color;
   display: flex;
   align-items: center;
@@ -288,4 +284,3 @@
 .copyright {
   color: $text-muted-color;
 }
-

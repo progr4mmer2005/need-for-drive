@@ -8,10 +8,15 @@ type TCheckboxOptionProps = {
 };
 
 export function CheckboxOption({
-  checked, label, onChange, disabled = false,
+  checked,
+  label,
+  onChange,
+  disabled = false,
 }: TCheckboxOptionProps) {
   return (
-    <label className={`${styles.checkboxLabel} ${checked ? styles.checked : ''} ${disabled ? styles.disabled : ''}`}>
+    <label
+      className={`${styles.checkboxLabel} ${checked ? styles.checked : ''} ${disabled ? styles.disabled : ''}`}
+    >
       <input checked={checked} type="checkbox" onChange={onChange} disabled={disabled} />
       {label}
     </label>

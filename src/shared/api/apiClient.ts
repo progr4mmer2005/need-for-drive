@@ -1,4 +1,4 @@
-﻿import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 
 export const API_BASE_URL = 'http://localhost:3000/api';
 
@@ -9,7 +9,8 @@ export const TOKEN_STORAGE = {
   getAccess: () => localStorage.getItem(ACCESS_TOKEN_KEY),
   getRefresh: () => localStorage.getItem(REFRESH_TOKEN_KEY),
   setAccess: (accessToken: string) => localStorage.setItem(ACCESS_TOKEN_KEY, accessToken),
-  setRefresh: (refreshTokenValue: string) => localStorage.setItem(REFRESH_TOKEN_KEY, refreshTokenValue),
+  setRefresh: (refreshTokenValue: string) =>
+    localStorage.setItem(REFRESH_TOKEN_KEY, refreshTokenValue),
   clear: () => {
     localStorage.removeItem(ACCESS_TOKEN_KEY);
     localStorage.removeItem(REFRESH_TOKEN_KEY);
@@ -21,6 +22,7 @@ const API_CLIENT: AxiosInstance = axios.create({ baseURL: API_BASE_URL });
 API_CLIENT.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = TOKEN_STORAGE.getAccess();
   if (token) {
+    // eslint-disable-next-line no-param-reassign
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
@@ -40,9 +42,9 @@ function processQueue(error: unknown, token: string | null) {
 API_CLIENT.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const original = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+    const original = error.config as InternalAxiosRequestConfig & { retry?: boolean };
 
-    if (error.response?.status === 401 && !original?._retry) {
+    if (error.response?.status === 401 && !original?.retry) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
@@ -52,7 +54,7 @@ API_CLIENT.interceptors.response.use(
         });
       }
 
-      original._retry = true;
+      original.retry = true;
       isRefreshing = true;
 
       const refresh = TOKEN_STORAGE.getRefresh();
@@ -85,7 +87,7 @@ API_CLIENT.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  },
+  }
 );
 
 export default API_CLIENT;

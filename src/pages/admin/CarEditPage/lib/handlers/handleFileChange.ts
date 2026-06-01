@@ -11,7 +11,7 @@ type TDeps = {
 
 export async function handleFileChange(
   event: ChangeEvent<HTMLInputElement>,
-  deps: TDeps,
+  deps: TDeps
 ): Promise<void> {
   const file = event.target.files?.[0];
   if (!file) return;
@@ -19,7 +19,12 @@ export async function handleFileChange(
     const { dataUrl, name, mime } = await processImageFile(file);
     deps.setPreviewUrl(dataUrl);
     deps.setPreviewBroken(false);
-    deps.setForm((prev) => ({ ...prev, thumbnailPath: dataUrl, thumbnailName: name, thumbnailMime: mime }));
+    deps.setForm((prev) => ({
+      ...prev,
+      thumbnailPath: dataUrl,
+      thumbnailName: name,
+      thumbnailMime: mime,
+    }));
   } catch (error) {
     deps.showToast(error instanceof Error ? error.message : 'Не удалось обработать файл', 'error');
   }

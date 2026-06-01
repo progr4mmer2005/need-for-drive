@@ -12,7 +12,7 @@ export function CategoriesPage() {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    void initCategories({ setCategories, setLoading });
+    initCategories({ setCategories, setLoading });
   }, []);
 
   const totalPages = calcTotalPages(categories.length);
@@ -30,7 +30,11 @@ export function CategoriesPage() {
         <tr key={category.id}>
           <td>{category.id}</td>
           <td>{category.name}</td>
-          <td><Link to={`/admin/categories/${category.id}`} className={cx.editLink}>Изменить</Link></td>
+          <td>
+            <Link to={`/admin/categories/${category.id}`} className={cx.editLink}>
+              Изменить
+            </Link>
+          </td>
         </tr>
       )}
       page={page}

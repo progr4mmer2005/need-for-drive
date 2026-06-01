@@ -1,4 +1,4 @@
-﻿import type { ButtonHTMLAttributes, PropsWithChildren } from 'react';
+import type { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 
 import { classNames } from '@/shared/lib/classNames';
 import * as styles from './Button.module.scss';
@@ -50,7 +50,7 @@ export function Button({
         fullWidthOnMobile && styles.fullWidthOnMobile,
         squareOnMobile && styles.squareOnMobile,
         disabled && styles.disabled,
-        className,
+        className
       )}
       type={type}
       disabled={disabled}
@@ -60,5 +60,3 @@ export function Button({
     </button>
   );
 }
-
-

@@ -14,7 +14,12 @@ type TOrderFiltersProps = {
 };
 
 export function OrderFilters({
-  filters, cars, cities, statuses, onFilterChange, onApply,
+  filters,
+  cars,
+  cities,
+  statuses,
+  onFilterChange,
+  onApply,
 }: TOrderFiltersProps) {
   const handleChange = (key: keyof TFilters) => (e: ChangeEvent<HTMLSelectElement>) => {
     onFilterChange(key, e.target.value);
@@ -39,7 +44,11 @@ export function OrderFilters({
         onChange={handleChange('car')}
       >
         <option value="">Автомобиль</option>
-        {cars.map((car) => <option key={car.id} value={car.id}>{car.name}</option>)}
+        {cars.map((car) => (
+          <option key={car.id} value={car.id}>
+            {car.name}
+          </option>
+        ))}
       </select>
 
       <select
@@ -48,7 +57,11 @@ export function OrderFilters({
         onChange={handleChange('city')}
       >
         <option value="">Город</option>
-        {cities.map((city) => <option key={city.id} value={city.id}>{city.name}</option>)}
+        {cities.map((city) => (
+          <option key={city.id} value={city.id}>
+            {city.name}
+          </option>
+        ))}
       </select>
 
       <select
@@ -57,7 +70,11 @@ export function OrderFilters({
         onChange={handleChange('status')}
       >
         <option value="">В процессе</option>
-        {statuses.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+        {statuses.map((s) => (
+          <option key={s.id} value={s.id}>
+            {s.name}
+          </option>
+        ))}
       </select>
 
       <button className={styles.applyBtn} type="button" onClick={onApply}>

@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { Button } from '@/shared/components/Button';
 import { classNames } from '@/shared/lib/classNames';
@@ -34,13 +34,14 @@ export function PromoSlider({ isDimmed }: TPromoSliderProps) {
     };
   }, [isAutoPlayEnabled, totalSlides]);
 
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       if (resumeTimeoutRef.current !== null) {
         window.clearTimeout(resumeTimeoutRef.current);
       }
-    };
-  }, []);
+    },
+    []
+  );
 
   const pauseAutoplayAndScheduleResume = () => {
     setIsAutoPlayEnabled(false);
@@ -80,7 +81,10 @@ export function PromoSlider({ isDimmed }: TPromoSliderProps) {
             key={slide.title}
             aria-hidden={index !== activeIndex}
             className={classNames(styles.slide, index === activeIndex && styles.slideActive)}
-            style={{ backgroundImage: `url(${slide.image})`, opacity: index === activeIndex ? 1 : 0 }}
+            style={{
+              backgroundImage: `url(${slide.image})`,
+              opacity: index === activeIndex ? 1 : 0,
+            }}
           >
             <div className={styles.overlay} />
           </article>

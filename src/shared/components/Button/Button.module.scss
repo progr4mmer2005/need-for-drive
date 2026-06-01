@@ -1,8 +1,5 @@
 @use '@/shared/styles/variables' as *;
 
-
-
-
 .button {
   display: block;
   border: 0;
@@ -13,7 +10,9 @@
   font-weight: 500;
   padding: 15px 24px;
   text-align: center;
-  transition: filter 0.2s ease, transform 0.2s ease;
+  transition:
+    filter 0.2s ease,
+    transform 0.2s ease;
   width: 100%;
 
   &:hover {
@@ -74,7 +73,6 @@
     display: block;
   }
 }
-
 
 .squareOnMobile {
   border-radius: 0;

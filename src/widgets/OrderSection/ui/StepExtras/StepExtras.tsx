@@ -33,22 +33,22 @@ type TStepExtrasProps = {
   onExtraToggle: (extraId: string) => void;
 };
 
-export const StepExtras = memo(function StepExtras({
-  selectedCar,
-  selectedColor,
-  dateFrom,
-  dateTo,
-  selectedRateId,
-  selectedExtraIds,
-  rentalRates,
-  extras,
-  onColorChange,
-  onDateFromChange,
-  onDateToChange,
-  onRateChange,
-  onExtraToggle,
-}: TStepExtrasProps) {
-  return (
+export const StepExtras = memo(
+  ({
+    selectedCar,
+    selectedColor,
+    dateFrom,
+    dateTo,
+    selectedRateId,
+    selectedExtraIds,
+    rentalRates,
+    extras,
+    onColorChange,
+    onDateFromChange,
+    onDateToChange,
+    onRateChange,
+    onExtraToggle,
+  }: TStepExtrasProps) => (
     <div className={styles.panel}>
       <SectionTitle text="Цвет" />
       <div className={styles.row}>
@@ -104,5 +104,7 @@ export const StepExtras = memo(function StepExtras({
         ))}
       </div>
     </div>
-  );
-});
+  )
+);
+
+StepExtras.displayName = 'StepExtras';

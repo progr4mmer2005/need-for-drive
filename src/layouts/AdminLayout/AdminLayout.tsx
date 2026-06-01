@@ -1,4 +1,4 @@
-﻿import { useState, type ComponentType, type SVGProps } from 'react';
+import { useState, type ComponentType, type SVGProps } from 'react';
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/shared/context/AuthContext';
 import {
@@ -55,17 +55,34 @@ export function AdminLayout() {
         </NavLink>
 
         <nav className={styles.nav}>
-          {NAV_ITEMS.map(({ to, label, Icon, disabled }) => (disabled ? (
-            <span key={to} className={`${styles.navItem} ${styles.navItemDisabled}`} aria-disabled="true">
-              <span className={styles.navIcon}><Icon /></span>
-              {label}
-            </span>
-          ) : (
-            <NavLink key={to} to={to} end className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}>
-              <span className={styles.navIcon}><Icon /></span>
-              {label}
-            </NavLink>
-          )))}
+          {NAV_ITEMS.map(({ to, label, Icon, disabled }) =>
+            disabled ? (
+              <span
+                key={to}
+                className={`${styles.navItem} ${styles.navItemDisabled}`}
+                aria-disabled="true"
+              >
+                <span className={styles.navIcon}>
+                  <Icon />
+                </span>
+                {label}
+              </span>
+            ) : (
+              <NavLink
+                key={to}
+                to={to}
+                end
+                className={({ isActive }) =>
+                  `${styles.navItem} ${isActive ? styles.navItemActive : ''}`
+                }
+              >
+                <span className={styles.navIcon}>
+                  <Icon />
+                </span>
+                {label}
+              </NavLink>
+            )
+          )}
         </nav>
       </aside>
 
@@ -73,7 +90,12 @@ export function AdminLayout() {
         <header className={styles.header}>
           <div className={styles.searchWrap}>
             <AdminSearchIcon className={styles.searchIcon} />
-            <input className={styles.searchInput} placeholder="Поиск ..." value={search} onChange={(event) => setSearch(event.target.value)} />
+            <input
+              className={styles.searchInput}
+              placeholder="Поиск ..."
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+            />
           </div>
 
           <div className={styles.headerRight}>
@@ -82,26 +104,38 @@ export function AdminLayout() {
               <span className={styles.bellBadge}>2</span>
             </button>
             <div className={styles.userMenu}>
-              <button className={styles.userBtn} type="button" onClick={() => setDropdownOpen((prevDropdownOpen) => !prevDropdownOpen)}>
+              <button
+                className={styles.userBtn}
+                type="button"
+                onClick={() => setDropdownOpen((prevDropdownOpen) => !prevDropdownOpen)}
+              >
                 <span className={styles.avatar}>A</span>
                 <span className={styles.adminName}>Admin</span>
                 <span className={styles.chevron}>▾</span>
               </button>
               {dropdownOpen && (
                 <div className={styles.dropdown}>
-                  <button className={styles.dropdownItem} type="button" onClick={handleLogout}>Выход</button>
+                  <button className={styles.dropdownItem} type="button" onClick={handleLogout}>
+                    Выход
+                  </button>
                 </div>
               )}
             </div>
           </div>
         </header>
 
-        <main className={styles.content}><Outlet context={{ search }} /></main>
+        <main className={styles.content}>
+          <Outlet context={{ search }} />
+        </main>
 
         <footer className={styles.footer}>
           <div className={styles.footerLinks}>
-            <Link to="/" className={styles.footerLink}>Главная страница</Link>
-            <Link to="/order" className={styles.footerLink}>Ссылка</Link>
+            <Link to="/" className={styles.footerLink}>
+              Главная страница
+            </Link>
+            <Link to="/order" className={styles.footerLink}>
+              Ссылка
+            </Link>
           </div>
           <span className={styles.copyright}>Copyright © 2020 Simbirsoft</span>
         </footer>
@@ -109,4 +143,3 @@ export function AdminLayout() {
     </div>
   );
 }
-

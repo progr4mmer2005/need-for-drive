@@ -1,7 +1,4 @@
-export type TAddColorResult =
-  | { ok: true; colors: string[] }
-  | { ok: false; error: string }
-  | null;
+export type TAddColorResult = { ok: true; colors: string[] } | { ok: false; error: string } | null;
 
 export function addColor(colorInput: string, existingColors: string[]): TAddColorResult {
   const color = colorInput.trim();

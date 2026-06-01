@@ -15,7 +15,13 @@ type TCarFiltersProps = {
 };
 
 export function CarFilters({
-  filters, cars, categories, colors, onFilterChange, onApply, onReset,
+  filters,
+  cars,
+  categories,
+  colors,
+  onFilterChange,
+  onApply,
+  onReset,
 }: TCarFiltersProps) {
   const handleChange = (key: keyof TFilters) => (e: ChangeEvent<HTMLSelectElement>) => {
     onFilterChange(key, e.target.value);
@@ -29,7 +35,11 @@ export function CarFilters({
         onChange={handleChange('model')}
       >
         <option value="">Автомобиль</option>
-        {cars.map((car) => <option key={car.id} value={car.id}>{car.name}</option>)}
+        {cars.map((car) => (
+          <option key={car.id} value={car.id}>
+            {car.name}
+          </option>
+        ))}
       </select>
 
       <select
@@ -38,7 +48,11 @@ export function CarFilters({
         onChange={handleChange('category')}
       >
         <option value="">Тип</option>
-        {categories.map((cat) => <option key={cat} value={cat}>{cat}</option>)}
+        {categories.map((cat) => (
+          <option key={cat} value={cat}>
+            {cat}
+          </option>
+        ))}
       </select>
 
       <select
@@ -57,11 +71,19 @@ export function CarFilters({
         onChange={handleChange('color')}
       >
         <option value="">Цвет</option>
-        {colors.map((color) => <option key={color} value={color}>{color}</option>)}
+        {colors.map((color) => (
+          <option key={color} value={color}>
+            {color}
+          </option>
+        ))}
       </select>
 
-      <button type="button" className={styles.resetBtn} onClick={onReset}>Сбросить</button>
-      <button type="button" className={styles.applyBtn} onClick={onApply}>Применить</button>
+      <button type="button" className={styles.resetBtn} onClick={onReset}>
+        Сбросить
+      </button>
+      <button type="button" className={styles.applyBtn} onClick={onApply}>
+        Применить
+      </button>
     </div>
   );
 }

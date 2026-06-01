@@ -29,10 +29,14 @@ export function ModelCard({ car, selected, onSelect }: TModelCardProps) {
       onClick={() => onSelect(car.id)}
     >
       <div className={styles.name}>{car.name}</div>
-      <div className={styles.price}>{`${formatPrice(car.priceMin)} - ${formatPrice(car.priceMax)}`}</div>
+      <div
+        className={styles.price}
+      >{`${formatPrice(car.priceMin)} - ${formatPrice(car.priceMax)}`}</div>
 
       <div className={styles.imageWrap}>
-        {hasImage ? <img className={styles.image} src={imageSrc} alt={car.name} onError={handleImageError} /> : null}
+        {hasImage ? (
+          <img className={styles.image} src={imageSrc} alt={car.name} onError={handleImageError} />
+        ) : null}
       </div>
     </button>
   );

@@ -13,7 +13,7 @@ export function HeroSection({ isMenuOpen, onMenuToggle }: THeroSectionProps) {
   return (
     <BaseSection isMenuOpen={isMenuOpen} onMenuToggle={onMenuToggle}>
       <div className={styles.heroContent}>
-            <div className={styles.promoContainer}>
+        <div className={styles.promoContainer}>
           <HorizontalContentContainer>
             <div className={styles.promo}>
               <h1 className={styles.title}>

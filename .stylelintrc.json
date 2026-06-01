@@ -3,7 +3,7 @@
   "plugins": ["stylelint-scss", "@stylistic/stylelint-plugin"],
 
   "ignoreFiles": [
-    "**/*.{js,html,svg,png,jpg,jpeg,ttf,woff,woff2}"
+    "**/*.{js,jsx,ts,tsx,html,svg,png,jpg,jpeg,webp,ttf,otf,woff,woff2,json}"
   ],
 
   "rules": {
@@ -16,9 +16,7 @@
     "color-function-notation": null,
     "alpha-value-notation": null,
     "scss/load-partial-extension": null,
-    "block-closing-brace-empty-line-before": "never",
-    "block-closing-brace-newline-before": "always-multi-line",
-    "block-opening-brace-newline-after": "always-multi-line",
+    "scss/dollar-variable-empty-line-before": null,
     "declaration-empty-line-before": "never",
     "rule-empty-line-before": ["always", {
       "except": ["first-nested"],

@@ -27,14 +27,16 @@ export function NominatimAutocomplete({
   const wrapperRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const suggestions = (requireHouseNumber && mode === 'address')
-    ? allSuggestions.filter((r) => Boolean(r.address.house_number))
-    : allSuggestions;
+  const suggestions =
+    requireHouseNumber && mode === 'address'
+      ? allSuggestions.filter((r) => Boolean(r.address.house_number))
+      : allSuggestions;
 
-  const showHouseNumberHint = requireHouseNumber
-    && mode === 'address'
-    && allSuggestions.length > 0
-    && suggestions.length === 0;
+  const showHouseNumberHint =
+    requireHouseNumber &&
+    mode === 'address' &&
+    allSuggestions.length > 0 &&
+    suggestions.length === 0;
 
   useEffect(() => {
     setInputValue(value);
@@ -51,17 +53,32 @@ export function NominatimAutocomplete({
   }, []);
 
   const fetchDeps = {
-    cityName, mode, setAllSuggestions, setIsOpen, setLoading,
+    cityName,
+    mode,
+    setAllSuggestions,
+    setIsOpen,
+    setLoading,
   };
   const onFetch = fetchSuggestions(fetchDeps);
   const onInputChange = handleInputChange({
-    setInputValue, onChange, debounceRef, fetchSuggestions: onFetch,
+    setInputValue,
+    onChange,
+    debounceRef,
+    fetchSuggestions: onFetch,
   });
   const onSelect = handleSelect({
-    mode, setInputValue, onChange, onConfirm, setAllSuggestions, setIsOpen,
+    mode,
+    setInputValue,
+    onChange,
+    onConfirm,
+    setAllSuggestions,
+    setIsOpen,
   });
   const onClear = handleClear({
-    setInputValue, onChange, setAllSuggestions, setIsOpen,
+    setInputValue,
+    onChange,
+    setAllSuggestions,
+    setIsOpen,
   });
 
   const dropdownVisible = isOpen && (suggestions.length > 0 || showHouseNumberHint);
@@ -70,7 +87,9 @@ export function NominatimAutocomplete({
     styles.inputRow,
     error ? styles.inputRowError : '',
     disabled ? styles.inputRowDisabled : '',
-  ].filter(Boolean).join(' ');
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <div className={styles.wrap} ref={wrapperRef}>
@@ -87,7 +106,12 @@ export function NominatimAutocomplete({
         />
         {loading && <span className={styles.spinner} />}
         {inputValue && !disabled && !loading && (
-          <button type="button" className={styles.clear} onClick={onClear} aria-label="Очистить поле">
+          <button
+            type="button"
+            className={styles.clear}
+            onClick={onClear}
+            aria-label="Очистить поле"
+          >
             <span className={styles.clearIcon} />
           </button>
         )}
@@ -111,9 +135,7 @@ export function NominatimAutocomplete({
             </button>
           ))}
           {showHouseNumberHint && (
-            <div className={styles.dropdownHint}>
-              Добавьте номер дома для выбора адреса
-            </div>
+            <div className={styles.dropdownHint}>Добавьте номер дома для выбора адреса</div>
           )}
         </div>
       )}

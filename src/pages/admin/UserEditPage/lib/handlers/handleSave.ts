@@ -11,7 +11,10 @@ type TDeps = {
 
 export async function handleSave(username: string, deps: TDeps): Promise<void> {
   const error = validate(username);
-  if (error) { deps.setError(error); return; }
+  if (error) {
+    deps.setError(error);
+    return;
+  }
   deps.setSaving(true);
   try {
     await saveUser(deps.id, username.trim());

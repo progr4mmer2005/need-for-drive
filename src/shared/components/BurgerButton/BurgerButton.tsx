@@ -21,7 +21,7 @@ export function BurgerButton({
         styles.button,
         color === 'dark' && styles.buttonDark,
         mobileOnly && styles.buttonMobileOnly,
-        isActive && styles.buttonActive,
+        isActive && styles.buttonActive
       )}
       type="button"
       onClick={onClick}

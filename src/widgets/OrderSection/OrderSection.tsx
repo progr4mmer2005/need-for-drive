@@ -40,17 +40,30 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
   const { stepSlug } = useParams<{ stepSlug?: string }>();
   const userHasInteracted = useRef(false);
 
-  const { orderState, setOrderState, resetAfterLocationChange, resetAfterModelChange } = useOrderState();
+  const { orderState, setOrderState, resetAfterLocationChange, resetAfterModelChange } =
+    useOrderState();
   const cancelStatusId = useCancelStatus();
   const { data: orderData, loading: apiLoading, error: apiError } = useApiOrderData();
 
   const {
-    cityOptions, nearestLocation,
-    categories, selectedCity, pickupOptions, selectedPickup,
-    filteredCars, selectedCar, selectedRate, selectedExtras,
-    availableAt, durationLabel, isDateRangeValid,
-    canGoToStep2, canGoToStep3, canGoToStep4,
-    globalMinPrice, globalMaxPrice,
+    cityOptions,
+    nearestLocation,
+    categories,
+    selectedCity,
+    pickupOptions,
+    selectedPickup,
+    filteredCars,
+    selectedCar,
+    selectedRate,
+    selectedExtras,
+    availableAt,
+    durationLabel,
+    isDateRangeValid,
+    canGoToStep2,
+    canGoToStep3,
+    canGoToStep4,
+    globalMinPrice,
+    globalMaxPrice,
   } = useOrderSelections(orderState, orderData, setOrderState);
 
   useEffect(() => {
@@ -108,7 +121,7 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
       totalPrice,
       durationLabel,
     },
-    setOrderState,
+    setOrderState
   );
 
   const { handleCancelOrder } = useCancelOrder({
@@ -118,16 +131,25 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
   });
 
   const orderItems = [
-    { label: ORDER_TEXT.pickupPoint, value: selectedPickup ? `${selectedCity?.name}, ${selectedPickup.name}` : null },
-    { label: ORDER_TEXT.model, value: selectedCar ? `${selectedCar.brand}, ${selectedCar.name}` : null },
+    {
+      label: ORDER_TEXT.pickupPoint,
+      value: selectedPickup ? `${selectedCity?.name}, ${selectedPickup.name}` : null,
+    },
+    {
+      label: ORDER_TEXT.model,
+      value: selectedCar ? `${selectedCar.brand}, ${selectedCar.name}` : null,
+    },
     { label: ORDER_TEXT.color, value: orderState.step >= 3 ? orderState.selectedColor : null },
     { label: ORDER_TEXT.duration, value: orderState.step >= 3 ? durationLabel : null },
-    { label: ORDER_TEXT.rate, value: orderState.step >= 3 ? (selectedRate?.label ?? null) : null },
+    { label: ORDER_TEXT.rate, value: orderState.step >= 3 ? selectedRate?.label ?? null : null },
     {
       label: ORDER_TEXT.fullTank,
-      value: orderState.step >= 3
-        ? (orderState.selectedExtraIds.includes('fullTank') ? ORDER_TEXT.yes : ORDER_TEXT.no)
-        : null,
+      value:
+        orderState.step >= 3
+          ? orderState.selectedExtraIds.includes('fullTank')
+            ? ORDER_TEXT.yes
+            : ORDER_TEXT.no
+          : null,
     },
   ];
 
@@ -220,7 +242,9 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
             canGoToStep4={canGoToStep4}
             onStepChange={(s) => handleStepTransition(s as TOrderFlowStep)}
             onOpenConfirm={() => setOrderState((prev) => ({ ...prev, isConfirmOpen: true }))}
-            onOpenCancelConfirm={() => setOrderState((prev) => ({ ...prev, isCancelConfirmOpen: true }))}
+            onOpenCancelConfirm={() =>
+              setOrderState((prev) => ({ ...prev, isCancelConfirmOpen: true }))
+            }
           />
         </div>
       </div>

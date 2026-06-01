@@ -24,11 +24,11 @@ export function RateEditPage() {
   const { toast, showToast, closeToast } = useAdminToast();
 
   useEffect(() => {
-    void initRateTypes({ isNew, setRateTypes, setForm }).catch(console.error);
+    initRateTypes({ isNew, setRateTypes, setForm }).catch(console.error);
   }, [isNew]);
 
   useEffect(() => {
-    void initRate(id, isNew, { setForm, setLoading });
+    initRate(id, isNew, { setForm, setLoading });
   }, [id, isNew]);
 
   return (
@@ -39,8 +39,24 @@ export function RateEditPage() {
       loading={loading}
       saving={saving}
       cancelPath="/admin/rates"
-      onSave={() => handleSave(form, { isNew, id: Number(id), setErrors, setSaving, showToast, navigate })}
-      onDelete={() => handleDelete({ id: Number(id), setSaving, showToast, navigate })}
+      onSave={() =>
+        handleSave(form, {
+          isNew,
+          id: Number(id),
+          setErrors,
+          setSaving,
+          showToast,
+          navigate,
+        })
+      }
+      onDelete={() =>
+        handleDelete({
+          id: Number(id),
+          setSaving,
+          showToast,
+          navigate,
+        })
+      }
       toast={toast}
       onCloseToast={closeToast}
     >
@@ -49,11 +65,16 @@ export function RateEditPage() {
           <AdminSelect
             value={form.rateTypeId}
             hasError={!!errors.rateTypeId}
-            onChange={(e) => { setForm((p) => ({ ...p, rateTypeId: e.target.value })); setErrors((p) => ({ ...p, rateTypeId: '' })); }}
+            onChange={(e) => {
+              setForm((p) => ({ ...p, rateTypeId: e.target.value }));
+              setErrors((p) => ({ ...p, rateTypeId: '' }));
+            }}
           >
             <option value="">Выберите тип</option>
             {rateTypes.map((rt) => (
-              <option key={rt.id} value={rt.id}>{rt.name} ({rt.unit})</option>
+              <option key={rt.id} value={rt.id}>
+                {rt.name} ({rt.unit})
+              </option>
             ))}
           </AdminSelect>
         </AdminField>
@@ -65,7 +86,10 @@ export function RateEditPage() {
             value={form.price}
             placeholder="1990"
             hasError={!!errors.price}
-            onChange={(e) => { setForm((p) => ({ ...p, price: e.target.value })); setErrors((p) => ({ ...p, price: '' })); }}
+            onChange={(e) => {
+              setForm((p) => ({ ...p, price: e.target.value }));
+              setErrors((p) => ({ ...p, price: '' }));
+            }}
           />
         </AdminField>
       </AdminRow>

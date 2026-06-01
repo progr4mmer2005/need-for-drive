@@ -1,6 +1,4 @@
-import {
-  TCar, TCity, Step, TSelectedPickup,
-} from '@/widgets/OrderSection/model/types';
+import { TCar, TCity, Step, TSelectedPickup } from '@/widgets/OrderSection/model/types';
 import { OrderContainer } from '@/widgets/OrderSection/ui/OrderContainer';
 import { StepLocation } from '@/widgets/OrderSection/ui/StepLocation';
 import { StepModels } from '@/widgets/OrderSection/ui/StepModels';

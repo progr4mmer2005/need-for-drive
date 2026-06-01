@@ -1,4 +1,5 @@
-﻿import { useCallback, Dispatch, SetStateAction } from 'react';
+import { useCallback, Dispatch, SetStateAction } from 'react';
+import { ORDERS_API } from '@/shared/api/ordersApi';
 import {
   ORDER_STORAGE_KEY,
   Step,
@@ -8,7 +9,6 @@ import {
   type TSelectedCar,
   type TSelectedRate,
 } from '../types';
-import { ORDERS_API } from '@/shared/api/ordersApi';
 
 type TOrderState = {
   step: Step;
@@ -53,7 +53,7 @@ function priceToNumber(price: string): number {
 export function useOrderSubmit(
   orderState: TOrderState,
   deps: TOrderSubmitDeps,
-  setOrderState: Dispatch<SetStateAction<TOrderState>>,
+  setOrderState: Dispatch<SetStateAction<TOrderState>>
 ) {
   const {
     selectedCity,
@@ -77,8 +77,7 @@ export function useOrderSubmit(
     const cityId = extractId((selectedCity as { id?: string }).id);
     const pointId = extractId((selectedPickup as { id?: string }).id);
     const carId = extractId((selectedCar as { id?: string }).id);
-    const rateBackendId =
-      (selectedRate as unknown as { backendId?: number })?.backendId ?? null;
+    const rateBackendId = (selectedRate as unknown as { backendId?: number })?.backendId ?? null;
 
     let backendOrderId: number | null = null;
 
@@ -91,9 +90,7 @@ export function useOrderSubmit(
           rateId: rateBackendId ? { id: rateBackendId } : { id: 1 },
           color: selectedColor || 'Любой',
           dateFrom: orderState.dateFrom ? new Date(orderState.dateFrom).getTime() : Date.now(),
-          dateTo: orderState.dateTo
-            ? new Date(orderState.dateTo).getTime()
-            : Date.now() + 86400000,
+          dateTo: orderState.dateTo ? new Date(orderState.dateTo).getTime() : Date.now() + 86400000,
           price: priceToNumber(totalPrice),
           isFullTank: selectedExtraIds.includes('fullTank'),
           isNeedChildChair: selectedExtraIds.includes('childChair'),
@@ -150,4 +147,3 @@ export function useOrderSubmit(
 
   return { handleSubmitOrder };
 }
-

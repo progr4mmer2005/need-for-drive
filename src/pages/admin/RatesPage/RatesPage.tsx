@@ -12,7 +12,7 @@ export function RatesPage() {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    void initRates({ setRates, setLoading });
+    initRates({ setRates, setLoading });
   }, []);
 
   const totalPages = calcTotalPages(rates.length);
@@ -29,9 +29,15 @@ export function RatesPage() {
       renderRow={(rate, cx) => (
         <tr key={rate.id}>
           <td>{rate.id}</td>
-          <td>{rate.rateTypeId?.name || '—'} ({rate.rateTypeId?.unit || '—'})</td>
+          <td>
+            {rate.rateTypeId?.name || '—'} ({rate.rateTypeId?.unit || '—'})
+          </td>
           <td>{rate.price.toLocaleString('ru-RU')} ₽</td>
-          <td><Link to={`/admin/rates/${rate.id}`} className={cx.editLink}>Изменить</Link></td>
+          <td>
+            <Link to={`/admin/rates/${rate.id}`} className={cx.editLink}>
+              Изменить
+            </Link>
+          </td>
         </tr>
       )}
       page={page}

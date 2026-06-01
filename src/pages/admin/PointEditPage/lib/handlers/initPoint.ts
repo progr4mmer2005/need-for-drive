@@ -9,11 +9,16 @@ type TDeps = {
   prevCityIdRef: MutableRefObject<string>;
 };
 
-export async function initPoint(id: string | undefined, isNew: boolean, deps: TDeps): Promise<void> {
+export async function initPoint(
+  id: string | undefined,
+  isNew: boolean,
+  deps: TDeps
+): Promise<void> {
   if (!isNew && id) {
     deps.setLoading(true);
     try {
       const { form, cityId } = await loadPoint(Number(id));
+      // eslint-disable-next-line no-param-reassign
       deps.prevCityIdRef.current = cityId;
       deps.setForm(form);
       deps.setIsAddressConfirmed(true);

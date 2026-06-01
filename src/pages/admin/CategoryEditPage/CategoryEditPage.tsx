@@ -22,7 +22,7 @@ export function CategoryEditPage() {
   const { toast, showToast, closeToast } = useAdminToast();
 
   useEffect(() => {
-    void initCategory(id, isNew, { setForm, setLoading });
+    initCategory(id, isNew, { setForm, setLoading });
   }, [id, isNew]);
 
   return (
@@ -33,8 +33,24 @@ export function CategoryEditPage() {
       loading={loading}
       saving={saving}
       cancelPath="/admin/categories"
-      onSave={() => handleSave(form, { isNew, id: Number(id), setErrors, setSaving, showToast, navigate })}
-      onDelete={() => handleDelete({ id: Number(id), setSaving, showToast, navigate })}
+      onSave={() =>
+        handleSave(form, {
+          isNew,
+          id: Number(id),
+          setErrors,
+          setSaving,
+          showToast,
+          navigate,
+        })
+      }
+      onDelete={() =>
+        handleDelete({
+          id: Number(id),
+          setSaving,
+          showToast,
+          navigate,
+        })
+      }
       toast={toast}
       onCloseToast={closeToast}
     >

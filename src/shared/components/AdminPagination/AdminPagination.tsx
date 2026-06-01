@@ -23,7 +23,11 @@ export function AdminPagination({ page, totalPages, onPageChange }: TAdminPagina
 
       {pages.map((pageItem, index) => {
         if (pageItem === '...') {
-          return <span key={`dots-${index}`} className={styles.pageDots}>...</span>;
+          return (
+            <span key={`dots-${index}`} className={styles.pageDots}>
+              ...
+            </span>
+          );
         }
         return (
           <button

@@ -14,5 +14,6 @@ export const handleInputChange = (deps: TDeps) => (e: React.ChangeEvent<HTMLInpu
   deps.onChange(val);
 
   if (deps.debounceRef.current) clearTimeout(deps.debounceRef.current);
+  // eslint-disable-next-line no-param-reassign
   deps.debounceRef.current = setTimeout(() => deps.fetchSuggestions(val), DEBOUNCE_MS);
 };

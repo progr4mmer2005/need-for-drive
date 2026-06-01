@@ -4,7 +4,7 @@ import { deleteOrder } from '../api/deleteOrder';
 export async function handleDelete(
   order: Order,
   refetch: () => void,
-  showToast: (message: string, type: 'success' | 'error') => void,
+  showToast: (message: string, type: 'success' | 'error') => void
 ): Promise<void> {
   if (!window.confirm('Удалить заказ?')) return;
   try {

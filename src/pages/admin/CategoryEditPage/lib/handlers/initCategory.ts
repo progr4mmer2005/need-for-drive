@@ -7,7 +7,11 @@ type TDeps = {
   setLoading: Dispatch<SetStateAction<boolean>>;
 };
 
-export async function initCategory(id: string | undefined, isNew: boolean, deps: TDeps): Promise<void> {
+export async function initCategory(
+  id: string | undefined,
+  isNew: boolean,
+  deps: TDeps
+): Promise<void> {
   if (isNew || !id) return;
   deps.setLoading(true);
   try {

@@ -1,4 +1,4 @@
-﻿import axios from 'axios';
+import axios from 'axios';
 import API_CLIENT, { API_BASE_URL, TOKEN_STORAGE } from './apiClient';
 import type { AuthResponse } from './types';
 
@@ -41,6 +41,7 @@ export async function logout(): Promise<void> {
   try {
     await API_CLIENT.post('/auth/logout');
   } catch {
+    // logout best-effort — ignore server errors
   }
 
   TOKEN_STORAGE.clear();

@@ -33,10 +33,23 @@ export function LoginPage() {
         <form
           className={styles.form}
           noValidate
-          onSubmit={(e) => handleSubmit(e, { username, password, isRegisterMode, setErrors, setLoading, login, register, navigate })}
+          onSubmit={(e) =>
+            handleSubmit(e, {
+              username,
+              password,
+              isRegisterMode,
+              setErrors,
+              setLoading,
+              login,
+              register,
+              navigate,
+            })
+          }
         >
           <div className={styles.fieldGroup}>
-            <label className={styles.label} htmlFor="username">Логин</label>
+            <label className={styles.label} htmlFor="username">
+              Логин
+            </label>
             <input
               id="username"
               type="text"
@@ -45,13 +58,17 @@ export function LoginPage() {
               value={username}
               maxLength={150}
               onChange={(e) => setUsername(e.target.value)}
-              onBlur={() => setErrors((prev) => ({ ...prev, username: validateUsername(username.trim()) }))}
+              onBlur={() =>
+                setErrors((prev) => ({ ...prev, username: validateUsername(username.trim()) }))
+              }
             />
             {errors.username && <span className={styles.errorMsg}>{errors.username}</span>}
           </div>
 
           <div className={styles.fieldGroup}>
-            <label className={styles.label} htmlFor="password">Пароль</label>
+            <label className={styles.label} htmlFor="password">
+              Пароль
+            </label>
             <div className={styles.passWrap}>
               <input
                 id="password"
@@ -60,7 +77,9 @@ export function LoginPage() {
                 value={password}
                 maxLength={150}
                 onChange={(e) => setPassword(e.target.value)}
-                onBlur={() => setErrors((prev) => ({ ...prev, password: validatePassword(password) }))}
+                onBlur={() =>
+                  setErrors((prev) => ({ ...prev, password: validatePassword(password) }))
+                }
               />
             </div>
             {errors.password && <span className={styles.errorMsg}>{errors.password}</span>}
@@ -72,12 +91,21 @@ export function LoginPage() {
             <button
               type="button"
               className={styles.requestBtn}
-              onClick={() => { setErrors({}); setIsRegisterMode((prev) => !prev); }}
+              onClick={() => {
+                setErrors({});
+                setIsRegisterMode((prev) => !prev);
+              }}
             >
               {isRegisterMode ? 'У меня уже есть аккаунт' : 'Запросить доступ'}
             </button>
             <button type="submit" className={styles.submitBtn} disabled={loading}>
-              {loading ? (isRegisterMode ? 'Регистрация...' : 'Вход...') : (isRegisterMode ? 'Зарегистрироваться' : 'Войти')}
+              {loading
+                ? isRegisterMode
+                  ? 'Регистрация...'
+                  : 'Вход...'
+                : isRegisterMode
+                  ? 'Зарегистрироваться'
+                  : 'Войти'}
             </button>
           </div>
         </form>

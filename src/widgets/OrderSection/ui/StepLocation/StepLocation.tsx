@@ -16,18 +16,18 @@ type TStepLocationProps = {
   onPickupSelectFromMap: (pickupId: string) => void;
 };
 
-export const StepLocation = memo(function StepLocation({
-  cityInput,
-  pickupInput,
-  cityOptions,
-  pickupOptions,
-  selectedCity,
-  selectedPickupId,
-  onCityChange,
-  onPickupChange,
-  onPickupSelectFromMap,
-}: TStepLocationProps) {
-  return (
+export const StepLocation = memo(
+  ({
+    cityInput,
+    pickupInput,
+    cityOptions,
+    pickupOptions,
+    selectedCity,
+    selectedPickupId,
+    onCityChange,
+    onPickupChange,
+    onPickupSelectFromMap,
+  }: TStepLocationProps) => (
     <div className={styles.panel}>
       <AutocompleteInput
         label="Город"
@@ -56,7 +56,8 @@ export const StepLocation = memo(function StepLocation({
         selectedId={selectedPickupId}
         onPointSelect={onPickupSelectFromMap}
       />
-
     </div>
-  );
-});
+  )
+);
+
+StepLocation.displayName = 'StepLocation';

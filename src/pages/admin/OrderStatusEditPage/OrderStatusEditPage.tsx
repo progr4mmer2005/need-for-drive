@@ -19,7 +19,7 @@ export function OrderStatusEditPage() {
   const { toast, showToast, closeToast } = useAdminToast();
 
   useEffect(() => {
-    void initOrderStatus(id, isNew, { setName, setLoading });
+    initOrderStatus(id, isNew, { setName, setLoading });
   }, [id, isNew]);
 
   return (
@@ -30,8 +30,24 @@ export function OrderStatusEditPage() {
       loading={loading}
       saving={saving}
       cancelPath="/admin/order-statuses"
-      onSave={() => handleSave(name, { isNew, id: Number(id), setError, setSaving, showToast, navigate })}
-      onDelete={() => handleDelete({ id: Number(id), setSaving, showToast, navigate })}
+      onSave={() =>
+        handleSave(name, {
+          isNew,
+          id: Number(id),
+          setError,
+          setSaving,
+          showToast,
+          navigate,
+        })
+      }
+      onDelete={() =>
+        handleDelete({
+          id: Number(id),
+          setSaving,
+          showToast,
+          navigate,
+        })
+      }
       toast={toast}
       onCloseToast={closeToast}
     >
@@ -41,7 +57,10 @@ export function OrderStatusEditPage() {
           maxLength={150}
           placeholder="Новый"
           hasError={!!error}
-          onChange={(e) => { setName(e.target.value); setError(''); }}
+          onChange={(e) => {
+            setName(e.target.value);
+            setError('');
+          }}
         />
       </AdminField>
     </AdminEditLayout>

@@ -16,7 +16,9 @@ export function AdminSelect({ hasError, className, children, ...props }: TAdminS
         isPlaceholder && styles.selectPlaceholder,
         hasError && styles.inputError,
         className,
-      ].filter(Boolean).join(' ')}
+      ]
+        .filter(Boolean)
+        .join(' ')}
       {...props}
     >
       {children}

@@ -1,4 +1,4 @@
-import type { Dispatch, SetStateAction, MutableRefObject } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import type { City } from '@/shared/api/types';
 import type { IFormState } from '../../types';
 import { loadCities } from '../api/loadCities';

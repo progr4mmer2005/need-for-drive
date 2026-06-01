@@ -16,7 +16,7 @@ const TEXT = {
   availableFrom: 'Доступна с',
 };
 
-export const StepOrderConfirmed = memo(function StepOrderConfirmed({ car, dateFrom }: TStepOrderConfirmed) {
+export const StepOrderConfirmed = memo(({ car, dateFrom }: TStepOrderConfirmed) => {
   const [hasImageError, setHasImageError] = useState(false);
   const carWithDetails = car as TCar & { plate?: string; fuel?: string };
 
@@ -53,3 +53,5 @@ export const StepOrderConfirmed = memo(function StepOrderConfirmed({ car, dateFr
     </div>
   );
 });
+
+StepOrderConfirmed.displayName = 'StepOrderConfirmed';

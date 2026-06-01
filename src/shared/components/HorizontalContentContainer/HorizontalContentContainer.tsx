@@ -5,7 +5,5 @@ interface IHorizontalContentContainerProps {
 }
 
 export function HorizontalContentContainer({ children }: IHorizontalContentContainerProps) {
-  return <div className={styles.container}>
-    {children}
-  </div>;
+  return <div className={styles.container}>{children}</div>;
 }

@@ -15,7 +15,6 @@
     padding: 0 32px;
   }
 
-
   @media (max-width: $breakpoint-mobile-sm) {
     margin-top: 32px;
     padding: 0;
@@ -27,13 +26,10 @@
   text-decoration: none;
 }
 
-
-
 .promoContainer {
   display: flex;
   flex-direction: column;
   margin-top: auto;
-
 
   @media (max-width: $breakpoint-mobile-sm) {
     margin-top: 10%;
@@ -76,7 +72,7 @@
   }
 }
 
-.footerInner{
+.footerInner {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -94,7 +90,6 @@
   }
 }
 
-
 .copyright {
   color: $dark-gray-color;
   font-size: 13px;
@@ -109,7 +104,9 @@
   color: $primary-black-color;
   font-size: 13px;
   text-decoration: none;
-  transition: color 0.2s ease, filter 0.2s ease;
+  transition:
+    color 0.2s ease,
+    filter 0.2s ease;
 
   @media (min-width: $breakpoint-mobile-sm) {
     &:hover {

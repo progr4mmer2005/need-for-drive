@@ -22,7 +22,7 @@ export function ConfirmModal({
   onCancel,
 }: TConfirmModalProps) {
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) return undefined;
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     return () => {
@@ -37,16 +37,10 @@ export function ConfirmModal({
       <div className={styles.modalContent}>
         <p className={styles.title}>{title}</p>
         <div className={styles.modalActions}>
-          <Button
-            tone={confirmTone === 'red' ? 'darkRed' : 'primary'}
-            onClick={onConfirm}
-          >
+          <Button tone={confirmTone === 'red' ? 'darkRed' : 'primary'} onClick={onConfirm}>
             {confirmText}
           </Button>
-          <Button
-            tone={confirmTone === 'red' ? 'primary' : 'darkRed'}
-            onClick={onCancel}
-          >
+          <Button tone={confirmTone === 'red' ? 'primary' : 'darkRed'} onClick={onCancel}>
             {backText}
           </Button>
         </div>

@@ -21,7 +21,7 @@ export function CityEditPage() {
   const { toast, showToast, closeToast } = useAdminToast();
 
   useEffect(() => {
-    void initCity(id, isNew, { setName, setIsCityConfirmed, setLoading });
+    initCity(id, isNew, { setName, setIsCityConfirmed, setLoading });
   }, [id, isNew]);
 
   return (
@@ -32,8 +32,25 @@ export function CityEditPage() {
       loading={loading}
       saving={saving}
       cancelPath="/admin/cities"
-      onSave={() => handleSave(name, { isNew, id: Number(id), isCityConfirmed, setError, setSaving, showToast, navigate })}
-      onDelete={() => handleDelete({ id: Number(id), setSaving, showToast, navigate })}
+      onSave={() =>
+        handleSave(name, {
+          isNew,
+          id: Number(id),
+          isCityConfirmed,
+          setError,
+          setSaving,
+          showToast,
+          navigate,
+        })
+      }
+      onDelete={() =>
+        handleDelete({
+          id: Number(id),
+          setSaving,
+          showToast,
+          navigate,
+        })
+      }
       toast={toast}
       onCloseToast={closeToast}
     >
@@ -43,7 +60,11 @@ export function CityEditPage() {
           value={name}
           placeholder="Москва"
           error={error}
-          onChange={(val) => { setName(val); setError(''); setIsCityConfirmed(false); }}
+          onChange={(val) => {
+            setName(val);
+            setError('');
+            setIsCityConfirmed(false);
+          }}
           onConfirm={() => setIsCityConfirmed(true)}
         />
       </AdminField>

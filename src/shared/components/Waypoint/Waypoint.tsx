@@ -1,4 +1,4 @@
-﻿import { WaypointPinIcon } from '@/shared/icons';
+import { WaypointPinIcon } from '@/shared/icons';
 import * as styles from './Waypoint.module.scss';
 
 type TWaypointProps = {
@@ -13,4 +13,3 @@ export function Waypoint({ city }: TWaypointProps) {
     </a>
   );
 }
-

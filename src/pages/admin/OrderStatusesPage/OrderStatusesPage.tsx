@@ -12,7 +12,7 @@ export function OrderStatusesPage() {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    void initOrderStatuses({ setStatuses, setLoading });
+    initOrderStatuses({ setStatuses, setLoading });
   }, []);
 
   const totalPages = calcTotalPages(statuses.length);
@@ -30,7 +30,11 @@ export function OrderStatusesPage() {
         <tr key={status.id}>
           <td>{status.id}</td>
           <td>{status.name}</td>
-          <td><Link to={`/admin/order-statuses/${status.id}`} className={cx.editLink}>Изменить</Link></td>
+          <td>
+            <Link to={`/admin/order-statuses/${status.id}`} className={cx.editLink}>
+              Изменить
+            </Link>
+          </td>
         </tr>
       )}
       page={page}

@@ -5,10 +5,11 @@ import { getUserPosition } from './geolocation';
 
 function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 6371;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = Math.sin(dLat / 2) ** 2
-    + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLon / 2) ** 2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
@@ -36,12 +37,14 @@ export function useNearestCity(): string {
         cities.map(async (city) => {
           const coords = await geocodeAddress(city.name);
           return coords ? { name: city.name, coords } : null;
-        }),
+        })
       );
 
       if (cancelled) return;
 
-      const valid = geocoded.filter((g): g is { name: string; coords: [number, number] } => g !== null);
+      const valid = geocoded.filter(
+        (g): g is { name: string; coords: [number, number] } => g !== null
+      );
 
       if (!valid.length) {
         setCityName(cities[0].name);
@@ -58,7 +61,9 @@ export function useNearestCity(): string {
     }
 
     detect();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return cityName;

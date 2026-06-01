@@ -1,6 +1,4 @@
-﻿import React, {
-  useEffect, useMemo, useRef, useState,
-} from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { IAutocompleteInputProps } from './types';
 import { filterOptions } from './lib/utils/filterOptions';
 import { handleInputChange } from './lib/handlers/handleInputChange';
@@ -24,10 +22,7 @@ export const AutocompleteInput: React.FC<IAutocompleteInputProps> = ({
     setInputValue(value);
   }, [value]);
 
-  const filteredOptions = useMemo(
-    () => filterOptions(options, inputValue),
-    [inputValue, options],
-  );
+  const filteredOptions = useMemo(() => filterOptions(options, inputValue), [inputValue, options]);
 
   useEffect(() => {
     const onMouseDown = (event: MouseEvent) => {
@@ -59,7 +54,12 @@ export const AutocompleteInput: React.FC<IAutocompleteInputProps> = ({
           disabled={disabled}
         />
         {inputValue && !disabled && (
-          <button className={styles.autocompleteClear} type="button" onClick={onClear} aria-label="Очистить поле">
+          <button
+            className={styles.autocompleteClear}
+            type="button"
+            onClick={onClear}
+            aria-label="Очистить поле"
+          >
             <span className={styles.autocompleteClearIcon} />
           </button>
         )}

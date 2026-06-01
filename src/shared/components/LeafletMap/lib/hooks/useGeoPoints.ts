@@ -9,20 +9,23 @@ export const useGeoPoints = (cityName: string, points: ILeafletMapPoint[]) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!cityName) return;
     let cancelled = false;
-    setLoading(true);
-    setGeoPoints([]);
 
-    (async () => {
-      const { center, geoPoints: resolved } = await geocodePoints(cityName, points);
-      if (cancelled) return;
-      if (center) setCityCenter(center);
-      setGeoPoints(resolved);
-      setLoading(false);
-    })();
+    if (cityName) {
+      setLoading(true);
+      setGeoPoints([]);
+      (async () => {
+        const { center, geoPoints: resolved } = await geocodePoints(cityName, points);
+        if (cancelled) return;
+        if (center) setCityCenter(center);
+        setGeoPoints(resolved);
+        setLoading(false);
+      })();
+    }
 
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [cityName, points.length]);
 
   return { cityCenter, geoPoints, loading };

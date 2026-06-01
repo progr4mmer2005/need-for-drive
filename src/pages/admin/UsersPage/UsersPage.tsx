@@ -12,7 +12,7 @@ export function UsersPage() {
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    void initUsers(page, { setUsers, setTotal, setLoading });
+    initUsers(page, { setUsers, setTotal, setLoading });
   }, [page]);
 
   const totalPages = calcTotalPages(total);
@@ -28,7 +28,11 @@ export function UsersPage() {
         <tr key={user.id}>
           <td>{user.id}</td>
           <td>{user.username}</td>
-          <td><Link to={`/admin/users/${user.id}`} className={cx.editLink}>Изменить</Link></td>
+          <td>
+            <Link to={`/admin/users/${user.id}`} className={cx.editLink}>
+              Изменить
+            </Link>
+          </td>
         </tr>
       )}
       page={page}

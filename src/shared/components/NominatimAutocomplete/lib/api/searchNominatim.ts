@@ -3,11 +3,9 @@ import { INominatimResult } from '../../types';
 export async function searchNominatim(
   query: string,
   cityName: string,
-  mode: 'address' | 'city',
+  mode: 'address' | 'city'
 ): Promise<INominatimResult[]> {
-  const fullQuery = mode === 'address' && cityName
-    ? `${cityName}, ${query}`
-    : query;
+  const fullQuery = mode === 'address' && cityName ? `${cityName}, ${query}` : query;
 
   const url = new URL('https://nominatim.openstreetmap.org/search');
   url.searchParams.set('q', fullQuery);

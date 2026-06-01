@@ -27,11 +27,16 @@ export function PointEditPage() {
   const prevCityIdRef = useRef<string>('');
 
   useEffect(() => {
-    void initCities({ isNew, setCities, setForm }).catch(console.error);
+    initCities({ isNew, setCities, setForm }).catch(console.error);
   }, [isNew]);
 
   useEffect(() => {
-    void initPoint(id, isNew, { setForm, setIsAddressConfirmed, setLoading, prevCityIdRef });
+    initPoint(id, isNew, {
+      setForm,
+      setIsAddressConfirmed,
+      setLoading,
+      prevCityIdRef,
+    });
   }, [id, isNew]);
 
   const selectedCityName = cities.find((c) => String(c.id) === form.cityId)?.name ?? '';
@@ -44,8 +49,25 @@ export function PointEditPage() {
       loading={loading}
       saving={saving}
       cancelPath="/admin/points"
-      onSave={() => handleSave(form, { isNew, id: Number(id), isAddressConfirmed, setErrors, setSaving, showToast, navigate })}
-      onDelete={() => handleDelete({ id: Number(id), setSaving, showToast, navigate })}
+      onSave={() =>
+        handleSave(form, {
+          isNew,
+          id: Number(id),
+          isAddressConfirmed,
+          setErrors,
+          setSaving,
+          showToast,
+          navigate,
+        })
+      }
+      onDelete={() =>
+        handleDelete({
+          id: Number(id),
+          setSaving,
+          showToast,
+          navigate,
+        })
+      }
       toast={toast}
       onCloseToast={closeToast}
     >
@@ -56,7 +78,10 @@ export function PointEditPage() {
             maxLength={150}
             placeholder="Аэропорт Домодедово"
             hasError={!!errors.name}
-            onChange={(e) => { setForm((p) => ({ ...p, name: e.target.value })); setErrors((p) => ({ ...p, name: '' })); }}
+            onChange={(e) => {
+              setForm((p) => ({ ...p, name: e.target.value }));
+              setErrors((p) => ({ ...p, name: '' }));
+            }}
           />
         </AdminField>
 
@@ -69,13 +94,19 @@ export function PointEditPage() {
               const cityChanged = newCityId !== prevCityIdRef.current;
               prevCityIdRef.current = newCityId;
               if (cityChanged) setIsAddressConfirmed(false);
-              setForm((p) => ({ ...p, cityId: newCityId, ...(cityChanged ? { address: '' } : {}) }));
+              setForm((p) => ({
+                ...p,
+                cityId: newCityId,
+                ...(cityChanged ? { address: '' } : {}),
+              }));
               setErrors((p) => ({ ...p, cityId: '', ...(cityChanged ? { address: '' } : {}) }));
             }}
           >
             <option value="">Выберите город</option>
             {cities.map((city) => (
-              <option key={city.id} value={city.id}>{city.name}</option>
+              <option key={city.id} value={city.id}>
+                {city.name}
+              </option>
             ))}
           </AdminSelect>
         </AdminField>
@@ -90,7 +121,11 @@ export function PointEditPage() {
           placeholder="ул. Пушкина, д. 1"
           error={errors.address}
           disabled={!form.cityId}
-          onChange={(val) => { setForm((p) => ({ ...p, address: val })); setErrors((p) => ({ ...p, address: '' })); setIsAddressConfirmed(false); }}
+          onChange={(val) => {
+            setForm((p) => ({ ...p, address: val }));
+            setErrors((p) => ({ ...p, address: '' }));
+            setIsAddressConfirmed(false);
+          }}
           onConfirm={() => setIsAddressConfirmed(true)}
         />
       </AdminField>

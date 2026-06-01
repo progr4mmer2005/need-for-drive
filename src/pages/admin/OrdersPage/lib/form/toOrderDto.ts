@@ -3,7 +3,11 @@ import type { OrderDto } from '@/shared/api/ordersApi';
 
 export function toOrderDto(order: Order, statusId?: number): OrderDto {
   return {
-    orderStatusId: statusId ? { id: statusId } : order.orderStatusId ? { id: order.orderStatusId.id } : undefined,
+    orderStatusId: statusId
+      ? { id: statusId }
+      : order.orderStatusId
+        ? { id: order.orderStatusId.id }
+        : undefined,
     cityId: { id: order.cityId.id },
     pointId: { id: order.pointId.id },
     carId: { id: order.carId.id },

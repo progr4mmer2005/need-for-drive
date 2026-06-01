@@ -3,11 +3,11 @@ import type { Car } from '@/shared/api/types';
 import { AdminPageTitle } from '@/shared/components/AdminPageTitle';
 import { AdminPagination } from '@/shared/components/AdminPagination';
 import { Loader } from '@/shared/components/Loader';
+import { calcTotalPages } from '@/shared/lib/pagination';
 import { CarFilters } from './ui/CarFilters';
 import { CarsTable } from './ui/CarsTable';
 import type { TFilters } from './types';
 import { DEFAULT_FILTERS } from './constants';
-import { calcTotalPages } from '@/shared/lib/pagination';
 import { filterCars } from './lib/form/filterCars';
 import { getCategories } from './lib/form/getCategories';
 import { getColors } from './lib/form/getColors';
@@ -26,7 +26,7 @@ export function CarsPage() {
   const [appliedFilters, setAppliedFilters] = useState<TFilters>(DEFAULT_FILTERS);
 
   useEffect(() => {
-    void initCars(page, { setCars, setTotal, setLoading });
+    initCars(page, { setCars, setTotal, setLoading });
   }, [page]);
 
   const totalPages = calcTotalPages(total);

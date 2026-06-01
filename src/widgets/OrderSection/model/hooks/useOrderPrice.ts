@@ -25,9 +25,7 @@ type TUseOrderPriceParams = {
 function calcRentPrice(rate: TRate, totalMinutes: number, totalDays: number): number {
   const unit = (rate.unit || '').toLowerCase();
   const isDaily = unit.includes('сут') || unit.includes('день') || unit.includes('day');
-  return isDaily
-    ? totalDays * Number(rate.price || 0)
-    : totalMinutes * Number(rate.price || 0);
+  return isDaily ? totalDays * Number(rate.price || 0) : totalMinutes * Number(rate.price || 0);
 }
 
 export function useOrderPrice({
@@ -58,7 +56,16 @@ export function useOrderPrice({
     const rentPrice = calcRentPrice(selectedRate, totalMinutes, totalDays);
 
     return formatPrice(rentPrice + extrasPrice);
-  }, [minPrice, maxPrice, selectedCar, selectedRate, selectedExtras, isDateRangeValid, dateFrom, dateTo]);
+  }, [
+    minPrice,
+    maxPrice,
+    selectedCar,
+    selectedRate,
+    selectedExtras,
+    isDateRangeValid,
+    dateFrom,
+    dateTo,
+  ]);
 
   const rateRangePriceText = useMemo(() => {
     if (!selectedCar || !isDateRangeValid || !rentalRates.length) return null;
@@ -69,7 +76,9 @@ export function useOrderPrice({
     const totalDays = Math.max(1, Math.ceil(totalMinutes / (60 * 24)));
     const extrasPrice = selectedExtras.reduce((acc, extra) => acc + extra.price, 0);
 
-    const prices = rentalRates.map((rate) => calcRentPrice(rate, totalMinutes, totalDays) + extrasPrice);
+    const prices = rentalRates.map(
+      (rate) => calcRentPrice(rate, totalMinutes, totalDays) + extrasPrice
+    );
     const minP = Math.min(...prices);
     const maxP = Math.max(...prices);
 

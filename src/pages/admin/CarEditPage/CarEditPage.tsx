@@ -32,11 +32,16 @@ export function CarEditPage() {
   const [previewBroken, setPreviewBroken] = useState(false);
 
   useEffect(() => {
-    void initCategories(isNew, { setCategories, setForm });
+    initCategories(isNew, { setCategories, setForm });
   }, [isNew]);
 
   useEffect(() => {
-    void initCar(id, isNew, { setForm, setPreviewUrl, setPreviewBroken, setLoading });
+    initCar(id, isNew, {
+      setForm,
+      setPreviewUrl,
+      setPreviewBroken,
+      setLoading,
+    });
   }, [id, isNew]);
 
   if (loading) return <Loader />;
@@ -62,7 +67,11 @@ export function CarEditPage() {
             </div>
             <div className={styles.fileRow}>
               <span className={styles.fileName}>{form.thumbnailName || 'Выберите файл...'}</span>
-              <button type="button" className={styles.browseBtn} onClick={() => fileRef.current?.click()}>
+              <button
+                type="button"
+                className={styles.browseBtn}
+                onClick={() => fileRef.current?.click()}
+              >
                 Обзор
               </button>
               <input
@@ -70,7 +79,14 @@ export function CarEditPage() {
                 type="file"
                 accept=".jpg,.jpeg,.png,.gif,.bmp"
                 className={styles.hiddenFile}
-                onChange={(e) => handleFileChange(e, { setPreviewUrl, setPreviewBroken, setForm, showToast })}
+                onChange={(e) =>
+                  handleFileChange(e, {
+                    setPreviewUrl,
+                    setPreviewBroken,
+                    setForm,
+                    showToast,
+                  })
+                }
               />
             </div>
           </div>
@@ -119,7 +135,11 @@ export function CarEditPage() {
                 onChange={(e) => setForm((prev) => ({ ...prev, categoryId: e.target.value }))}
               >
                 <option value="">Выберите тип</option>
-                {categories.map((cat) => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
               </AdminSelect>
             </AdminField>
           </AdminRow>
@@ -158,7 +178,9 @@ export function CarEditPage() {
                   maxLength={150}
                   placeholder="Синий"
                   onChange={(e) => setForm((prev) => ({ ...prev, colorInput: e.target.value }))}
-                  onKeyDown={(e) => e.key === 'Enter' && handleAddColor(form, { setForm, setErrors })}
+                  onKeyDown={(e) =>
+                    e.key === 'Enter' && handleAddColor(form, { setForm, setErrors })
+                  }
                 />
                 <button
                   type="button"
@@ -186,7 +208,16 @@ export function CarEditPage() {
                 type="button"
                 className={styles.saveBtn}
                 disabled={saving}
-                onClick={() => handleSave(form, { isNew, id: Number(id), setErrors, setSaving, showToast, navigate })}
+                onClick={() =>
+                  handleSave(form, {
+                    isNew,
+                    id: Number(id),
+                    setErrors,
+                    setSaving,
+                    showToast,
+                    navigate,
+                  })
+                }
               >
                 Сохранить
               </button>
@@ -199,7 +230,14 @@ export function CarEditPage() {
                 type="button"
                 className={styles.deleteBtn}
                 disabled={saving}
-                onClick={() => handleDelete({ id: Number(id), setSaving, showToast, navigate })}
+                onClick={() =>
+                  handleDelete({
+                    id: Number(id),
+                    setSaving,
+                    showToast,
+                    navigate,
+                  })
+                }
               >
                 Удалить
               </button>

@@ -25,7 +25,7 @@ function base64SizeBytes(base64: string): number {
 }
 
 export async function compressImageDataUrl(
-  sourceDataUrl: string,
+  sourceDataUrl: string
 ): Promise<{ dataUrl: string; mime: string }> {
   const image = await loadImage(sourceDataUrl);
   let ratio = Math.min(MAX_IMAGE_SIDE / image.width, MAX_IMAGE_SIDE / image.height, 1);

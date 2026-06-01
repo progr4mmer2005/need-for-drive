@@ -56,7 +56,7 @@
 
 .statusText {
   font-size: 12px;
-  font-family: 'Roboto', sans-serif;
+  font-family: Roboto, sans-serif;
   color: $text-muted-color;
 }
 
@@ -83,14 +83,14 @@
 .previewLabel {
   font-size: 11px;
   color: $text-muted-color;
-  font-family: 'Roboto', sans-serif;
+  font-family: Roboto, sans-serif;
   white-space: nowrap;
 }
 
 .previewValue {
   font-size: 11px;
   color: $text-admin-primary-color;
-  font-family: 'Roboto', sans-serif;
+  font-family: Roboto, sans-serif;
   text-align: right;
 }
 
@@ -103,7 +103,7 @@
 
 .previewOption {
   font-size: 11px;
-  font-family: 'Roboto', sans-serif;
+  font-family: Roboto, sans-serif;
   color: $icon-muted-color;
   padding-left: 16px;
   position: relative;
@@ -171,7 +171,7 @@
   border-radius: 4px;
   background: $white-color;
   color: $text-primary-color;
-  font-family: 'Roboto', sans-serif;
+  font-family: Roboto, sans-serif;
   font-size: 11px;
   letter-spacing: -0.18px;
   outline: none;
@@ -189,9 +189,17 @@
   }
 }
 
-.selectPlaceholder { color: $text-placeholder-color; }
-.select option { color: $text-primary-color; }
-.select option[value=''] { color: $text-placeholder-color; }
+.selectPlaceholder {
+  color: $text-placeholder-color;
+}
+
+.select option {
+  color: $text-primary-color;
+}
+
+.select option[value=''] {
+  color: $text-placeholder-color;
+}
 
 .checkboxGroup {
   display: flex;
@@ -207,7 +215,7 @@
   cursor: pointer;
   font-size: 11px;
   color: $text-primary-color;
-  font-family: 'Roboto', sans-serif;
+  font-family: Roboto, sans-serif;
 
   input[type='checkbox'] {
     width: 14px;
@@ -248,9 +256,20 @@
   }
 }
 
-.saveBtn   { background: $accent-blue-color;    color: $white-color; }
-.cancelBtn { background: $bg-surface-muted-color; color: $text-admin-primary-color; }
-.deleteBtn { background: $danger-color;          color: $white-color; }
+.saveBtn {
+  background: $accent-blue-color;
+  color: $white-color;
+}
+
+.cancelBtn {
+  background: $bg-surface-muted-color;
+  color: $text-admin-primary-color;
+}
+
+.deleteBtn {
+  background: $danger-color;
+  color: $white-color;
+}
 
 @media (max-width: $breakpoint-desktop) {
   .layout {

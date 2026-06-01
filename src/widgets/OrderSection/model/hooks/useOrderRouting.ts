@@ -1,10 +1,6 @@
 import { useCallback, useEffect, useMemo, type Dispatch, type SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  ROUTE_SEGMENT_TO_STEP,
-  STEP_ROUTE_SEGMENTS,
-  type TOrderFlowStep,
-} from '../types';
+import { ROUTE_SEGMENT_TO_STEP, STEP_ROUTE_SEGMENTS, type TOrderFlowStep } from '../types';
 import type { TOrderState } from './useOrderState';
 
 type TRoutingParams = {
@@ -18,7 +14,7 @@ type TRoutingParams = {
 
 function resolveGuardedStep(
   stepSlug: string | undefined,
-  maxAvailableStep: TOrderFlowStep,
+  maxAvailableStep: TOrderFlowStep
 ): TOrderFlowStep {
   if (!stepSlug) return 1;
   const raw = ROUTE_SEGMENT_TO_STEP[stepSlug];
@@ -36,9 +32,12 @@ export function useOrderRouting({
 }: TRoutingParams) {
   const navigate = useNavigate();
 
-  const replaceOrderRouteStep = useCallback((targetStep: TOrderFlowStep) => {
-    navigate(`/order/${STEP_ROUTE_SEGMENTS[targetStep]}`, { replace: true });
-  }, [navigate]);
+  const replaceOrderRouteStep = useCallback(
+    (targetStep: TOrderFlowStep) => {
+      navigate(`/order/${STEP_ROUTE_SEGMENTS[targetStep]}`, { replace: true });
+    },
+    [navigate]
+  );
 
   const maxAvailableStep = useMemo<TOrderFlowStep>(() => {
     if (canGoToStep4) return 4;
@@ -49,13 +48,16 @@ export function useOrderRouting({
 
   const isStepEnabled = useCallback(
     (stepIndex: TOrderFlowStep) => stepIndex <= maxAvailableStep,
-    [maxAvailableStep],
+    [maxAvailableStep]
   );
 
-  const handleStepTransition = useCallback((nextStep: TOrderFlowStep) => {
-    if (!isStepEnabled(nextStep)) return;
-    replaceOrderRouteStep(nextStep);
-  }, [isStepEnabled, replaceOrderRouteStep]);
+  const handleStepTransition = useCallback(
+    (nextStep: TOrderFlowStep) => {
+      if (!isStepEnabled(nextStep)) return;
+      replaceOrderRouteStep(nextStep);
+    },
+    [isStepEnabled, replaceOrderRouteStep]
+  );
 
   useEffect(() => {
     if (step === 5) return;

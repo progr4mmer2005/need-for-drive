@@ -1,4 +1,4 @@
-﻿import API_CLIENT from './apiClient';
+import API_CLIENT from './apiClient';
 import type { ApiResponse, Car, QueryParams } from './types';
 
 export interface CarDto {

@@ -13,15 +13,15 @@ type TStepModelsProps = {
   onCarSelect: (carId: string) => void;
 };
 
-export const StepModels = memo(function StepModels({
-  categories,
-  selectedCategory,
-  selectedCarId,
-  cars,
-  onCategoryChange,
-  onCarSelect,
-}: TStepModelsProps) {
-  return (
+export const StepModels = memo(
+  ({
+    categories,
+    selectedCategory,
+    selectedCarId,
+    cars,
+    onCategoryChange,
+    onCarSelect,
+  }: TStepModelsProps) => (
     <div className={styles.panel}>
       <div className={styles.filtersRow}>
         {categories.map((category) => (
@@ -37,9 +37,16 @@ export const StepModels = memo(function StepModels({
 
       <div className={styles.modelsGrid}>
         {cars.map((car) => (
-          <ModelCard key={car.id} car={car} selected={selectedCarId === car.id} onSelect={onCarSelect} />
+          <ModelCard
+            key={car.id}
+            car={car}
+            selected={selectedCarId === car.id}
+            onSelect={onCarSelect}
+          />
         ))}
       </div>
     </div>
-  );
-});
+  )
+);
+
+StepModels.displayName = 'StepModels';

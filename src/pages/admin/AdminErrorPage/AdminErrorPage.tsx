@@ -1,4 +1,4 @@
-﻿import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styles from './AdminErrorPage.module.scss';
 
 const DEFAULT_MESSAGES: Record<number, string> = {
@@ -6,7 +6,10 @@ const DEFAULT_MESSAGES: Record<number, string> = {
   500: 'Внутренняя ошибка сервера',
 };
 
-interface AdminErrorPageProps { code?: number; message?: string; }
+interface AdminErrorPageProps {
+  code?: number;
+  message?: string;
+}
 
 export function AdminErrorPage({ code = 500, message }: AdminErrorPageProps) {
   const navigate = useNavigate();
@@ -17,7 +20,9 @@ export function AdminErrorPage({ code = 500, message }: AdminErrorPageProps) {
       <div className={styles.code}>{code}</div>
       <h2 className={styles.title}>{displayMessage}</h2>
       <p className={styles.subtitle}>Попробуйте перезагрузить страницу</p>
-      <button type="button" className={styles.backBtn} onClick={() => navigate(-1)}>Назад</button>
+      <button type="button" className={styles.backBtn} onClick={() => navigate(-1)}>
+        Назад
+      </button>
     </div>
   );
 }

@@ -17,23 +17,29 @@ export function useAdminToast(durationMs = 5000) {
     setToast(null);
   }, []);
 
-  const showToast = useCallback((message: string, type: TAdminToast['type']) => {
-    if (timeoutRef.current !== null) {
-      window.clearTimeout(timeoutRef.current);
-    }
+  const showToast = useCallback(
+    (message: string, type: TAdminToast['type']) => {
+      if (timeoutRef.current !== null) {
+        window.clearTimeout(timeoutRef.current);
+      }
 
-    setToast({ message, type });
-    timeoutRef.current = window.setTimeout(() => {
-      setToast(null);
-      timeoutRef.current = null;
-    }, durationMs);
-  }, [durationMs]);
+      setToast({ message, type });
+      timeoutRef.current = window.setTimeout(() => {
+        setToast(null);
+        timeoutRef.current = null;
+      }, durationMs);
+    },
+    [durationMs]
+  );
 
-  useEffect(() => () => {
-    if (timeoutRef.current !== null) {
-      window.clearTimeout(timeoutRef.current);
-    }
-  }, []);
+  useEffect(
+    () => () => {
+      if (timeoutRef.current !== null) {
+        window.clearTimeout(timeoutRef.current);
+      }
+    },
+    []
+  );
 
   return { toast, showToast, closeToast };
 }

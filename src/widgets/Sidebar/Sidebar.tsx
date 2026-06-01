@@ -9,9 +9,7 @@ type TSidebarProps = {
   onLanguageToggle: () => void;
 };
 
-export function Sidebar({
-  isMenuOpen, language, onMenuToggle, onLanguageToggle,
-}: TSidebarProps) {
+export function Sidebar({ isMenuOpen, language, onMenuToggle, onLanguageToggle }: TSidebarProps) {
   return (
     <aside className={styles.sidebar}>
       <BurgerButton isActive={isMenuOpen} onClick={onMenuToggle} />

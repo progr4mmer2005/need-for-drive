@@ -113,7 +113,9 @@ export function useApiOrderData() {
           }),
           cars: cars.map((car: ApiCar) => {
             const rawName = car.name || '';
-            const parts = rawName.includes(',') ? rawName.split(',').map((s) => s.trim()) : rawName.split(' ');
+            const parts = rawName.includes(',')
+              ? rawName.split(',').map((s) => s.trim())
+              : rawName.split(' ');
             const brand = parts[0] || rawName || DEFAULT_BRAND;
             const rest = parts.slice(1).join(' ') || rawName;
             const rawFuel = String(car.tank || '').trim();

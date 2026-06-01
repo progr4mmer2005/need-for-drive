@@ -38,7 +38,11 @@ function resetOrderState(setOrderState: Dispatch<SetStateAction<TOrderState>>) {
   }));
 }
 
-export function useCancelOrder({ backendOrderId, cancelStatusId, setOrderState }: TCancelOrderParams) {
+export function useCancelOrder({
+  backendOrderId,
+  cancelStatusId,
+  setOrderState,
+}: TCancelOrderParams) {
   const navigate = useNavigate();
 
   const handleCancelOrder = useCallback(async () => {

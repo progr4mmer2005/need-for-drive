@@ -3,7 +3,7 @@ import { geocodeAddress } from './geocodeAddress';
 
 export const geocodePoints = async (
   cityName: string,
-  points: ILeafletMapPoint[],
+  points: ILeafletMapPoint[]
 ): Promise<{ center: [number, number] | null; geoPoints: IGeoPoint[] }> => {
   const center = await geocodeAddress(cityName);
 
@@ -12,7 +12,7 @@ export const geocodePoints = async (
       const query = point.address ? `${cityName}, ${point.address}` : `${cityName}, ${point.name}`;
       const coords = await geocodeAddress(query);
       return coords ? { ...point, coords } : null;
-    }),
+    })
   );
 
   return {

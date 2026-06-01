@@ -5,11 +5,11 @@ import { AdminPageTitle } from '@/shared/components/AdminPageTitle';
 import { AdminPagination } from '@/shared/components/AdminPagination';
 import { AdminToast, useAdminToast } from '@/shared/components/AdminToast';
 import { Loader } from '@/shared/components/Loader';
+import { calcTotalPages } from '@/shared/lib/pagination';
 import { OrderCard } from './ui/OrderCard';
 import { OrderFilters } from './ui/OrderFilters';
 import type { TFilters } from './types';
 import { DEFAULT_FILTERS } from './constants';
-import { calcTotalPages } from '@/shared/lib/pagination';
 import { initFilterOptions } from './lib/handlers/initFilterOptions';
 import { fetchOrders } from './lib/handlers/fetchOrders';
 import { handleFilterChange } from './lib/handlers/handleFilterChange';
@@ -32,14 +32,21 @@ export function OrdersPage() {
   const [appliedFilters, setAppliedFilters] = useState<TFilters>(DEFAULT_FILTERS);
 
   useEffect(() => {
-    void initFilterOptions({ setCars, setCities, setStatuses }).catch(console.error);
+    initFilterOptions({ setCars, setCities, setStatuses }).catch(console.error);
   }, []);
 
   const refetch = useCallback(() => {
-    void fetchOrders(page, appliedFilters, { setOrders, setTotal, setLoading, navigate });
+    fetchOrders(page, appliedFilters, {
+      setOrders,
+      setTotal,
+      setLoading,
+      navigate,
+    });
   }, [page, appliedFilters, navigate]);
 
-  useEffect(() => { refetch(); }, [refetch]);
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   const totalPages = calcTotalPages(total);
 
@@ -63,15 +70,17 @@ export function OrdersPage() {
             <Loader />
           ) : orders.length === 0 ? (
             <p className={styles.empty}>Нет заказов</p>
-          ) : orders.map((order) => (
-            <OrderCard
-              key={order.id}
-              order={order}
-              onComplete={() => handleComplete(order, refetch, showToast)}
-              onDelete={() => handleDelete(order, refetch, showToast)}
-              onEdit={() => navigate(`/admin/orders/${order.id}`)}
-            />
-          ))}
+          ) : (
+            orders.map((order) => (
+              <OrderCard
+                key={order.id}
+                order={order}
+                onComplete={() => handleComplete(order, refetch, showToast)}
+                onDelete={() => handleDelete(order, refetch, showToast)}
+                onEdit={() => navigate(`/admin/orders/${order.id}`)}
+              />
+            ))
+          )}
         </div>
 
         <AdminPagination page={page} totalPages={totalPages} onPageChange={setPage} />

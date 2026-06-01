@@ -1,13 +1,5 @@
-﻿import API_CLIENT from './apiClient';
-import type {
-  ApiResponse,
-  Category,
-  City,
-  OrderStatus,
-  Point,
-  Rate,
-  RateType,
-} from './types';
+import API_CLIENT from './apiClient';
+import type { ApiResponse, Category, City, OrderStatus, Point, Rate, RateType } from './types';
 
 export const CITIES_API = {
   getAll: async (): Promise<ApiResponse<City[]>> => {
@@ -40,11 +32,18 @@ export const POINTS_API = {
     const { data } = await API_CLIENT.get<ApiResponse<Point>>(`/db/point/${id}`);
     return data;
   },
-  create: async (dto: { name: string; address: string; cityId: { id: number } }): Promise<ApiResponse<Point>> => {
+  create: async (dto: {
+    name: string;
+    address: string;
+    cityId: { id: number };
+  }): Promise<ApiResponse<Point>> => {
     const { data } = await API_CLIENT.post<ApiResponse<Point>>('/db/point/', dto);
     return data;
   },
-  update: async (id: number, dto: { name: string; address: string; cityId: { id: number } }): Promise<ApiResponse<Point>> => {
+  update: async (
+    id: number,
+    dto: { name: string; address: string; cityId: { id: number } }
+  ): Promise<ApiResponse<Point>> => {
     const { data } = await API_CLIENT.put<ApiResponse<Point>>(`/db/point/${id}`, dto);
     return data;
   },
@@ -62,11 +61,17 @@ export const RATES_API = {
     const { data } = await API_CLIENT.get<ApiResponse<Rate>>(`/db/rate/${id}`);
     return data;
   },
-  create: async (dto: { price: number; rateTypeId: { id: number } }): Promise<ApiResponse<Rate>> => {
+  create: async (dto: {
+    price: number;
+    rateTypeId: { id: number };
+  }): Promise<ApiResponse<Rate>> => {
     const { data } = await API_CLIENT.post<ApiResponse<Rate>>('/db/rate/', dto);
     return data;
   },
-  update: async (id: number, dto: { price: number; rateTypeId: { id: number } }): Promise<ApiResponse<Rate>> => {
+  update: async (
+    id: number,
+    dto: { price: number; rateTypeId: { id: number } }
+  ): Promise<ApiResponse<Rate>> => {
     const { data } = await API_CLIENT.put<ApiResponse<Rate>>(`/db/rate/${id}`, dto);
     return data;
   },
@@ -88,7 +93,10 @@ export const RATE_TYPES_API = {
     const { data } = await API_CLIENT.post<ApiResponse<RateType>>('/db/rateType/', dto);
     return data;
   },
-  update: async (id: number, dto: { name: string; unit: string }): Promise<ApiResponse<RateType>> => {
+  update: async (
+    id: number,
+    dto: { name: string; unit: string }
+  ): Promise<ApiResponse<RateType>> => {
     const { data } = await API_CLIENT.put<ApiResponse<RateType>>(`/db/rateType/${id}`, dto);
     return data;
   },
@@ -110,7 +118,10 @@ export const CATEGORIES_API = {
     const { data } = await API_CLIENT.post<ApiResponse<Category>>('/db/category/', dto);
     return data;
   },
-  update: async (id: number, dto: { name: string; description?: string }): Promise<ApiResponse<Category>> => {
+  update: async (
+    id: number,
+    dto: { name: string; description?: string }
+  ): Promise<ApiResponse<Category>> => {
     const { data } = await API_CLIENT.put<ApiResponse<Category>>(`/db/category/${id}`, dto);
     return data;
   },

@@ -9,7 +9,11 @@ type TLanguageToggleProps = {
 
 export function LanguageToggle({ compact = false, label, onClick }: TLanguageToggleProps) {
   return (
-    <button className={classNames(styles.button, compact && styles.buttonCompact)} type="button" onClick={onClick}>
+    <button
+      className={classNames(styles.button, compact && styles.buttonCompact)}
+      type="button"
+      onClick={onClick}
+    >
       <span className={styles.label}>{label}</span>
     </button>
   );

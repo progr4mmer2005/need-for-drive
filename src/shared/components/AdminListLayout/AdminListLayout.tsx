@@ -26,7 +26,9 @@ export function AdminListLayout<T>({
       <div className={styles.tableWrap}>
         {addLink && (
           <div className={styles.addRow}>
-            <Link className={styles.addBtn} to={addLink}>Добавить</Link>
+            <Link className={styles.addBtn} to={addLink}>
+              Добавить
+            </Link>
           </div>
         )}
         <div className={styles.scrollArea}>
@@ -38,12 +40,12 @@ export function AdminListLayout<T>({
             <table className={styles.table}>
               <thead>
                 <tr>
-                  {columns.map((col, i) => <th key={i}>{col}</th>)}
+                  {columns.map((col, i) => (
+                    <th key={i}>{col}</th>
+                  ))}
                 </tr>
               </thead>
-              <tbody>
-                {items.map((item) => renderRow(item, cx))}
-              </tbody>
+              <tbody>{items.map((item) => renderRow(item, cx))}</tbody>
             </table>
           )}
         </div>

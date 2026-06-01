@@ -15,7 +15,7 @@ const TEXT = {
   availableFrom: 'Доступна с',
 };
 
-export const StepSummary = memo(function StepSummary({ car, dateFrom }: TStepSummaryProps) {
+export const StepSummary = memo(({ car, dateFrom }: TStepSummaryProps) => {
   const [hasImageError, setHasImageError] = useState(false);
   const carWithDetails = car as TCar & { plate?: string; fuel?: string };
 
@@ -51,3 +51,5 @@ export const StepSummary = memo(function StepSummary({ car, dateFrom }: TStepSum
     </div>
   );
 });
+
+StepSummary.displayName = 'StepSummary';

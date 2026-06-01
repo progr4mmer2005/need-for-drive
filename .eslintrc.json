@@ -10,7 +10,8 @@
   "extends": [
     "airbnb-base",
     "plugin:@typescript-eslint/recommended",
-    "plugin:react/recommended"
+    "plugin:react/recommended",
+    "prettier"
   ],
   "plugins": ["@typescript-eslint", "react", "import"],
   "env": {

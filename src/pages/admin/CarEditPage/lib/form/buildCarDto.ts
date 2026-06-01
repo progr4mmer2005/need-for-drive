@@ -14,7 +14,12 @@ export type TCarDto = {
 
 export function buildCarDto(form: IFormState): TCarDto {
   const thumbnail = form.thumbnailPath
-    ? { path: form.thumbnailPath, originalname: form.thumbnailName || 'upload.png', mimetype: form.thumbnailMime || 'image/png', size: 0 }
+    ? {
+        path: form.thumbnailPath,
+        originalname: form.thumbnailName || 'upload.png',
+        mimetype: form.thumbnailMime || 'image/png',
+        size: 0,
+      }
     : null;
   return {
     name: form.name.trim(),

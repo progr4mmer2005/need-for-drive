@@ -1,11 +1,4 @@
-﻿import {
-  createContext,
-  useContext,
-  useState,
-  useCallback,
-  ReactNode,
-  useEffect,
-} from 'react';
+import { createContext, useContext, useState, useCallback, ReactNode, useEffect } from 'react';
 import {
   login as apiLogin,
   logout as apiLogout,
@@ -85,13 +78,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{
-      isAuthenticated,
-      isAuthLoading,
-      login,
-      register,
-      logout,
-    }}
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        isAuthLoading,
+        login,
+        register,
+        logout,
+      }}
     >
       {children}
     </AuthContext.Provider>

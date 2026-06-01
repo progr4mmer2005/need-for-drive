@@ -1,1 +1,4 @@
-export interface IFormState { price: string; rateTypeId: string; }
+export interface IFormState {
+  price: string;
+  rateTypeId: string;
+}

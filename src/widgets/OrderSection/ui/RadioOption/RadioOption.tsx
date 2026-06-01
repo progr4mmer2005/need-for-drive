@@ -9,11 +9,24 @@ type TRadioOptionProps = {
 };
 
 export function RadioOption({
-  checked, name, label, onChange, disabled = false,
+  checked,
+  name,
+  label,
+  onChange,
+  disabled = false,
 }: TRadioOptionProps) {
   return (
-    <label className={`${styles.radioLabel} ${checked ? styles.checked : ''} ${disabled ? styles.disabled : ''}`}>
-      <input className={styles.radioInput} checked={checked} name={name} type="radio" onChange={onChange} disabled={disabled} />
+    <label
+      className={`${styles.radioLabel} ${checked ? styles.checked : ''} ${disabled ? styles.disabled : ''}`}
+    >
+      <input
+        className={styles.radioInput}
+        checked={checked}
+        name={name}
+        type="radio"
+        onChange={onChange}
+        disabled={disabled}
+      />
       <span className={styles.radioMark} aria-hidden />
       {label}
     </label>

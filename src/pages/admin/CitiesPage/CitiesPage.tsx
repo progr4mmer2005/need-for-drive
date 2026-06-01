@@ -12,7 +12,7 @@ export function CitiesPage() {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    void initCities({ setCities, setLoading });
+    initCities({ setCities, setLoading });
   }, []);
 
   const totalPages = calcTotalPages(cities.length);
@@ -30,7 +30,11 @@ export function CitiesPage() {
         <tr key={city.id}>
           <td>{city.id}</td>
           <td>{city.name}</td>
-          <td><Link to={`/admin/cities/${city.id}`} className={cx.editLink}>Изменить</Link></td>
+          <td>
+            <Link to={`/admin/cities/${city.id}`} className={cx.editLink}>
+              Изменить
+            </Link>
+          </td>
         </tr>
       )}
       page={page}

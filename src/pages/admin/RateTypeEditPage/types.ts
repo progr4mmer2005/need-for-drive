@@ -1,1 +1,4 @@
-export interface IFormState { name: string; unit: string; }
+export interface IFormState {
+  name: string;
+  unit: string;
+}

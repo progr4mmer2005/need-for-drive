@@ -27,9 +27,9 @@ export function CarsTable({ cars }: TCarsTableProps) {
         {cars.map((car) => (
           <tr key={car.id}>
             <td>
-              {car.thumbnail?.path
-                ? <img className={styles.carThumb} src={car.thumbnail.path} alt="" />
-                : null}
+              {car.thumbnail?.path ? (
+                <img className={styles.carThumb} src={car.thumbnail.path} alt="" />
+              ) : null}
             </td>
             <td>{car.name}</td>
             <td>{car.categoryId?.name || '—'}</td>
@@ -40,7 +40,9 @@ export function CarsTable({ cars }: TCarsTableProps) {
             </td>
             <td>{(car.colors || []).slice(0, 3).join(', ')}</td>
             <td>
-              <Link className={styles.editBtn} to={`/admin/cars/${car.id}`}>Изменить</Link>
+              <Link className={styles.editBtn} to={`/admin/cars/${car.id}`}>
+                Изменить
+              </Link>
             </td>
           </tr>
         ))}

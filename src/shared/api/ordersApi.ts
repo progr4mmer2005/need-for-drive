@@ -1,4 +1,4 @@
-﻿import API_CLIENT from './apiClient';
+import API_CLIENT from './apiClient';
 import type { ApiResponse, Order, QueryParams } from './types';
 
 export interface OrderDto {

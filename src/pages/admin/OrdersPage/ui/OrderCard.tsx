@@ -24,8 +24,12 @@ export function OrderCard({ order, onComplete, onDelete, onEdit }: TOrderCardPro
           <span className={styles.orderMuted}>, </span>
           <span className={styles.orderAddress}>{order.pointId?.address}</span>
         </div>
-        <div className={styles.orderDates}>{formatDate(order.dateFrom)} – {formatDate(order.dateTo)}</div>
-        <div className={styles.orderColor}>Цвет: <span>{order.color || '—'}</span></div>
+        <div className={styles.orderDates}>
+          {formatDate(order.dateFrom)} – {formatDate(order.dateTo)}
+        </div>
+        <div className={styles.orderColor}>
+          Цвет: <span>{order.color || '—'}</span>
+        </div>
       </div>
 
       <div className={styles.orderExtras}>
@@ -33,7 +37,9 @@ export function OrderCard({ order, onComplete, onDelete, onEdit }: TOrderCardPro
           <span className={styles.checkboxBox}>{order.isFullTank ? '✓' : ''}</span>
           Полный бак
         </span>
-        <span className={`${styles.checkbox} ${order.isNeedChildChair ? styles.checkboxChecked : ''}`}>
+        <span
+          className={`${styles.checkbox} ${order.isNeedChildChair ? styles.checkboxChecked : ''}`}
+        >
           <span className={styles.checkboxBox}>{order.isNeedChildChair ? '✓' : ''}</span>
           Детское кресло
         </span>
@@ -46,10 +52,18 @@ export function OrderCard({ order, onComplete, onDelete, onEdit }: TOrderCardPro
       <div className={styles.orderPrice}>{formatPrice(order.price)}</div>
 
       <div className={styles.orderActions}>
-        <button className={`${styles.actionBtn} ${styles.successBtn}`} type="button" onClick={onComplete}>
+        <button
+          className={`${styles.actionBtn} ${styles.successBtn}`}
+          type="button"
+          onClick={onComplete}
+        >
           ✓ Готово
         </button>
-        <button className={`${styles.actionBtn} ${styles.dangerBtn}`} type="button" onClick={onDelete}>
+        <button
+          className={`${styles.actionBtn} ${styles.dangerBtn}`}
+          type="button"
+          onClick={onDelete}
+        >
           ✕ Отмена
         </button>
         <button className={`${styles.actionBtn} ${styles.editBtn}`} type="button" onClick={onEdit}>

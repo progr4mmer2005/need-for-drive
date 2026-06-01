@@ -14,7 +14,10 @@ type TDeps = {
 
 export async function handleSave(name: string, deps: TDeps): Promise<void> {
   const error = validate(name);
-  if (error) { deps.setError(error); return; }
+  if (error) {
+    deps.setError(error);
+    return;
+  }
   deps.setSaving(true);
   try {
     const newId = await saveOrderStatus(deps.isNew, deps.id, name.trim());

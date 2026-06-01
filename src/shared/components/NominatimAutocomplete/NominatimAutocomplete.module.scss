@@ -36,7 +36,7 @@
   border: none;
   background: transparent;
   color: $text-primary-color;
-  font-family: 'Roboto', sans-serif;
+  font-family: Roboto, sans-serif;
   font-size: 11px;
   letter-spacing: -0.18px;
   outline: none;
@@ -108,12 +108,14 @@
   border: 2px solid $icon-muted-color;
   border-top-color: $success-color;
   border-radius: 50%;
-  animation: nomSpin 0.7s linear infinite;
+  animation: nom-spin 0.7s linear infinite;
   pointer-events: none;
 }
 
-@keyframes nomSpin {
-  to { transform: rotate(360deg); }
+@keyframes nom-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .errMsg {
@@ -149,7 +151,7 @@
   cursor: pointer;
   text-align: left;
   transition: background 0.1s;
-  font-family: 'Roboto', sans-serif;
+  font-family: Roboto, sans-serif;
 
   &:last-child {
     border-bottom: none;
@@ -175,7 +177,7 @@
 
 .dropdownHint {
   padding: 8px 11px;
-  font-family: 'Roboto', sans-serif;
+  font-family: Roboto, sans-serif;
   font-size: 10px;
   color: $text-muted-color;
   font-style: italic;

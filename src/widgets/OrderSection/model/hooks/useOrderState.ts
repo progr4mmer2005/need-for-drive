@@ -42,27 +42,33 @@ export function useOrderState() {
     backendOrderId: null,
   }));
 
-  const resetAfterLocationChange = useCallback((prev: TOrderState): TOrderState => ({
-    ...prev,
-    selectedCategory: ORDER_DEFAULTS.CATEGORY,
-    selectedCarId: null,
-    selectedColor: ORDER_DEFAULTS.COLOR,
-    dateFrom: defaultRange.from,
-    dateTo: defaultRange.to,
-    selectedRateId: ORDER_DEFAULTS.RATE_ID,
-    selectedExtraIds: [...ORDER_DEFAULTS.EXTRAS],
-    step: 1 as Step,
-  }), [defaultRange]);
+  const resetAfterLocationChange = useCallback(
+    (prev: TOrderState): TOrderState => ({
+      ...prev,
+      selectedCategory: ORDER_DEFAULTS.CATEGORY,
+      selectedCarId: null,
+      selectedColor: ORDER_DEFAULTS.COLOR,
+      dateFrom: defaultRange.from,
+      dateTo: defaultRange.to,
+      selectedRateId: ORDER_DEFAULTS.RATE_ID,
+      selectedExtraIds: [...ORDER_DEFAULTS.EXTRAS],
+      step: 1 as Step,
+    }),
+    [defaultRange]
+  );
 
-  const resetAfterModelChange = useCallback((prev: TOrderState): TOrderState => ({
-    ...prev,
-    selectedColor: ORDER_DEFAULTS.COLOR,
-    dateFrom: defaultRange.from,
-    dateTo: defaultRange.to,
-    selectedRateId: ORDER_DEFAULTS.RATE_ID,
-    selectedExtraIds: [...ORDER_DEFAULTS.EXTRAS],
-    step: 2 as Step,
-  }), [defaultRange]);
+  const resetAfterModelChange = useCallback(
+    (prev: TOrderState): TOrderState => ({
+      ...prev,
+      selectedColor: ORDER_DEFAULTS.COLOR,
+      dateFrom: defaultRange.from,
+      dateTo: defaultRange.to,
+      selectedRateId: ORDER_DEFAULTS.RATE_ID,
+      selectedExtraIds: [...ORDER_DEFAULTS.EXTRAS],
+      step: 2 as Step,
+    }),
+    [defaultRange]
+  );
 
   return {
     orderState,

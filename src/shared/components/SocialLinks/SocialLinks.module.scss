@@ -17,7 +17,9 @@
   width: 38px;
   color: $light-gray-color;
   fill: currentcolor;
-  transition: color 0.2s ease, opacity 0.2s ease;
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
 
   &:hover {
     color: $primary-color;

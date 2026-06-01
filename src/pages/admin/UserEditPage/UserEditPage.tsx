@@ -18,7 +18,7 @@ export function UserEditPage() {
   const { toast, showToast, closeToast } = useAdminToast();
 
   useEffect(() => {
-    void initUser(id, { setUsername, setLoading });
+    initUser(id, { setUsername, setLoading });
   }, [id]);
 
   return (
@@ -29,8 +29,22 @@ export function UserEditPage() {
       loading={loading}
       saving={saving}
       cancelPath="/admin/users"
-      onSave={() => handleSave(username, { id: Number(id), setError, setSaving, showToast })}
-      onDelete={() => handleDelete({ id: Number(id), setSaving, showToast, navigate })}
+      onSave={() =>
+        handleSave(username, {
+          id: Number(id),
+          setError,
+          setSaving,
+          showToast,
+        })
+      }
+      onDelete={() =>
+        handleDelete({
+          id: Number(id),
+          setSaving,
+          showToast,
+          navigate,
+        })
+      }
       toast={toast}
       onCloseToast={closeToast}
     >
@@ -40,7 +54,10 @@ export function UserEditPage() {
           maxLength={150}
           placeholder="username"
           hasError={!!error}
-          onChange={(e) => { setUsername(e.target.value); setError(''); }}
+          onChange={(e) => {
+            setUsername(e.target.value);
+            setError('');
+          }}
         />
       </AdminField>
     </AdminEditLayout>

@@ -16,7 +16,10 @@ type TDeps = {
 
 export async function handleSave(form: IFormState, deps: TDeps): Promise<void> {
   const errs = validate(form);
-  if (Object.keys(errs).length > 0) { deps.setErrors(errs); return; }
+  if (Object.keys(errs).length > 0) {
+    deps.setErrors(errs);
+    return;
+  }
   deps.setSaving(true);
   try {
     const newId = await saveRate(deps.isNew, deps.id, buildRateDto(form));

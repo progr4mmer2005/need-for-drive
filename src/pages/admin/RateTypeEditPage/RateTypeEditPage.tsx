@@ -21,7 +21,7 @@ export function RateTypeEditPage() {
   const { toast, showToast, closeToast } = useAdminToast();
 
   useEffect(() => {
-    void initRateType(id, isNew, { setForm, setLoading });
+    initRateType(id, isNew, { setForm, setLoading });
   }, [id, isNew]);
 
   return (
@@ -32,8 +32,24 @@ export function RateTypeEditPage() {
       loading={loading}
       saving={saving}
       cancelPath="/admin/rate-types"
-      onSave={() => handleSave(form, { isNew, id: Number(id), setErrors, setSaving, showToast, navigate })}
-      onDelete={() => handleDelete({ id: Number(id), setSaving, showToast, navigate })}
+      onSave={() =>
+        handleSave(form, {
+          isNew,
+          id: Number(id),
+          setErrors,
+          setSaving,
+          showToast,
+          navigate,
+        })
+      }
+      onDelete={() =>
+        handleDelete({
+          id: Number(id),
+          setSaving,
+          showToast,
+          navigate,
+        })
+      }
       toast={toast}
       onCloseToast={closeToast}
     >
@@ -44,7 +60,10 @@ export function RateTypeEditPage() {
             maxLength={150}
             placeholder="День, Час..."
             hasError={!!errors.name}
-            onChange={(e) => { setForm((p) => ({ ...p, name: e.target.value })); setErrors((p) => ({ ...p, name: '' })); }}
+            onChange={(e) => {
+              setForm((p) => ({ ...p, name: e.target.value }));
+              setErrors((p) => ({ ...p, name: '' }));
+            }}
           />
         </AdminField>
 
@@ -54,7 +73,10 @@ export function RateTypeEditPage() {
             maxLength={50}
             placeholder="день, час..."
             hasError={!!errors.unit}
-            onChange={(e) => { setForm((p) => ({ ...p, unit: e.target.value })); setErrors((p) => ({ ...p, unit: '' })); }}
+            onChange={(e) => {
+              setForm((p) => ({ ...p, unit: e.target.value }));
+              setErrors((p) => ({ ...p, unit: '' }));
+            }}
           />
         </AdminField>
       </AdminRow>

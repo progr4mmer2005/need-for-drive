@@ -9,11 +9,7 @@ type TBaseSectionProps = {
   children: ReactNode;
 };
 
-export function BaseSection({
-  isMenuOpen,
-  onMenuToggle,
-  children,
-}: TBaseSectionProps) {
+export function BaseSection({ isMenuOpen, onMenuToggle, children }: TBaseSectionProps) {
   return (
     <section className={styles.section}>
       <div className={styles.headerContainer}>

@@ -14,8 +14,15 @@
   font-size: 13px;
 }
 
-.toastSuccess { background: $success-color; color: $white-color; }
-.toastError   { background: $danger-color;  color: $white-color; }
+.toastSuccess {
+  background: $success-color;
+  color: $white-color;
+}
+
+.toastError {
+  background: $danger-color;
+  color: $white-color;
+}
 
 .toastClose {
   border: none;
