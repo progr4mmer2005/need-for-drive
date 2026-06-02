@@ -5,8 +5,6 @@ import { RATES_API } from '@/shared/api/ratesApi';
 import { CARS_API } from '@/shared/api/carsApi';
 import type { City, Point, Car as ApiCar, Rate } from '@/shared/api/types';
 
-const ECONOMY_CATEGORY = 'Эконом';
-const PREMIUM_CATEGORY = 'Премиум';
 const DEFAULT_BRAND = 'Авто';
 const DEFAULT_PLATE = 'К 761 НА 73';
 const DEFAULT_RATE_LABEL = 'Тариф';
@@ -14,15 +12,6 @@ const RATE_DAILY_MARKER = 'сут';
 const RUBLE_SIGN = '₽';
 const LOAD_ERROR = 'Ошибка загрузки данных';
 
-const COLOR_RU_MAP: Record<string, string> = {
-  red: 'Красный',
-  blue: 'Синий',
-  white: 'Белый',
-  black: 'Чёрный',
-  grey: 'Серый',
-  gray: 'Серый',
-  orange: 'Оранжевый',
-};
 
 export interface ApiOrderData {
   cities: Array<{
@@ -123,22 +112,16 @@ export function useApiOrderData() {
             const rawFuel = String(car.tank || '').trim();
             const fuel = rawFuel ? (rawFuel.includes('%') ? rawFuel : `${rawFuel}%`) : '100%';
 
-            const mappedColors = (car.colors || []).map((color) => {
-              const normalized = normalizeText(color);
-              const key = normalized.toLowerCase();
-              return COLOR_RU_MAP[key] || normalized;
-            });
-
             return {
               id: `car-${car.id}`,
               backendId: car.id,
               brand,
               name: rest,
-              category: car.categoryId?.id === 1 ? ECONOMY_CATEGORY : PREMIUM_CATEGORY,
+              category: normalizeText(car.categoryId?.name || ''),
               image: car.thumbnail?.path || '',
               priceMin: Number(car.priceMin || 0),
               priceMax: Number(car.priceMax || 0),
-              colors: mappedColors,
+              colors: (car.colors || []).map((color) => normalizeText(color)),
               plate: car.number || DEFAULT_PLATE,
               fuel,
             };
