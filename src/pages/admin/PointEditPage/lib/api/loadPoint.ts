@@ -1,4 +1,4 @@
-import { POINTS_API } from '@/shared/api/citiesApi';
+import { POINTS_API } from '@/shared/api/pointsApi';
 import type { IFormState } from '../../types';
 
 export async function loadPoint(id: number): Promise<{ form: IFormState; cityId: string }> {

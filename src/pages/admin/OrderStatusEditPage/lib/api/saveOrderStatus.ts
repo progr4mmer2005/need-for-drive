@@ -1,4 +1,4 @@
-import { ORDER_STATUS_API } from '@/shared/api/citiesApi';
+import { ORDER_STATUS_API } from '@/shared/api/orderStatusApi';
 
 export async function saveOrderStatus(
   isNew: boolean,

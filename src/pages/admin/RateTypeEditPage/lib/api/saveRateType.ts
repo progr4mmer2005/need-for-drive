@@ -1,4 +1,4 @@
-import { RATE_TYPES_API } from '@/shared/api/citiesApi';
+import { RATE_TYPES_API } from '@/shared/api/rateTypesApi';
 
 type TDto = { name: string; unit: string };
 

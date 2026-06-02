@@ -1,4 +1,4 @@
-import { RATES_API } from '@/shared/api/citiesApi';
+import { RATES_API } from '@/shared/api/ratesApi';
 
 type TRateDto = { price: number; rateTypeId: { id: number } };
 

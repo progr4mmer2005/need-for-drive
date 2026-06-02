@@ -1,4 +1,4 @@
-import { RATE_TYPES_API } from '@/shared/api/citiesApi';
+import { RATE_TYPES_API } from '@/shared/api/rateTypesApi';
 import type { IFormState } from '../../types';
 
 export async function loadRateType(id: number): Promise<IFormState> {

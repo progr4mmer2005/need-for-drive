@@ -1,4 +1,4 @@
-import { CATEGORIES_API } from '@/shared/api/citiesApi';
+import { CATEGORIES_API } from '@/shared/api/categoriesApi';
 import type { Category } from '@/shared/api/types';
 
 export async function loadCategory(id: number): Promise<Category> {

@@ -1,4 +1,4 @@
-import { RATES_API } from '@/shared/api/citiesApi';
+import { RATES_API } from '@/shared/api/ratesApi';
 import type { Rate } from '@/shared/api/types';
 
 export async function loadRates(): Promise<Rate[]> {

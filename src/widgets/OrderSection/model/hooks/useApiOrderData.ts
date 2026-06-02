@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import { CITIES_API, POINTS_API, RATES_API } from '@/shared/api/citiesApi';
+import { CITIES_API } from '@/shared/api/citiesApi';
+import { POINTS_API } from '@/shared/api/pointsApi';
+import { RATES_API } from '@/shared/api/ratesApi';
 import { CARS_API } from '@/shared/api/carsApi';
 import type { City, Point, Car as ApiCar, Rate } from '@/shared/api/types';
 

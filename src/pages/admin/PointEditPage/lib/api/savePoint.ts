@@ -1,4 +1,4 @@
-import { POINTS_API } from '@/shared/api/citiesApi';
+import { POINTS_API } from '@/shared/api/pointsApi';
 
 type TDto = { name: string; address: string; cityId: { id: number } };
 

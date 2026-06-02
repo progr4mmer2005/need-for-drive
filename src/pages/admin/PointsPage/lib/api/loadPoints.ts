@@ -1,4 +1,4 @@
-import { POINTS_API } from '@/shared/api/citiesApi';
+import { POINTS_API } from '@/shared/api/pointsApi';
 import type { Point } from '@/shared/api/types';
 import { PAGE_SIZE } from '@/shared/lib/pagination';
 

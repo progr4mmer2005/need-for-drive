@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ORDER_STATUS_API } from '@/shared/api/citiesApi';
+import { ORDER_STATUS_API } from '@/shared/api/orderStatusApi';
 import type { OrderStatus } from '@/shared/api/types';
 
 function findCancelStatus(statuses: OrderStatus[]): number | null {

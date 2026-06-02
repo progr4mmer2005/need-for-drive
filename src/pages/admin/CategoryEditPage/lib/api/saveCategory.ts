@@ -1,4 +1,4 @@
-import { CATEGORIES_API } from '@/shared/api/citiesApi';
+import { CATEGORIES_API } from '@/shared/api/categoriesApi';
 import type { TCategoryDto } from '../form/buildCategoryDto';
 
 export async function saveCategory(
