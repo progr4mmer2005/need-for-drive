@@ -46,3 +46,5 @@ export function RatesPage() {
     />
   );
 }
+
+export default RatesPage;

@@ -44,3 +44,5 @@ export function RateTypesPage() {
     />
   );
 }
+
+export default RateTypesPage;

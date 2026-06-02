@@ -96,3 +96,5 @@ export function RateEditPage() {
     </AdminEditLayout>
   );
 }
+
+export default RateEditPage;

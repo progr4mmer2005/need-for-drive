@@ -43,3 +43,5 @@ export function OrderStatusesPage() {
     />
   );
 }
+
+export default OrderStatusesPage;

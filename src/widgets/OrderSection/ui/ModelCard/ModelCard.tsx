@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { TCar } from '@/widgets/OrderSection/model/types';
 import { formatPrice } from '@/widgets/OrderSection/model/utils/formatPrice';
-import { getCarImage } from '@/widgets/OrderSection/ui/ModelCard/carImages';
+import { getCarImage } from '@/widgets/OrderSection/ui/ModelCard';
 import * as styles from './ModelCard.module.scss';
 
 type TModelCardProps = {

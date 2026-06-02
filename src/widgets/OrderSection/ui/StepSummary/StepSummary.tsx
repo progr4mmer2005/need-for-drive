@@ -1,7 +1,7 @@
 import { memo, useState } from 'react';
 
 import { TCar } from '@/widgets/OrderSection/model/types';
-import { getCarImage } from '@/widgets/OrderSection/ui/ModelCard/carImages';
+import { getCarImage } from '@/widgets/OrderSection/ui/ModelCard';
 import * as styles from './StepSummary.module.scss';
 
 type TStepSummaryProps = {

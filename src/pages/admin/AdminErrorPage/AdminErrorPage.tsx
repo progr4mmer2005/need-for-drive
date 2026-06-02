@@ -26,3 +26,5 @@ export function AdminErrorPage({ code = 500, message }: AdminErrorPageProps) {
     </div>
   );
 }
+
+export default AdminErrorPage;

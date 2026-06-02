@@ -248,3 +248,5 @@ export function CarEditPage() {
     </div>
   );
 }
+
+export default CarEditPage;

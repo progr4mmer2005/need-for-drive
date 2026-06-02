@@ -41,3 +41,5 @@ export function UsersPage() {
     />
   );
 }
+
+export default UsersPage;

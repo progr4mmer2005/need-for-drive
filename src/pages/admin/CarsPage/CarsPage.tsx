@@ -60,3 +60,5 @@ export function CarsPage() {
     </div>
   );
 }
+
+export default CarsPage;

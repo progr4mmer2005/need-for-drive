@@ -132,3 +132,5 @@ export function PointEditPage() {
     </AdminEditLayout>
   );
 }
+
+export default PointEditPage;

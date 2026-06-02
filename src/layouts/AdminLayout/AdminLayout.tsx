@@ -143,3 +143,5 @@ export function AdminLayout() {
     </div>
   );
 }
+
+export default AdminLayout;

@@ -71,3 +71,5 @@ export function CityEditPage() {
     </AdminEditLayout>
   );
 }
+
+export default CityEditPage;

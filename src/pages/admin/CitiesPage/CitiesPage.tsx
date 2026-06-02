@@ -43,3 +43,5 @@ export function CitiesPage() {
     />
   );
 }
+
+export default CitiesPage;

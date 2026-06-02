@@ -63,3 +63,5 @@ export function UserEditPage() {
     </AdminEditLayout>
   );
 }
+
+export default UserEditPage;

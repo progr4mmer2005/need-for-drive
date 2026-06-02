@@ -267,3 +267,5 @@ export function OrderSection({ isMenuOpen, onMenuToggle }: TOrderSectionProps) {
     </BaseSection>
   );
 }
+
+export default OrderSection;

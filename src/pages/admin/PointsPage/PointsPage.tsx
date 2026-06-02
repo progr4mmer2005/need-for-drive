@@ -44,3 +44,5 @@ export function PointsPage() {
     />
   );
 }
+
+export default PointsPage;

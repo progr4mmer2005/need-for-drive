@@ -66,3 +66,5 @@ export function OrderStatusEditPage() {
     </AdminEditLayout>
   );
 }
+
+export default OrderStatusEditPage;

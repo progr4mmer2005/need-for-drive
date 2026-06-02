@@ -43,3 +43,5 @@ export function CategoriesPage() {
     />
   );
 }
+
+export default CategoriesPage;

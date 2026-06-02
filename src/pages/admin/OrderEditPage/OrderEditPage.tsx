@@ -324,3 +324,5 @@ export function OrderEditPage() {
     </div>
   );
 }
+
+export default OrderEditPage;

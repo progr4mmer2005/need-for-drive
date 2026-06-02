@@ -80,3 +80,5 @@ export function CategoryEditPage() {
     </AdminEditLayout>
   );
 }
+
+export default CategoryEditPage;
